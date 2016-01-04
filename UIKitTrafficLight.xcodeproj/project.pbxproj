@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69E69B8A1C38849D00C657E7 /* AATLightPhaseMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B891C38849D00C657E7 /* AATLightPhaseMachine.m */; };
+		69E69B8D1C38B00800C657E7 /* AACarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8C1C38B00800C657E7 /* AACarView.m */; };
+		69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */; };
 		69EBD93B1C38750F00FA7C87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93A1C38750F00FA7C87 /* main.m */; };
 		69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93D1C38750F00FA7C87 /* AppDelegate.m */; };
 		69EBD9411C38750F00FA7C87 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9401C38750F00FA7C87 /* FirstViewController.m */; };
@@ -15,6 +18,7 @@
 		69EBD9491C38750F00FA7C87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD9481C38750F00FA7C87 /* Assets.xcassets */; };
 		69EBD94C1C38750F00FA7C87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD94A1C38750F00FA7C87 /* LaunchScreen.storyboard */; };
 		69EBD9571C38751000FA7C87 /* UIKitTrafficLightUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */; };
+		69EBD9631C38776B00FA7C87 /* AAStopLightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9621C38776B00FA7C87 /* AAStopLightView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,12 +32,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		69E69B881C38849D00C657E7 /* AATLightPhaseMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AATLightPhaseMachine.h; path = UIKitTrafficLight/AATLightPhaseMachine.h; sourceTree = "<group>"; };
+		69E69B891C38849D00C657E7 /* AATLightPhaseMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AATLightPhaseMachine.m; path = UIKitTrafficLight/AATLightPhaseMachine.m; sourceTree = "<group>"; };
+		69E69B8B1C38B00800C657E7 /* AACarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AACarView.h; path = UIKitTrafficLight/AACarView.h; sourceTree = "<group>"; };
+		69E69B8C1C38B00800C657E7 /* AACarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AACarView.m; path = UIKitTrafficLight/AACarView.m; sourceTree = "<group>"; };
+		69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AARoadModelViewUtils.h; path = UIKitTrafficLight/AARoadModelViewUtils.h; sourceTree = "<group>"; };
+		69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AARoadModelViewUtils.m; path = UIKitTrafficLight/AARoadModelViewUtils.m; sourceTree = "<group>"; };
 		69EBD9361C38750F00FA7C87 /* UIKitTrafficLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitTrafficLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EBD93A1C38750F00FA7C87 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		69EBD93C1C38750F00FA7C87 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		69EBD93D1C38750F00FA7C87 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		69EBD93F1C38750F00FA7C87 /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
-		69EBD9401C38750F00FA7C87 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		69EBD9401C38750F00FA7C87 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FirstViewController.m; path = UIKitTrafficLight/FirstViewController.m; sourceTree = "<group>"; };
 		69EBD9421C38750F00FA7C87 /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		69EBD9431C38750F00FA7C87 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		69EBD9461C38750F00FA7C87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -43,6 +53,8 @@
 		69EBD9521C38751000FA7C87 /* UIKitTrafficLightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitTrafficLightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitTrafficLightUITests.m; sourceTree = "<group>"; };
 		69EBD9581C38751000FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69EBD9611C38776B00FA7C87 /* AAStopLightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAStopLightView.h; path = UIKitTrafficLight/AAStopLightView.h; sourceTree = "<group>"; };
+		69EBD9621C38776B00FA7C87 /* AAStopLightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAStopLightView.m; path = UIKitTrafficLight/AAStopLightView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +78,15 @@
 		69EBD92D1C38750F00FA7C87 = {
 			isa = PBXGroup;
 			children = (
+				69EBD9611C38776B00FA7C87 /* AAStopLightView.h */,
+				69EBD9621C38776B00FA7C87 /* AAStopLightView.m */,
+				69E69B881C38849D00C657E7 /* AATLightPhaseMachine.h */,
+				69E69B891C38849D00C657E7 /* AATLightPhaseMachine.m */,
+				69E69B8B1C38B00800C657E7 /* AACarView.h */,
+				69E69B8C1C38B00800C657E7 /* AACarView.m */,
+				69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */,
+				69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */,
+				69EBD9401C38750F00FA7C87 /* FirstViewController.m */,
 				69EBD9381C38750F00FA7C87 /* UIKitTrafficLight */,
 				69EBD9551C38751000FA7C87 /* UIKitTrafficLightUITests */,
 				69EBD9371C38750F00FA7C87 /* Products */,
@@ -87,7 +108,6 @@
 				69EBD93C1C38750F00FA7C87 /* AppDelegate.h */,
 				69EBD93D1C38750F00FA7C87 /* AppDelegate.m */,
 				69EBD93F1C38750F00FA7C87 /* FirstViewController.h */,
-				69EBD9401C38750F00FA7C87 /* FirstViewController.m */,
 				69EBD9421C38750F00FA7C87 /* SecondViewController.h */,
 				69EBD9431C38750F00FA7C87 /* SecondViewController.m */,
 				69EBD9451C38750F00FA7C87 /* Main.storyboard */,
@@ -218,8 +238,12 @@
 			files = (
 				69EBD9441C38750F00FA7C87 /* SecondViewController.m in Sources */,
 				69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */,
+				69E69B8D1C38B00800C657E7 /* AACarView.m in Sources */,
 				69EBD9411C38750F00FA7C87 /* FirstViewController.m in Sources */,
 				69EBD93B1C38750F00FA7C87 /* main.m in Sources */,
+				69EBD9631C38776B00FA7C87 /* AAStopLightView.m in Sources */,
+				69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */,
+				69E69B8A1C38849D00C657E7 /* AATLightPhaseMachine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +432,7 @@
 				69EBD95D1C38751000FA7C87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		69EBD95E1C38751000FA7C87 /* Build configuration list for PBXNativeTarget "UIKitTrafficLightUITests" */ = {
 			isa = XCConfigurationList;
@@ -416,6 +441,7 @@
 				69EBD9601C38751000FA7C87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -10,6 +10,7 @@
 
 @interface FirstViewController : UIViewController
 
+@property (nonatomic) NSTimeInterval masterTime;
 
 @end
 

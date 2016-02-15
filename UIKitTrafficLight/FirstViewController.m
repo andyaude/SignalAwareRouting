@@ -184,6 +184,10 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
             [car moveInApproachDir:CAR_MOVE_ITERATION];
     }
 }
+- (IBAction)sliderChanged:(id)sender {
+    
+    NSLog(@"What you talking bout");
+}
 
 // TODO: UpdateName
 - (void)placeNewCarForApproach:(AApproachDirs)approachDir {
@@ -199,6 +203,8 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
     [self.scrollView addSubview:car];
     
     [self.activeCars addObject:car];
+    
+    self.mySlider.value -= 0.1;
 }
 
 - (void)layoutTrafficLights {

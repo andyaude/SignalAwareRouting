@@ -12,5 +12,7 @@
 
 @property (nonatomic) NSTimeInterval masterTime;
 
+@property (weak, nonatomic) IBOutlet UISlider *mySlider;
+
 @end
 

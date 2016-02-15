@@ -46,12 +46,17 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     self = [super init];
     if (!self) return nil;
     
-    self.ewPhase = 10.0;
-    self.nsPhase = 10.0;
+    self.phase_offset = 0.;
+    self.ewPhase = 30.0;
+    self.nsPhase = 30.0;
     self.all_red_duration = 1.0; // CHANGEME 1 to 4
     self.yellow_duration = 3.0; // CHANGEME
     
     return self;
+}
+
+- (NSTimeInterval)getMasterInterval {
+    return _master_time_interval;
 }
 
 - (float)getCurrentPhaseProgress {
@@ -85,7 +90,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     else return EW_PHASE;
 }
 
-- (BOOL)shouldAdvanceToYellowPhase: (AATrafficLightDirection)dir {
+- (BOOL)shouldShowPhaseAsYellow: (AATrafficLightDirection)dir {
     if (dir == NS_DIRECTION) {
         
         if (self.phase == NS_PHASE) {
@@ -103,12 +108,65 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     return NO;
 }
 
+#warning ASSUMES NS starts
+- (double)predictWaitTimeForMasterInterval:(NSTimeInterval)time andTrafficDir:(AATrafficLightDirection)dir {
+    double wholeCycleTime = 0;
+    
+    // A whole cycle!
+    wholeCycleTime += self.all_red_duration + self.nsPhase + self.all_red_duration + self.ewPhase;
+    
+    double effective_time = time + 1; // we get to skip the first "all_red"
+    
+    double time_into_cycle = fmod(effective_time, wholeCycleTime);
+    
+    
+    BOOL NS_IS_GREEN = (time_into_cycle > self.all_red_duration && time_into_cycle < self.all_red_duration + self.nsPhase);
+    BOOL EW_IS_GREEN = (time_into_cycle > 2 * self.all_red_duration + self.nsPhase);
+
+#warning convulated logic screw this
+    
+    if (dir == NS_DIRECTION)
+    {
+        if (NS_IS_GREEN) return 0.0;
+        // At the first "all_red" scenario
+        if (time_into_cycle < self.all_red_duration)
+            return self.all_red_duration - time_into_cycle;
+
+        
+        if (EW_IS_GREEN) {
+            return wholeCycleTime - time_into_cycle + self.all_red_duration;
+        }
+        
+        
+        if (time_into_cycle > self.all_red_duration + self.nsPhase)
+            return self.all_red_duration + self.ewPhase;
+        
+    } else {
+        
+        if (EW_IS_GREEN) return 0.0;
+        
+        
+        if (NS_IS_GREEN)
+            return 2 * self.all_red_duration + self.nsPhase - time_into_cycle;
+        
+        // All red turning NS. (We need EW)
+        if (time_into_cycle < self.all_red_duration)
+            return self.all_red_duration - time_into_cycle + self.nsPhase;
+        
+        
+        if (time_into_cycle > self.all_red_duration + self.nsPhase)
+            return 1.0;
+        
+    }
+    
+    return -1;
+}
+
 - (void)setPhaseForMasterTimeInterval:(NSTimeInterval)time {
     
-    NSTimeInterval curDiff = time - self.master_time_interval;
+    NSTimeInterval curDiff = (time + _phase_offset) - (self.master_time_interval);
     
-    self.master_time_interval = time;
-    
+    self.master_time_interval = time + _phase_offset;
     self.current_phase_time_interval += curDiff;
     
     
@@ -123,7 +181,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     // NS Green
     if (self.phase == NS_PHASE) {
         // Turn Green to Yellow
-        if ([self shouldAdvanceToYellowPhase:NS_DIRECTION]) {
+        if ([self shouldShowPhaseAsYellow:NS_DIRECTION]) {
             self.current_phase_yellow = YES;
         }
         
@@ -136,7 +194,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     // EW Green
     else if (self.phase == EW_PHASE) {
         // Turn Greens to Yellow
-        if ([self shouldAdvanceToYellowPhase:EW_DIRECTION]) {
+        if ([self shouldShowPhaseAsYellow:EW_DIRECTION]) {
             self.current_phase_yellow = YES;
         }
         
@@ -158,7 +216,6 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
         if (self.phase == NS_PHASE) {
             return self.current_phase_yellow ? YELLOW_LIGHTUNIT : GREEN_LIGHTUNIT;
         }
-        
         
     } else if (direction == EW_DIRECTION) {
         

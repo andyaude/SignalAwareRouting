@@ -30,6 +30,11 @@ typedef enum
 - (float)getCurrentPhaseProgress;
 
 
+// You shouldn't need this... Deprecated
+- (NSTimeInterval)getMasterInterval;
+
+@property (nonatomic) NSTimeInterval phase_offset;
+
 @property (nonatomic) NSTimeInterval current_phase_time_interval;
 
 // Starts out in NS Green (start of cycle)
@@ -43,6 +48,9 @@ typedef enum
 
 
 - (AALightUnitColor)lightColorForDirection:(AATrafficLightDirection)phase;
+
+// TODO fix when tampering with stuff. ??
+- (double)predictWaitTimeForMasterInterval:(NSTimeInterval)time andTrafficDir:(AATrafficLightDirection)dir;
 
 
 @end

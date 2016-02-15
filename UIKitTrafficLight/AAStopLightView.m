@@ -61,11 +61,11 @@
 }
 
 
-
+#define SCALAR .6
 - (void)sizeToFit {
     
     CGRect oldFrame = self.frame;
-    oldFrame.size = CGSizeMake(30, 100);
+    oldFrame.size = CGSizeMake(30*SCALAR, 100*SCALAR);
     self.frame = oldFrame;
 
 }
@@ -82,21 +82,21 @@
     [[UIColor blackColor] setStroke];
 
     // Top Light
-    CGRect rect = CGRectMake(4, 4, 20, 20);
+    CGRect rect = CGRectMake(4*SCALAR, 4*SCALAR, 20*SCALAR, 20*SCALAR);
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:rect];
     [[self activeRedColor] setFill];
     [circlePath stroke];
     [circlePath fill];
     
     // Center Light
-    rect.origin.y += 30;
+    rect.origin.y += 30*SCALAR;
     UIBezierPath *circlePath2 = [UIBezierPath bezierPathWithOvalInRect:rect];
     [[self activeYellowColor] setFill];
     [circlePath2 stroke];
     [circlePath2 fill];
     
     // Green Light
-    rect.origin.y += 30;
+    rect.origin.y += 30*SCALAR;
     UIBezierPath *circlePath3 = [UIBezierPath bezierPathWithOvalInRect:rect];
     [[self activeGreenColor] setFill];
     [circlePath3 stroke];

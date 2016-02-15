@@ -7,6 +7,7 @@
 //
 
 #import "AACarView.h"
+#import "CarAndView.h"
 
 @interface AACarView () {
     AApproachDirs _approachDir;
@@ -15,6 +16,33 @@
 @end
 
 @implementation AACarView
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.frame = CGRectMake(0, 0, 20, 20);
+        self.backgroundColor = [UIColor clearColor];
+        self.clipsToBounds = NO;
+        
+        UITapGestureRecognizer *taptap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(startDeployPopover)];
+        [self addGestureRecognizer:taptap];
+    }
+    return self;
+}
+
+-(void)setOverrideColor:(UIColor *)overrideColor {
+    
+    if (overrideColor != _overrideColor) {
+        _overrideColor = overrideColor;
+        [self setNeedsDisplay];
+    }
+}
+
+-(void)startDeployPopover {
+    if (self.containingCar) {
+        [self.containingCar didClickOnCar];
+    }
+}
 
 -(void)moveInApproachDir:(CGFloat)units {
     CGRect oldFrame = self.frame;
@@ -42,24 +70,25 @@
     
     _approachDir = approach;
     
-    if (approach == NORTH_APPROACH) {
-        self.transform = CGAffineTransformIdentity;
-    }
-    
-    else if (approach == SOUTH_APPROACH) {
-        self.transform = CGAffineTransformMakeRotation(M_PI);
-    }
-    
-    else if (approach == EASTWARD_APPROACH) {
-        self.transform = CGAffineTransformMakeRotation(M_PI/2.);
-    }
-    else if (approach == WESTWARD_APPROACH) {
-        self.transform = CGAffineTransformMakeRotation(-M_PI/2.);
-    }
+//    if (approach == NORTH_APPROACH) {
+//        self.transform = CGAffineTransformIdentity;
+//    }
+//    
+//    else if (approach == SOUTH_APPROACH) {
+//        self.transform = CGAffineTransformMakeRotation(M_PI);
+//    }
+//    
+//    else if (approach == EASTWARD_APPROACH) {
+//        self.transform = CGAffineTransformMakeRotation(M_PI/2.);
+//    }
+//    else if (approach == WESTWARD_APPROACH) {
+//        self.transform = CGAffineTransformMakeRotation(-M_PI/2.);
+//    }
 }
 -(AApproachDirs)approachDir {
     return _approachDir;
 }
+
 
 -(void)drawRect:(CGRect)rect {
     
@@ -91,7 +120,13 @@
     bezier.lineWidth = 1.0;
     
     [[UIColor blackColor] setStroke];
-    [[UIColor greenColor] setFill];
+    
+    if (self.overrideColor) {
+        [self.overrideColor setFill];
+    } else {
+        [[UIColor greenColor] setFill];
+    }
+    
     [bezier fill];
     [bezier stroke];
     

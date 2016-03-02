@@ -12,6 +12,11 @@
 @interface SecondViewController : UIViewController {
     double _timeMultiplier;
     NSMutableArray *_allCars;
+    int _finishedCars;
+    int _emittedCars;
+
+    BOOL _autoEFEmit;
+    BOOL _autorandoEmit;
 
 }
 
@@ -28,14 +33,24 @@
 @property (weak, nonatomic) IBOutlet UITextField *endField;
 @property (weak, nonatomic) IBOutlet UISwitch *rtPenaltySwitch;
 @property (weak, nonatomic) IBOutlet UILabel *routeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *flowRateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *throughputLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *queingPenaltySwitch;
 
 @property (strong, nonatomic) NSTimer *activeTimer;
 @property (weak, nonatomic) IBOutlet UILabel *timeRateLabel;
+@property (weak, nonatomic) IBOutlet UISwitch *updateUISwitch;
+@property (weak, nonatomic) IBOutlet UIButton *startDFAutoEmitLabel;
+@property (weak, nonatomic) IBOutlet UIButton *startSlowRandoEmitLabel;
+@property (weak, nonatomic) IBOutlet UIButton *startClockButton;
 
 - (NSArray *)getCarsToDraw;
+- (IBAction)considerPenaltyChanged:(id)sender;
 
--(void)editNode:(IntersectionNode *)node atPoint:(CGPoint)point;
+- (void)unselectAllCars;
+- (void)editNode:(IntersectionNode *)node atPoint:(CGPoint)point;
 - (void)putCarOnEdge:(StreetEdge *)edge andStartPoint:(IntersectionNode *)start withCar:(CarAndView*)car;
+- (IBAction)startEFAutoEmitPressed:(id)sender;
 
 @end
 

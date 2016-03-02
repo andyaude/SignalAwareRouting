@@ -23,9 +23,10 @@
 - (double)getWeight {
         // x = vt... x/v -> t
     
+#warning todo make systematic
     double miles_per_second = self.max_mph / 60.0 / 60.0;
     
-    return self.distance / miles_per_second;
+    return self.distance / (miles_per_second*4.5);
     
 }
 

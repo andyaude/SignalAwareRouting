@@ -50,7 +50,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     self.ewPhase = 30.0;
     self.nsPhase = 30.0;
     self.all_red_duration = 1.0; // CHANGEME 1 to 4
-    self.yellow_duration = 3.0; // CHANGEME
+    self.yellow_duration = 1.0; // CHANGEME
     
     return self;
 }
@@ -78,7 +78,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
 }
 
 - (void)setNewPhase: (AATIntersectionPhase)phase {
-    NSLog(@"Set new phase: %@", nameForPhaseEnum(phase));
+//    NSLog(@"Set new phase: %@", nameForPhaseEnum(phase));
     self.phase = phase;
     self.current_phase_yellow = NO;
     self.current_phase_time_interval = 0;
@@ -159,7 +159,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
         
     }
     
-    return -1;
+    return 0.0;
 }
 
 - (void)setPhaseForMasterTimeInterval:(NSTimeInterval)time {

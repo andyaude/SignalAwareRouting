@@ -24,6 +24,9 @@
 
 @property (nonatomic) long uniqueID;
 
+@property (nonatomic) BOOL shadowRandomCar;
+
+
 - (BOOL)isReadyForRemoval;
 
 @property (nonatomic, getter=getIsOnGraph) BOOL isOnGraphView;
@@ -41,6 +44,11 @@
 
 - (void)initializeIfNeeded;
 - (void)didClickOnCar;
+
+- (BOOL)isSelectedByUser;
+- (void)setUnselected;
+
+-(CGFloat)lastSpeedPerSecond;
 
 // Respond to timer tick
 - (void)doTick:(NSTimeInterval) timeDiff;

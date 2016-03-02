@@ -65,7 +65,8 @@ NSMutableDictionary *edges;
 	@param destinationNode the node to check the weight to
 	@returns either nil, or a number object describing the weight from one node to the other
  */
-- (NSNumber *)weightFromNode:(IntersectionNode *)sourceNode viaNode:(IntersectionNode *)viaNode toNeighboringNode:(IntersectionNode *)destinationNode andConsiderLightPenalty:(BOOL)considerPenalty andRT:(BOOL)rt andTime:(double)time;
+- (NSNumber *)weightFromNode:(IntersectionNode *)sourceNode viaNode:(IntersectionNode *)viaNode toNeighboringNode:(IntersectionNode *)destinationNode andConsiderLightPenalty:(BOOL)considerPenalty andRT:(BOOL)rt andTime:(double)time andQueuePenalty:(BOOL)queuePenalty;
+
 /**
 	Returns an unordered collection of all nodes that receive edges from the given node.
 	@param aNode a node to test for neighbors of
@@ -125,7 +126,7 @@ NSMutableDictionary *edges;
 	@param endNode a node in graph to calculate a route to
 	@returns either a PESGraphRoute object or nil, if no route is possible
  */
-- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty andTime:(double)time;
+- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty;
 
 - (void)justAddNode:(IntersectionNode *)node;
 

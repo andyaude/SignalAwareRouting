@@ -50,8 +50,11 @@ typedef enum {
 // Strongify -- main owner of the phase machine
 @property (nonatomic, strong) AATLightPhaseMachine *light_phase_machine;
 
-- (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp useRealTiming:(BOOL)real_timing;
+- (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp;
+
+
 - (BOOL)isTurnForbidden:(PortDirection)inp outPort:(PortDirection)outp;
+- (float)calculateRealtimePenalty:(PortDirection)inp outPort:(PortDirection)outp withRealTimestamp:(NSTimeInterval)times;
 
 
 /**

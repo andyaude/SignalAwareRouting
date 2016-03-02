@@ -183,13 +183,17 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     
 }
 
-- (void)drawRouteOverlay:(AAGraphRoute *)route  {
+- (void)drawRouteOverlay:(AAGraphRoute *)route andSpecialColorOrNil:(UIColor *)colorOrNil {
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
     
-    [[UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.1] set];
-    CGContextSetLineWidth(ctx,3.0f);
+    if (!colorOrNil)
+        [[UIColor colorWithRed:0.0 green:1.0 blue:1.0 alpha:0.1] set];
+    else
+        [colorOrNil set];
+    
+    CGContextSetLineWidth(ctx,2.5f);
     
 //    NSDictionary *edges = [self.graph edges];
     for (AAGraphRouteStep *aStep in route.steps) {
@@ -216,12 +220,12 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     
 }
 
-- (void)drawShortestPathFromNodeNamed:(NSString *)first toNodeNamed:(NSString *)second consider:(BOOL)considerPenalty {
+- (void)drawShortestPathFromNodeNamed:(NSString *)first toNodeNamed:(NSString *)second consider:(BOOL)considerPenalty inRealtime:(BOOL)rt withTime:(NSTimeInterval) time andCurrentQueuePenalty:(BOOL)currentQueuePenalty {
     IntersectionNode *nodeA = [self.graph nodeInGraphWithIdentifier:first];
     IntersectionNode *nodeB = [self.graph nodeInGraphWithIdentifier:second];
     
 
-    AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeA toNode:nodeB considerIntxnPenalty:considerPenalty andTime:0];
+    AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeA toNode:nodeB considerIntxnPenalty:considerPenalty realtimeTimings:rt andTime:time andCurrentQueuePenalty:currentQueuePenalty];
     NSLog(@"Route :%@",route);
     self.curRouteText = [route description];
     drawThisRoute = route;
@@ -267,7 +271,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
             IntersectionNode *obj = nodes[name];
             
             CGPoint center = [self getCGPointForLongitude:obj.longitude andLatitude:obj.latitude];
-            center.x += CIRCLE_BOX_SIZE/8.; center.y += CIRCLE_BOX_SIZE/8.;
+            center.x += CIRCLE_BOX_SIZE/7.; center.y += CIRCLE_BOX_SIZE/7.;
 
             CGPoint off_left = center; off_left.x -= 8.0;
             CGPoint off_right = center; off_right.x += 8.0;
@@ -289,10 +293,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 
             
         }
-  
-    
 }
-
 
 // Assuming deg latitude = 69.0
 // Assuming deg longitude = 53.0
@@ -332,8 +333,14 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     }
 }
 
+- (void)removeAllSubviews {
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+}
+
 - (void)drawCarsAndStuff {
     NSArray *carViews = [self.containingViewController getCarsToDraw];
+    
+    CarAndView *deferDraw = nil;
     
     for (CarAndView *car in carViews) {
         AACarView *carView = car.carView;
@@ -344,7 +351,21 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
         
         [car initializeIfNeeded];
         
-        [self drawRouteOverlay:car.intendedRoute];
+        UIColor *override = nil;
+        
+        // For normal D-I routes show as RED
+        if (!car.shadowRandomCar)
+            override = [UIColor colorWithRed:1.0 green:.2 blue:.2 alpha:0.3];
+        
+        if ([car isSelectedByUser]) {
+            deferDraw = car;
+        } else {
+        
+//            int randodraw = arc4random() % 100;
+            
+//            if (randodraw < 30)
+                [self drawRouteOverlay:car.intendedRoute andSpecialColorOrNil:override];
+        }
 
         
         carView.hidden = NO;
@@ -354,6 +375,11 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 //        NSLog(@"place at xy: %@", NSStringFromCGPoint(newCenter));
         carView.center = newCenter;
     }
+    
+    if (deferDraw) {
+        [self drawRouteOverlay:deferDraw.intendedRoute andSpecialColorOrNil:[UIColor colorWithRed:0 green:1.0 blue:0. alpha:1.]];
+    }
+
 }
 
 // Only override drawRect: if you perform custom drawing.
@@ -366,7 +392,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     [self drawAllIntxnCircles];
     
     if (drawThisRoute) {
-        [self drawRouteOverlay:drawThisRoute];
+        [self drawRouteOverlay:drawThisRoute andSpecialColorOrNil:nil];
     }
 
     [self drawTrafficLights];

@@ -24,7 +24,11 @@
 // Make car aware of other cars.
 
 #warning todo:Assuming 60 second phase
-- (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp useRealTiming:(BOOL)real_timing {
+- (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp {
+    
+    AATLightPhaseMachine *lightPhase = self.light_phase_machine;
+    
+    double totalPhaseLen = (lightPhase.nsPhase + lightPhase.ewPhase) + 1;
     
     if ((inp == NORTH_PORT && outp == NORTH_PORT)
         || (inp == SOUTH_PORT && outp == SOUTH_PORT)
@@ -32,39 +36,104 @@
         || (inp == WEST_PORT && outp == WEST_PORT))
         
         // U-Turn delay
-        return 60.0; // calculate based on stop light average timing OR ACTUAL timing
+        return (lightPhase.nsPhase + lightPhase.ewPhase)/2.; // calculate based on stop light average timing OR ACTUAL timing
     
-    if ((inp == NORTH_PORT && outp == SOUTH_PORT)
-        || (inp == SOUTH_PORT && outp == NORTH_PORT)
-        || (inp == EAST_PORT && outp == WEST_PORT)
-        || (inp == WEST_PORT && outp == EAST_PORT))
-        
+//    if ((inp == NORTH_PORT && outp == SOUTH_PORT)
+//        || (inp == SOUTH_PORT && outp == NORTH_PORT)
+//        || (inp == EAST_PORT && outp == WEST_PORT)
+//        || (inp == WEST_PORT && outp == EAST_PORT)) {
+    
         // STRAIGHT THRU ? delay
-        return 15.0; // calculate based on stop light average timing OR ACTUAL timing
+        // STRAIGHT THRU delays
+        if (inp == NORTH_PORT || inp == SOUTH_PORT)
+            return lightPhase.ewPhase / totalPhaseLen ; // expected num seconds? // clear for (percent time in NS) * 0 + percent time in EW * EW
+        else return lightPhase.nsPhase / totalPhaseLen;
+//    }
     
-    if ((inp == NORTH_PORT && outp == WEST_PORT)
-        || (inp == SOUTH_PORT && outp == EAST_PORT)
-        || (inp == EAST_PORT && outp == NORTH_PORT)
-        || (inp == WEST_PORT && outp == SOUTH_PORT))
-        
-        // RIGHT Turn Delay
-#warning TODO: Make factor of cross street congestion!
-        return 20.0;
 
-    if ((inp == NORTH_PORT && outp == EAST_PORT)
-        || (inp == SOUTH_PORT && outp == WEST_PORT)
-        || (inp == EAST_PORT && outp == SOUTH_PORT)
-        || (inp == WEST_PORT && outp == NORTH_PORT))
-        
-        // LEFT Turn Delay
-#warning TODO: Determine signal phases
-        return 90.0;
-    
+#warning TODO IMPELMENT CORRECT TURN VIOLATION BEHAVIORS!!
+//    if ((inp == NORTH_PORT && outp == WEST_PORT)
+//        || (inp == SOUTH_PORT && outp == EAST_PORT)
+//        || (inp == EAST_PORT && outp == NORTH_PORT)
+//        || (inp == WEST_PORT && outp == SOUTH_PORT))
+//        
+//        // RIGHT Turn Delay
+//#warning TODO: Make factor of cross street congestion!
+//        return 20.0;
+//
+//    if ((inp == NORTH_PORT && outp == EAST_PORT)
+//        || (inp == SOUTH_PORT && outp == WEST_PORT)
+//        || (inp == EAST_PORT && outp == SOUTH_PORT)
+//        || (inp == WEST_PORT && outp == NORTH_PORT))
+//        
+//        // LEFT Turn Delay
+//#warning TODO: Determine signal phases
+//        return 60.0;
+//    
     NSLog(@"Uh, this shouldn't happen");
     NSAssert(0, @"Invalid turn direction");
     return 100.0;
     
         
+}
+
+
+- (float)calculateRealtimePenalty:(PortDirection)inp outPort:(PortDirection)outp withRealTimestamp:(NSTimeInterval)times {
+    
+    AATLightPhaseMachine *lightPhase = self.light_phase_machine;
+    
+    if ((inp == NORTH_PORT && outp == NORTH_PORT)
+        || (inp == SOUTH_PORT && outp == SOUTH_PORT)
+        || (inp == EAST_PORT && outp == EAST_PORT)
+        || (inp == WEST_PORT && outp == WEST_PORT))
+        
+        // U-Turn delay
+        // Forever and a half, basically. Downrank. TODO FIX
+        return (lightPhase.nsPhase + lightPhase.ewPhase)/2.;
+    
+    if ((inp == NORTH_PORT && outp == SOUTH_PORT)
+        || (inp == SOUTH_PORT && outp == NORTH_PORT)
+        || (inp == EAST_PORT && outp == WEST_PORT)
+        || (inp == WEST_PORT && outp == EAST_PORT)) {
+        
+        // STRAIGHT THRU delays
+        if (inp == NORTH_PORT || inp == SOUTH_PORT)
+            return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION];
+        else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION];
+    }
+    
+    
+    
+    if ((inp == NORTH_PORT && outp == WEST_PORT)
+        || (inp == SOUTH_PORT && outp == EAST_PORT)
+        || (inp == EAST_PORT && outp == NORTH_PORT)
+        || (inp == WEST_PORT && outp == SOUTH_PORT)) {
+        
+        // RIGHT Turn Delay
+#warning TODO: RIGHT TURN ON RED!??
+
+        if (inp == NORTH_PORT || inp == SOUTH_PORT)
+            return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION];
+        else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION]; // 2.0 for right turn on red
+    }
+    
+    
+    if ((inp == NORTH_PORT && outp == EAST_PORT)
+        || (inp == SOUTH_PORT && outp == WEST_PORT)
+        || (inp == EAST_PORT && outp == SOUTH_PORT)
+        || (inp == WEST_PORT && outp == NORTH_PORT)) {
+        
+        // LEFT Turn Delay
+        if (inp == NORTH_PORT || inp == SOUTH_PORT)
+            return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION] * 1.3;
+        else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION] * 1.3; // Extra wait for left turns. Scalar should depend on probe data traffic loads. :/
+    
+    }
+    NSLog(@"Uh, this shouldn't happen");
+    NSAssert(0, @"Invalid turn direction");
+    return 100.0;
+    
+    
 }
 
 - (NSSet *)getEdgeSet {

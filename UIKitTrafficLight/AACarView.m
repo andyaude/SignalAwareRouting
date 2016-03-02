@@ -20,7 +20,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.frame = CGRectMake(0, 0, 20, 20);
+        self.frame = CGRectMake(0, 0, 10, 10);
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = NO;
         
@@ -43,6 +43,7 @@
         [self.containingCar didClickOnCar];
     }
 }
+
 
 -(void)moveInApproachDir:(CGFloat)units {
     CGRect oldFrame = self.frame;
@@ -124,7 +125,12 @@
     if (self.overrideColor) {
         [self.overrideColor setFill];
     } else {
-        [[UIColor greenColor] setFill];
+        
+        if (self.containingCar.shadowRandomCar) {
+            [[UIColor colorWithRed:0.4 green:1.0 blue:0.9 alpha:0.8] setFill];
+        } else {
+            [[UIColor greenColor] setFill];
+        }
     }
     
     [bezier fill];

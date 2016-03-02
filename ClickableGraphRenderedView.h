@@ -25,13 +25,14 @@
 @property (nonatomic) float min_lati;
 @property (nonatomic) float max_lati;
 
-- (void)drawShortestPathFromNodeNamed:(NSString *)first toNodeNamed:(NSString *)second consider:(BOOL)considerPenalty;
 @property (nonatomic) NSString *curRouteText;
 
 #warning sloppy delegate
 @property (nonatomic, weak) id containingViewController;
 
+- (void)drawShortestPathFromNodeNamed:(NSString *)first toNodeNamed:(NSString *)second consider:(BOOL)considerPenalty inRealtime:(BOOL)rt withTime:(NSTimeInterval) time andCurrentQueuePenalty:(BOOL)queue;
 
 + (double)distance:(CGPoint)latLongOne andPoint:(CGPoint)latLongTwo;
+- (void)removeAllSubviews;
 
 @end

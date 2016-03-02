@@ -16,6 +16,8 @@
 @synthesize nodes = nodes;
 @synthesize edges = edges;
 
+#define CARS_PER_SEC 0.5
+
 
 - (id)init
 {
@@ -89,7 +91,7 @@
 }
 
 // TODO: UNTESTED MESS
-- (NSNumber *)weightFromNode:(IntersectionNode *)sourceNode viaNode:(IntersectionNode *)viaNode toNeighboringNode:(IntersectionNode *)destinationNode andConsiderLightPenalty:(BOOL)considerPenalty andRT:(BOOL)rt andTime:(double)time
+- (NSNumber *)weightFromNode:(IntersectionNode *)sourceNode viaNode:(IntersectionNode *)viaNode toNeighboringNode:(IntersectionNode *)destinationNode andConsiderLightPenalty:(BOOL)considerPenalty andRT:(BOOL)rt andTime:(double)time andQueuePenalty:(BOOL)queuePenalty
 {
     StreetEdge *firstEdge = [self edgeFromNode:sourceNode toNeighboringNode:viaNode];
     StreetEdge *lastEdge = [self edgeFromNode:viaNode toNeighboringNode:destinationNode];
@@ -100,15 +102,42 @@
         
     PortDirection inPort = [self getPortDirForNode:viaNode andEdge:firstEdge];
     PortDirection outPort = [self getPortDirForNode:viaNode andEdge:lastEdge];
-    
-    
+        
     if (considerPenalty) {
-        double penalty = [sourceNode calculateTurnPenaltyForInPort:inPort outPort:outPort useRealTiming:NO];
+        
+        double penalty;
+        if (!rt)
+            penalty = [sourceNode calculateTurnPenaltyForInPort:inPort outPort:outPort];
+        else
+            penalty = [sourceNode calculateRealtimePenalty:inPort outPort:outPort withRealTimestamp:time+baseWeight];
+        
+        
         baseWeight += penalty;
-        NSLog(@"Doling out penalty from source:%@ via:%@ dest:%@ amount :%.2f, ip%d op%d", sourceNode.identifier, viaNode.identifier, destinationNode.identifier, penalty, inPort, outPort);
+        
+//        NSLog(@"Penalty from source:%@ via:%@ dest:%@ amount :%.2f, forTime %.2f t+b %.2f", sourceNode.identifier, viaNode.identifier, destinationNode.identifier, penalty, time, time+baseWeight-penalty);
     }
     } else if (considerPenalty) {
         NSLog(@"Didn't have a first edge and was supposed to add penalty...");
+    }
+    
+    if (queuePenalty) {
+        NSUInteger numCarsOnRoadAlready = 0;
+        if (firstEdge.intersectionA == sourceNode)
+            numCarsOnRoadAlready = firstEdge.ABCars.count;
+        else
+            numCarsOnRoadAlready = firstEdge.BACars.count;
+        
+        if (numCarsOnRoadAlready > 0) {
+            double queuePen = 3.0 * numCarsOnRoadAlready;
+            double car_ratio = numCarsOnRoadAlready / (firstEdge.getWeight * CARS_PER_SEC);
+                                                       
+            double scalar = car_ratio < 1.0 ? sqrt(car_ratio) : pow(car_ratio, 2.0); // severely penalize a full road. Not so much penalty for unfilled road!
+            
+            baseWeight += queuePen * scalar; // Add 2 seconds * logbase2 of (numcarsonroad)
+            NSLog(@" QueuePen %@ %.2f scalar %.2f", firstEdge.identifier, queuePen, scalar);
+
+        }
+        
     }
     
     return (lastEdge) ? @(baseWeight) : nil;
@@ -253,7 +282,7 @@
 
 // Returns the quickest possible path between two nodes, using Dijkstra's algorithm
 // http://en.wikipedia.org/wiki/Dijkstra's_algorithm
-- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty andTime:(double)time
+- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty
 {
     NSMutableDictionary *unexaminedNodes = [NSMutableDictionary dictionaryWithDictionary:self.nodes];
     
@@ -284,6 +313,8 @@
                            forKey:startNode.identifier];
     
     NSString *currentlyExaminedIdentifier = nil;
+    
+//    double cum_time = time;
     
     while ([unexaminedNodes count] > 0) {
         
@@ -324,14 +355,19 @@
                     // to the origin so far, save / store the new shortest path amount for the node, and set
                     // the currently being examined node to be the optimal path home
                     // The distance of going from the neighbor node to the origin, going through the node we're about to eliminate
+                    
+                    NSNumber *distanceFromNeighborToOrigin = [distancesFromSource objectForKey:neighboringNode.identifier];
+                    
+                    // need to consider full candidate route??
+#warning routing logic mindfuck
+                    
                     NSNumber *alt = [NSNumber numberWithFloat:
                                      [[distancesFromSource objectForKey:identifierOfSmallestDist] floatValue] +
                                      [[self weightFromNode:[previousNodeInOptimalPath objectForKey:nodeMostRecentlyExamined.identifier]
                                                    viaNode:nodeMostRecentlyExamined
                                                     toNeighboringNode:neighboringNode
-                                                    andConsiderLightPenalty:penalty andRT:NO andTime:time] floatValue]];
+                                                    andConsiderLightPenalty:penalty andRT:realtime andTime:time andQueuePenalty:currentQueuePenalty] floatValue]];
                     
-                    NSNumber *distanceFromNeighborToOrigin = [distancesFromSource objectForKey:neighboringNode.identifier];
                     
                     // If its quicker to get to the neighboring node going through the node we're about the remove
                     // than through any other path, record that the node we're about to remove is the current fastes
@@ -391,7 +427,7 @@
         
         route.effective_dist_from_source = [[distancesFromSource objectForKey:endNode.identifier] doubleValue];
         
-        NSLog(@"Distances from source :%@", distancesFromSource);
+//        NSLog(@"Distances from source :%@", distancesFromSource);
         return route;
     }
 }

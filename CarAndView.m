@@ -14,16 +14,19 @@
 #import "AATLightPhaseMachine.h"
 #import "SecondViewController.h"
 
-#define DIST_TO_YELLOWIFY 0.020
-#define CAR_STOP_SEP 0.020
-
+#define DIST_TO_YELLOWIFY 0.011
+#define CAR_STOP_SEP 0.0081
+#define STANDARD_SPEED 1/270.0 // units per time tick?
 
 @interface CarAndView () {
     BOOL _readyForRemoval;
+    BOOL _wasClicked;
 }
 
 @property (nonatomic) BOOL inited;
 @property (nonatomic) CGFloat oldDist;
+
+@property (nonatomic) double last_speed;
 
 @property (nonatomic) int step_index;
 @property (nonatomic) BOOL isOnFinalStep;
@@ -46,6 +49,15 @@
         _oldDist = CGFLOAT_MAX;
     }
     return self;
+}
+
+-(BOOL)isSelectedByUser {
+    return _wasClicked;
+}
+
+
+-(CGFloat)lastSpeedPerSecond {
+    return _last_speed * 30;
 }
 
 - (BOOL)getIsOnGraph {
@@ -84,6 +96,8 @@
     double myDist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.latlong];
     // Filter to only cars ahead of me.
     for (CarAndView *other in cars) {
+        if (other->_uniqueID == self->_uniqueID) continue; // ignore self
+        
         double theirDist = [ClickableGraphRenderedView distance:other.currentLongLat andPoint:farNode.latlong];
         if (theirDist < myDist) [forwardDirCars addObject:other];
     }
@@ -128,13 +142,15 @@
     
     if (sortedArray.count == 0) return NO;
     
-    if (sortedArray.count == 1) {
+    // Check immediate next car!
+    if (sortedArray.count >= 1) {
         CarAndView *closest = sortedArray[0];
         double dist_between = [ClickableGraphRenderedView distance:closest.currentLongLat andPoint:self.currentLongLat];
         if (dist_between > CAR_STOP_SEP) return NO;
 
     }
     
+    // If we have more than immediate next car, check for more backup
     for (int i = 0; i < sortedArray.count - 1; i++) {
         CarAndView *carA = sortedArray[i];
         CarAndView *carB = sortedArray[i+1];
@@ -165,7 +181,7 @@
         
         for (CarAndView *carCand in cars) {
             double dist_between = [ClickableGraphRenderedView distance:carCand.currentLongLat andPoint:first.node.getLatLong];
-            if (dist_between < CAR_STOP_SEP) {
+            if (dist_between < CAR_STOP_SEP*1.5) {
                 if ([carCand chainedHardStopImpending])
                     return YES;
             }
@@ -176,7 +192,7 @@
 }
 
 // Per second?
-- (double)velocity {
+- (double)velocity_helper {
     IntersectionNode *farNode = [self getFarNode];
     AATLightPhaseMachine *lightPhase = farNode.light_phase_machine;
     
@@ -187,13 +203,16 @@
     if ([self isInIntersectionRange]) {
         
         if ([self checkBackedUpIntxn]) {
+            self.hardStopped = YES;
             return 0.0;
+        } else {
+            self.hardStopped = NO;
         }
         
         // Logic to run the yellow??
         if (color == GREEN_LIGHTUNIT) {
             self.hardStopped = NO;
-            return 1/100.0;
+            return STANDARD_SPEED;
         } else {
             self.hardStopped = YES;
             return 0.0; // TODO DECEL
@@ -209,14 +228,33 @@
     
 
     
-    return 1/100.;
+    return STANDARD_SPEED;
+}
+
+- (double)velocity {
+    double result = [self velocity_helper];
+    _last_speed = result;
+    return result;
 }
 
 
+- (void)setUnselected {
+    _wasClicked = NO;
+}
 
 
 - (void)didClickOnCar {
     NSLog(@"Did click on car %ld", _uniqueID);
+    
+    if (_wasClicked) {
+        _wasClicked = NO;
+    } else {
+    
+        [self.secondVC unselectAllCars];
+        _wasClicked = YES;
+    
+    }
+    NSLog(@"Hard_stopped %d and last velocity %.3f", self.hardStopped, 30*_last_speed);
 //    [self something];
 }
 
@@ -238,7 +276,7 @@
     
     if (first.edge == nil) {
         [self vanquish];
-        NSLog(@"Called vanquish!");
+//        NSLog(@"Called vanquish!");
         return;
     }
     
@@ -260,7 +298,7 @@
         _oldDist = dist;
         return NO;
     } else {
-        NSLog(@"The distance increased, undoing a step");
+//        NSLog(@"The distance increased, undoing a step");
         
         // Logic to undo a step
         CGPoint oldCenter = self.currentLongLat;
@@ -285,7 +323,11 @@
     if ([self isInIntersectionRange]) {
          self.carView.overrideColor = [UIColor yellowColor];
     } else {
-        self.carView.overrideColor = nil;
+        
+        if (_wasClicked)
+            self.carView.overrideColor = [UIColor redColor];
+        else
+            self.carView.overrideColor = nil;
     }
 }
 
@@ -328,9 +370,9 @@
     self.currentLongLat = oldCenter;
 
     
-    [UIView animateWithDuration:0.25 animations:^{
+//    [UIView animateWithDuration:0.25 animations:^{
         self.carView.transform = CGAffineTransformMakeRotation(angle);
-    }];
+//    }];
     
     [self turnCarYellowIfCloseToIntersection];
     
@@ -345,10 +387,7 @@
 
 
 // TODO:
-#warning figure out dijkstra calculation w/ time penalty considered (easy?)
-#warning figure out how to place cars on graph, // and have them move along graph
-#warning teach cars to follow cars in front without slamming into them! teach cars to turn.
-#warning first will need to make sample cars w/ sample routes started out on the right edge
+#warning figure out dijkstra calculation w/ time penalty considered (word ladder calculation!)
 
 // Will want to filter and sort other cars in the edge array. Will need logic to determine opposite side for purposes of permissive left turn.
 

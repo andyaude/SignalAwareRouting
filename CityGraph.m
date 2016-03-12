@@ -117,7 +117,7 @@
 //        NSLog(@"Penalty from source:%@ via:%@ dest:%@ amount :%.2f, forTime %.2f t+b %.2f", sourceNode.identifier, viaNode.identifier, destinationNode.identifier, penalty, time, time+baseWeight-penalty);
     }
     } else if (considerPenalty) {
-        NSLog(@"Didn't have a first edge and was supposed to add penalty...");
+//        NSLog(@"Didn't have a first edge and was supposed to add penalty...");
     }
     
     if (queuePenalty) {
@@ -134,7 +134,7 @@
             double scalar = car_ratio < 1.0 ? sqrt(car_ratio) : pow(car_ratio, 2.0); // severely penalize a full road. Not so much penalty for unfilled road!
             
             baseWeight += queuePen * scalar; // Add 2 seconds * logbase2 of (numcarsonroad)
-            NSLog(@" QueuePen %@ %.2f scalar %.2f", firstEdge.identifier, queuePen, scalar);
+//            NSLog(@" QueuePen %@ %.2f scalar %.2f", firstEdge.identifier, queuePen, scalar);
 
         }
         

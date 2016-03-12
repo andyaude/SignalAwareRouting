@@ -11,7 +11,7 @@
 #import "AAGraphRoute.h"
 #import "AAGraphRouteStep.h"
 #import "ClickableGraphRenderedView.h"
-#import "AATLightPhaseMachine.h"
+#import "LightPhaseMachine.h"
 #import "SecondViewController.h"
 
 #define DIST_TO_YELLOWIFY 0.011
@@ -30,6 +30,11 @@
 
 @property (nonatomic) int step_index;
 @property (nonatomic) BOOL isOnFinalStep;
+
+
+// Start time interval
+@property (nonatomic) NSTimeInterval startTimeInterval;
+@property (nonatomic) NSTimeInterval endTimeInterval;
 
 
 @property (nonatomic, weak) AAGraphRouteStep *currentStep;
@@ -66,6 +71,10 @@
 
 - (BOOL)isReadyForRemoval {
     return _readyForRemoval;
+}
+
+- (StreetEdge *)getCurrentEdge {
+    return self.currentStep.edge;
 }
 
 - (IntersectionNode *)getFarNode {
@@ -167,6 +176,10 @@
 
 }
 
+- (void)markStartTime:(NSTimeInterval)time {
+    self.startTimeInterval = time;
+}
+
 - (BOOL)checkBackedUpIntxn {
     if ([self isInIntersectionRange]) {
         AAGraphRoute *destination =  self.intendedRoute;
@@ -194,7 +207,7 @@
 // Per second?
 - (double)velocity_helper {
     IntersectionNode *farNode = [self getFarNode];
-    AATLightPhaseMachine *lightPhase = farNode.light_phase_machine;
+    LightPhaseMachine *lightPhase = farNode.light_phase_machine;
     
     BOOL isNS = (self.currentStep.edge == farNode.n_port || self.currentStep.edge == farNode.s_port);
     
@@ -254,6 +267,9 @@
         _wasClicked = YES;
     
     }
+    
+    // Force show path update even if simulation is paused!
+    [self.secondVC.clickableRenderView setNeedsDisplay];
     NSLog(@"Hard_stopped %d and last velocity %.3f", self.hardStopped, 30*_last_speed);
 //    [self something];
 }
@@ -261,6 +277,10 @@
 
 - (void)vanquish {
     _readyForRemoval = YES; // Flag to communicate with second view controller!
+    self.endTimeInterval = [self.secondVC masterTime];
+    
+    if (!self.shadowRandomCar)
+        [self.secondVC reportE2EDelayForID:self.uniqueID andInterval:self.endTimeInterval - self.startTimeInterval];
 }
 
 - (void)advanceToNextStepIndex {
@@ -358,6 +378,7 @@
     CGPoint up = CGPointMake(0, -1);
     
     double angle =  atan2(dirVector.y, dirVector.x) - atan2(up.y, up.x);
+    
 
     
     CGPoint translateMe = dirVector;
@@ -368,6 +389,7 @@
     oldCenter.x += translateMe.x;
     oldCenter.y -= translateMe.y; // because we're dealing with lat long and not coordinates
     self.currentLongLat = oldCenter;
+    
 
     
 //    [UIView animateWithDuration:0.25 animations:^{
@@ -384,11 +406,5 @@
     
     
 }
-
-
-// TODO:
-#warning figure out dijkstra calculation w/ time penalty considered (word ladder calculation!)
-
-// Will want to filter and sort other cars in the edge array. Will need logic to determine opposite side for purposes of permissive left turn.
 
 @end

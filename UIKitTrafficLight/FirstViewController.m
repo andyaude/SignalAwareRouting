@@ -7,8 +7,8 @@
 //
 
 #import "FirstViewController.h"
-#import "AAStopLightView.h"
-#import "AATLightPhaseMachine.h"
+#import "StopLightView.h"
+#import "LightPhaseMachine.h"
 #import "AACarView.h"
 
 @interface FirstViewController ()
@@ -19,13 +19,13 @@
 @property (weak, nonatomic) IBOutlet UIView *northSouthRoad;
 @property (weak, nonatomic) IBOutlet UIView *eastWestRoad;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
-@property (weak, nonatomic) IBOutlet AAStopLightView *testLightSW;
-@property (weak, nonatomic) IBOutlet AAStopLightView *testLightEast;
-@property (weak, nonatomic) IBOutlet AAStopLightView *testLightNorth;
-@property (weak, nonatomic) IBOutlet AAStopLightView *testLightWest;
+@property (weak, nonatomic) IBOutlet StopLightView *testLightSW;
+@property (weak, nonatomic) IBOutlet StopLightView *testLightEast;
+@property (weak, nonatomic) IBOutlet StopLightView *testLightNorth;
+@property (weak, nonatomic) IBOutlet StopLightView *testLightWest;
 
 
-@property (strong, nonatomic) AATLightPhaseMachine *phaseMachine;
+@property (strong, nonatomic) LightPhaseMachine *phaseMachine;
 @property (strong, nonatomic) NSArray *allLights;
 
 @property (strong, nonatomic) NSTimer *activeTimer;
@@ -227,7 +227,7 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
     
     self.activeCars = [NSMutableArray new];
     _timeMultiplier = 1.0;
-    self.phaseMachine = [[AATLightPhaseMachine alloc] init];
+    self.phaseMachine = [[LightPhaseMachine alloc] init];
     [self layoutTrafficLights];
     [self setLightDirections];
     self.road_pair = @[self.eastWestRoad, self.northSouthRoad];
@@ -249,7 +249,7 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
 }
 
 - (void)redrawLightsBasedOnPhaseMachine {
-    for (AAStopLightView *light in self.allLights) {
+    for (StopLightView *light in self.allLights) {
         [light setColor:[self.phaseMachine lightColorForDirection:light.light_direction]];
     }
 }

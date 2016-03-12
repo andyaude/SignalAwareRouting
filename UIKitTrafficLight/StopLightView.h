@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AAStopLightView : UIView
+@interface StopLightView : UIView
 
 typedef enum  {
     RED_LIGHTUNIT,

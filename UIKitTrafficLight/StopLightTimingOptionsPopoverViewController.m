@@ -7,7 +7,7 @@
 //
 
 #import "StopLightTimingOptionsPopoverViewController.h"
-#import "AATLightPhaseMachine.h"
+#import "LightPhaseMachine.h"
 
 @interface StopLightTimingOptionsPopoverViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *NWPhaseLbl;
@@ -36,7 +36,7 @@
 }
 
 - (void)updateTimerProg {
-    AATLightPhaseMachine *phase = self.intxnnode.light_phase_machine;
+    LightPhaseMachine *phase = self.intxnnode.light_phase_machine;
 
     [self.progressIndicator setProgress:[phase getCurrentPhaseProgress] animated:NO];
     
@@ -44,7 +44,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    AATLightPhaseMachine *phase = self.intxnnode.light_phase_machine;
+    LightPhaseMachine *phase = self.intxnnode.light_phase_machine;
     
     
     self.NWPhaseLbl.text = [NSString stringWithFormat:@"%.2f", phase.nsPhase];
@@ -65,17 +65,17 @@
     }
 }
 - (IBAction)offsetChanged:(UISlider *)sender {
-    AATLightPhaseMachine *phase = self.intxnnode.light_phase_machine;
+    LightPhaseMachine *phase = self.intxnnode.light_phase_machine;
     phase.phase_offset = sender.value;
     [self viewWillAppear:NO];
 }
 - (IBAction)EWChanged:(UISlider *)sender {
-    AATLightPhaseMachine *phase = self.intxnnode.light_phase_machine;
+    LightPhaseMachine *phase = self.intxnnode.light_phase_machine;
     phase.ewPhase = sender.value;
     [self viewWillAppear:NO];
 }
 - (IBAction)NSChanged:(UISlider *)sender {
-    AATLightPhaseMachine *phase = self.intxnnode.light_phase_machine;
+    LightPhaseMachine *phase = self.intxnnode.light_phase_machine;
     phase.nsPhase = sender.value;
     [self viewWillAppear:NO];
 }

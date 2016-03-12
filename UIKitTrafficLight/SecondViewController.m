@@ -11,13 +11,18 @@
 #import "StreetEdge.h"
 #import "AAGraphRoute.h"
 #import "ClickableGraphRenderedView.h"
-#import "AATLightPhaseMachine.h"
+#import "LightPhaseMachine.h"
 #import "StopLightTimingOptionsPopoverViewController.h"
+#import "SimulationSettingsViewController.h"
+
 #import "CarAndView.h"
 
 @interface SecondViewController ()
-
-@property (nonatomic,strong) UIPopoverController *popover;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+@property (nonatomic,strong) UIPopoverController *timingsPopover;
+@property (nonatomic,strong) UIPopoverController *simSettingsPopover;
+#pragma clang diagnostic pop
 
 @end
 
@@ -33,17 +38,31 @@
     [self establishGraph];
     
     _allCars = [NSMutableArray new];
+    _drawAllPaths = YES;
+    _frequentUIUpdates = YES;
 
+    [self setEmitButtonsEnabled:NO];
+
+    // Make this smarter?
+    [self updateSpawnButtons];
+    
     self.clickableRenderView.graph = theGraph;
     self.clickableRenderView.containingViewController = self;
     
+    [self.scrollView setDelegate:self];
     
     [self.clickableRenderView setNeedsDisplay];
+    
+    _e2eDelays = [NSMutableDictionary new];
     
     
     // Do any additional setup after loading the view, typically from a nib.
 }
 
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.clickableRenderView;
+    
+}
 - (NSArray *)getCarsToDraw {
     return _allCars;
 }
@@ -51,6 +70,32 @@
 - (IBAction)considerPenaltyChanged:(UISwitch *)sender {
     if (!sender.on)
         [self.rtPenaltySwitch setOn:NO animated:YES];
+}
+
+- (IBAction)segmentControlChanged:(id)sender {
+    [self.activeTimer invalidate];
+    self.activeTimer = nil;
+    [self resetAll:nil];
+}
+
+- (IBAction)openSimSettingsController:(UIButton *)sender {
+    UIStoryboard *story = self.storyboard;
+    SimulationSettingsViewController *vc = [story instantiateViewControllerWithIdentifier:@"simSettingsController"];
+    vc.secondVC = self;
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    self.simSettingsPopover = [[UIPopoverController alloc] initWithContentViewController:vc];
+#pragma clang diagnostic pop
+
+    vc.parentDrawAllPaths = &_drawAllPaths;
+    vc.parentFrequentUIUpdates = &_frequentUIUpdates;
+    
+    CGRect loc;
+    loc.origin = sender.center;
+    loc.size = CGSizeMake(0, 0);
+    
+    [self.simSettingsPopover presentPopoverFromRect:loc inView:sender.superview permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
 - (double)aggregateSpeed {
@@ -64,14 +109,16 @@
     UIStoryboard *story = self.storyboard;
     StopLightTimingOptionsPopoverViewController *vc = [story instantiateViewControllerWithIdentifier:@"StopTimings"];
     
-    self.popover = [[UIPopoverController alloc] initWithContentViewController:vc];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    self.timingsPopover = [[UIPopoverController alloc] initWithContentViewController:vc];
+#pragma clang diagnostic pop
     vc.intxnnode = node;
-    
     CGRect loc;
     loc.origin = point;
     loc.size = CGSizeMake(0, 0);
     
-    [self.popover presentPopoverFromRect:loc inView:self.clickableRenderView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    [self.timingsPopover presentPopoverFromRect:loc inView:self.clickableRenderView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     
 }
 
@@ -80,7 +127,7 @@
     NSDictionary *nodeNames = graph.nodes;
     for (NSString *name in nodeNames) {
         IntersectionNode *node = nodeNames[name];
-        AATLightPhaseMachine *phaseMachine = node.light_phase_machine;
+        LightPhaseMachine *phaseMachine = node.light_phase_machine;
         phaseMachine.nsPhase = 10.0;
         phaseMachine.ewPhase = 10.0;
         phaseMachine.phase_offset = 0.0;
@@ -105,13 +152,13 @@ float randomFloat(float min, float max)
     NSDictionary *nodeNames = graph.nodes;
     for (NSString *name in nodeNames) {
         IntersectionNode *node = nodeNames[name];
-        AATLightPhaseMachine *phaseMachine = node.light_phase_machine;
+        LightPhaseMachine *phaseMachine = node.light_phase_machine;
         
         phaseMachine.phase_offset = randomFloat(-60.0, 60.0);
         
     }
     
-    self.routeLabel.text = @"WARNING: TOTALLY RANDOM PHASES";
+    self.routeLabel.text = @"WARNING: TOTALLY RANDOM TIMING/PHASES";
     
 }
 
@@ -121,15 +168,34 @@ float randomFloat(float min, float max)
 
 
 - (void)establishGraph {
-//    [self establishBasicGraph];
-//    [self establishGreenFlowGraph];
-    [self establishRushhourGraph];
+    
+    switch (self.scenarioSegment.selectedSegmentIndex) {
+        case 0:
+            [self establishBasicGraph];
+            self.startEmitNodename = @"A";
+            self.endEmitNodename = @"K";
+        break;
+        case 1:
+            [self establishGreenFlowGraph];
+            self.startEmitNodename = @"D";
+            self.endEmitNodename = @"L";
+            break;
+        case 2:
+            [self establishRushhourGraph];
+            self.startEmitNodename = @"D";
+            self.endEmitNodename = @"L";
+            break;
+
+    }
    
 }
 - (void)establishBasicGraph {
     
     
     CityGraph *graph = self.graph;
+    
+    self.routeLabel.text = @"TIMING: Timing cycles between 3 \"best\" flows for A->K .";
+
     
     self.clickableRenderView.min_long = 45.10;
     self.clickableRenderView.max_long = 45.50;
@@ -190,6 +256,7 @@ float randomFloat(float min, float max)
     IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L"]; [graph justAddNode:lNode];
     lNode.latitude = 45.15; lNode.longitude = 45.46;
     lNode.light_phase_machine.phase_offset = 15.0;
+
     
     IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R"]; [graph justAddNode:RNode];
     RNode.latitude = 45.05; RNode.longitude = 45.38;
@@ -244,6 +311,8 @@ float randomFloat(float min, float max)
 - (void)establishGreenFlowGraph {
     
     NSLog(@"Green flow graph");
+    self.routeLabel.text = @"TIMING: D to L Green Flow";
+
     CityGraph *graph = self.graph;
     
     self.clickableRenderView.min_long = 45.10;
@@ -285,21 +354,14 @@ float randomFloat(float min, float max)
     
     IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L"]; [graph justAddNode:lNode];
     lNode.latitude = 45.15; lNode.longitude = 45.46;
-    lNode.light_phase_machine.phase_offset = 00.0;
+    lNode.light_phase_machine.phase_offset = 16.0;
+    lNode.light_phase_machine.ewPhase = 50;
+    lNode.light_phase_machine.nsPhase = 10;
 
     
     IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K"]; [graph justAddNode:kNode];
     kNode.latitude = 45.15; kNode.longitude = 45.38;
     kNode.light_phase_machine.phase_offset = -26.0;
-    
-    //    IntersectionNode *hNode = [IntersectionNode nodeWithIdentifier:@"H"]; [graph justAddNode:hNode];
-    //    hNode.latitude = 45.045; hNode.longitude = 45.24;
-    //    hNode.light_phase_machine.nsPhase = 4.0;
-    
-    
-    IntersectionNode *INode = [IntersectionNode nodeWithIdentifier:@"I"]; [graph justAddNode:INode];
-    INode.latitude = 45.26; INode.longitude = 45.45;
-    INode.light_phase_machine.phase_offset = 18.0;
     
     IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J"];    [graph justAddNode:JNode];
     JNode.latitude = 45.05; JNode.longitude = 45.315;
@@ -319,25 +381,14 @@ float randomFloat(float min, float max)
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"D <--> C"] fromNode:dNode fromPort:EAST_PORT toNode:cNode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"B <--> F"] fromNode:bNode fromPort:EAST_PORT toNode:fNode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"D <--> E"] fromNode:dNode fromPort:SOUTH_PORT toNode:eNode toDir:NORTH_PORT];
-    
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"E <--> J"] fromNode:eNode fromPort:EAST_PORT toNode:JNode toDir:WEST_PORT];
-
-    // DON'T NORMALLY USE THIS
-    
-    
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"C <--> B"] fromNode:cNode fromPort:NORTH_PORT toNode:bNode toDir:SOUTH_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"C <--> G"] fromNode:cNode fromPort:EAST_PORT toNode:gNode toDir:WEST_PORT];
-    
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"G <--> K"] fromNode:gNode fromPort:EAST_PORT toNode:kNode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"J <--> G"] fromNode:JNode fromPort:NORTH_PORT toNode:gNode toDir:SOUTH_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"K <--> F"] fromNode:kNode fromPort:NORTH_PORT toNode:fNode toDir:SOUTH_PORT];
-    [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"F <--> I"] fromNode:fNode fromPort:EAST_PORT toNode:INode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"K <--> L"] fromNode:kNode fromPort:EAST_PORT toNode:lNode toDir:WEST_PORT];
-
-    
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"J <--> R"] fromNode:JNode fromPort:EAST_PORT toNode:RNode toDir:WEST_PORT];
-    [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"R <--> S"] fromNode:RNode fromPort:EAST_PORT toNode:SNode toDir:WEST_PORT];
-    
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"R <--> K"] fromNode:RNode fromPort:NORTH_PORT toNode:kNode toDir:SOUTH_PORT];
 
 }
@@ -345,6 +396,9 @@ float randomFloat(float min, float max)
 - (void)establishRushhourGraph {
     NSLog(@"Rush hour graph");
     CityGraph *graph = self.graph;
+    
+    self.routeLabel.text = @"TIMING: D to L ALL GREEN. J->G is infinitely starved when C->L is fully loaded.";
+
     
     // Cross section starvation can result otherwise!
     BOOL withDecongestionOffset = NO;
@@ -378,7 +432,7 @@ float randomFloat(float min, float max)
     
     IntersectionNode *eNode = [IntersectionNode nodeWithIdentifier:@"E"]; [graph justAddNode:eNode];
     eNode.latitude = 45.07; eNode.longitude = 45.165;
-    eNode.light_phase_machine.ewPhase = 1.0;
+    eNode.light_phase_machine.ewPhase = 5.0;
     
     IntersectionNode *fNode = [IntersectionNode nodeWithIdentifier:@"F"];
     fNode.latitude = 45.26; fNode.longitude = 45.37; [graph justAddNode:fNode];
@@ -386,16 +440,13 @@ float randomFloat(float min, float max)
     
     IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L"]; [graph justAddNode:lNode];
     lNode.latitude = 45.15; lNode.longitude = 45.46;
-    if (withDecongestionOffset) lNode.light_phase_machine.ewPhase = 50;
+    if (withDecongestionOffset) lNode.light_phase_machine.phase_offset = 15.0;
+    lNode.light_phase_machine.ewPhase = 50;
+    lNode.light_phase_machine.nsPhase = 10;
     
     IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K"]; [graph justAddNode:kNode];
     kNode.latitude = 45.15; kNode.longitude = 45.38;
     if (withDecongestionOffset)  kNode.light_phase_machine.phase_offset = 0.0;
-    
-    //    IntersectionNode *hNode = [IntersectionNode nodeWithIdentifier:@"H"]; [graph justAddNode:hNode];
-    //    hNode.latitude = 45.045; hNode.longitude = 45.24;
-    //    hNode.light_phase_machine.nsPhase = 4.0;
-    
     
     
     IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J"];    [graph justAddNode:JNode];
@@ -407,7 +458,6 @@ float randomFloat(float min, float max)
     RNode.latitude = 45.05; RNode.longitude = 45.38;
     RNode.light_phase_machine.phase_offset = 25.0;
     
- 
     
     
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"A <--> B"] fromNode:aNode fromPort:EAST_PORT toNode:bNode toDir:WEST_PORT];
@@ -417,10 +467,6 @@ float randomFloat(float min, float max)
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"D <--> E"] fromNode:dNode fromPort:SOUTH_PORT toNode:eNode toDir:NORTH_PORT];
     
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"E <--> J"] fromNode:eNode fromPort:EAST_PORT toNode:JNode toDir:WEST_PORT];
-    
-    // DON'T NORMALLY USE THIS
-    
-    
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"C <--> B"] fromNode:cNode fromPort:NORTH_PORT toNode:bNode toDir:SOUTH_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"C <--> G"] fromNode:cNode fromPort:EAST_PORT toNode:gNode toDir:WEST_PORT];
     
@@ -434,20 +480,25 @@ float randomFloat(float min, float max)
 
     
 #warning RANDOM OFFSETS APPLIED
-    [self setRandomOffsetTimes];
+//    [self setRandomOffsetTimes];
 }
 
 - (IBAction)startTimer:(id)sender {
     
-    UIButton *sender_as_label = (UIButton *)sender;
-    
     if (!self.activeTimer) {
-        self.activeTimer = [NSTimer scheduledTimerWithTimeInterval:2.0/60.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
-        [sender_as_label setTitle:@"Stop" forState:UIControlStateNormal];
+        self.activeTimer = [NSTimer timerWithTimeInterval:2.0/60.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:self.activeTimer forMode:NSRunLoopCommonModes];
+        [self setEmitButtonsEnabled:YES];
+        [self setStartClockButtonToPause:YES];
+
+//        [sender_as_label setTitle:@"Stop" forState:UIControlStateNormal];
     } else {
         [self.activeTimer invalidate];
         self.activeTimer = nil;
-        [sender_as_label setTitle:@"Start timer" forState:UIControlStateNormal];
+        [self setEmitButtonsEnabled:NO];
+        [self setStartClockButtonToPause:NO];
+
+//        [sender_as_label setTitle:@"Start timer" forState:UIControlStateNormal];
     }
 }
 
@@ -457,10 +508,11 @@ float randomFloat(float min, float max)
 
 - (IBAction)startEFAutoEmitPressed:(UIButton *)sender {
     _autoEFEmit = !_autoEFEmit;
+    NSString *routeName = [NSString stringWithFormat:@"%@-%@", self.startEmitNodename, self.endEmitNodename];
     if (_autoEFEmit)
-        [sender setTitle:@"Stop D-I Emitting" forState:UIControlStateNormal];
+        [sender setTitle:[NSString stringWithFormat:@"Stop %@ Emitting",routeName] forState:UIControlStateNormal];
     else
-        [sender setTitle:@"Start Auto D-I Emit" forState:UIControlStateNormal];
+        [sender setTitle:[NSString stringWithFormat:@"Start Auto %@ Emit", routeName] forState:UIControlStateNormal];
 }
 
 - (IBAction)startSlowRandoEmit:(id)sender {
@@ -486,6 +538,27 @@ float randomFloat(float min, float max)
         }
     }
 }
+
+- (void)setStartClockButtonToPause:(BOOL)toPaused {
+    if (!toPaused)
+        [self.startClockButton setImage:[UIImage imageNamed:@"play1-150x150"] forState:UIControlStateNormal];
+    else
+        [self.startClockButton setImage:[UIImage imageNamed:@"pause1-150x150"] forState:UIControlStateNormal];
+}
+
+- (void)setEmitButtonsEnabled:(BOOL)enabled {
+    self.startSlowRandoEmitLabel.enabled = enabled;
+    self.startDFAutoEmitLabel.enabled = enabled;
+    self.spawnStartEndCarButton.enabled = enabled;
+    self.spawnSingleRandoCarButton.enabled = enabled;
+}
+
+- (void)updateSpawnButtons {
+    NSString *routeName = [NSString stringWithFormat:@"%@-%@", self.startEmitNodename, self.endEmitNodename];
+    [self.startDFAutoEmitLabel setTitle:[NSString stringWithFormat:@"Start Auto %@ Emit",routeName] forState:UIControlStateNormal];
+    [self.spawnStartEndCarButton setTitle:[NSString stringWithFormat:@"Spawn %@",routeName] forState:UIControlStateNormal];
+
+}
 - (IBAction)resetAll:(id)sender {
 
     [self.activeTimer invalidate];
@@ -495,19 +568,29 @@ float randomFloat(float min, float max)
     _emittedCars = 0;
     _autorandoEmit = NO;
     _autoEFEmit = NO;
+    _cumulativee2eDelay = 0;
+    _numE2EReportedCars = 0;
+    self.e2eDelayLabel.text = @"End-to-end delay:";
+
     self.routeLabel.text = @"Route";
     self.flowRateLabel.text = @"Flow Rate:";
     self.throughputLabel.text = @"Throughput:";
-    self.updateUISwitch.on = YES;
-    [self.startDFAutoEmitLabel setTitle:@"Start Auto D-L Emit" forState:UIControlStateNormal];
-    [self.startSlowRandoEmitLabel setTitle:@"Start Rando Emit" forState:UIControlStateNormal];
-    [self.startClockButton setTitle:@"Start timer" forState:UIControlStateNormal];
+    _frequentUIUpdates = YES;
+    _drawAllPaths = YES;
     
     self.graph = [CityGraph new];
     [self establishGraph];
+    [self updateSpawnButtons];
+    [self setEmitButtonsEnabled:NO];
+    
+
     self.masterTime = 0;
     self.clickableRenderView.graph = self.graph;
     _allCars = [NSMutableArray new];
+        [self.startSlowRandoEmitLabel setTitle:@"Start Rando Emit" forState:UIControlStateNormal];
+    //    [self.startClockButton setTitle:@"Start timer" forState:UIControlStateNormal];
+    [self setStartClockButtonToPause:NO];
+    
     [self.clickableRenderView removeAllSubviews];
     [self.clickableRenderView setNeedsDisplay];
 
@@ -550,22 +633,36 @@ float randomFloat(float min, float max)
     
     for (NSString * name in nodes) {
         IntersectionNode *node = nodes[name];
-        AATLightPhaseMachine *phaseMachine = node.light_phase_machine;
+        LightPhaseMachine *phaseMachine = node.light_phase_machine;
         [phaseMachine setPhaseForMasterTimeInterval:self.masterTime];
 
     }
     
     [self pruneCars:timeDiff];
     
-    if (self.updateUISwitch.on)
+    self.clickableRenderView.drawAllPaths = _drawAllPaths;
+    static int slowUpdate = 0;
+    slowUpdate++;
+    if (_frequentUIUpdates || slowUpdate % 4 == 0)
         [[self clickableRenderView] setNeedsDisplay];
     
-    self.flowRateLabel.text = [NSString stringWithFormat:@"Flow Rate: %.2f%%", [self aggregateSpeed]/0.11111*100.0];
+    
+    if (_numE2EReportedCars)
+        self.e2eDelayLabel.text = [NSString stringWithFormat:@"End-to-end delay: %.2f for %d cars", _cumulativee2eDelay/_numE2EReportedCars, _numE2EReportedCars];
+    self.flowRateLabel.text = [NSString stringWithFormat:@"Flow Rate: %.2f%% of %lu are moving", [self aggregateSpeed]/0.11111*100.0, (unsigned long)[_allCars count]];
     self.throughputLabel.text = [NSString stringWithFormat:@"Throughput: %d in %.2f sec", _finishedCars, self.masterTime];
 
     
     
 }
+
+
+// Returns true if node exists in the graph!
+- (BOOL)validateNodeName:(NSString *)name {
+    IntersectionNode *nd = [self.graph nodeInGraphWithIdentifier:name];
+    return (nd != nil);
+}
+
 
 - (IBAction)placeCarOne:(id)sender {
     
@@ -573,18 +670,17 @@ float randomFloat(float min, float max)
     
     CarAndView *car = [[CarAndView alloc] init];
     car.secondVC = self;
+    [car markStartTime:self.masterTime];
     [_allCars addObject:car];
     
-    BOOL isGreenFlow = YES;
+    IntersectionNode *nodeStart = [self.graph nodeInGraphWithIdentifier:self.startEmitNodename];
     
-    IntersectionNode *nodeD = [self.graph nodeInGraphWithIdentifier:@"D"];
+    IntersectionNode *nodeEnd = [self.graph nodeInGraphWithIdentifier:self.endEmitNodename];
     
-    IntersectionNode *nodeF = [self.graph nodeInGraphWithIdentifier:@"L"];
-    
-    if (nodeD) {
-        car.currentLongLat = CGPointMake(nodeD.longitude, nodeD.latitude);
+    if (nodeStart) {
+        car.currentLongLat = CGPointMake(nodeStart.longitude, nodeStart.latitude);
         
-        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeD toNode:nodeF considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on];
+        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeStart toNode:nodeEnd considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on];
         
         car.intendedRoute = route;
     }
@@ -644,6 +740,12 @@ float randomFloat(float min, float max)
 - (IBAction)changedTimeRateSlider:(UISlider *)sender {
     _timeMultiplier = sender.value;
     self.timeRateLabel.text = [NSString stringWithFormat:@"%.1f", sender.value];
+}
+
+- (void)reportE2EDelayForID:(NSUInteger)uniqueID andInterval:(NSTimeInterval)interval {
+    [_e2eDelays setObject:@(interval) forKey:@(uniqueID)];
+    _cumulativee2eDelay += interval;
+    _numE2EReportedCars++;
 }
 
 

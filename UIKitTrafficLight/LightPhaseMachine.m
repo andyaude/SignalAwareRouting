@@ -6,7 +6,7 @@
 //  Copyright © 2016 Andrew Aude. All rights reserved.
 //
 
-#import "AATLightPhaseMachine.h"
+#import "LightPhaseMachine.h"
 
 // NS_PHASE,
 //EW_PHASE,
@@ -37,10 +37,10 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
 }
 
 
-@interface AATLightPhaseMachine ()
+@interface LightPhaseMachine ()
 @property (nonatomic) NSTimeInterval master_time_interval;
 @end
-@implementation AATLightPhaseMachine
+@implementation LightPhaseMachine
 
 - (instancetype) init {
     self = [super init];

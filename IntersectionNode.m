@@ -7,7 +7,7 @@
 //
 
 #import "IntersectionNode.h"
-#import "AATLightPhaseMachine.h"
+#import "LightPhaseMachine.h"
 
 @implementation IntersectionNode
 
@@ -26,7 +26,7 @@
 #warning todo:Assuming 60 second phase
 - (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp {
     
-    AATLightPhaseMachine *lightPhase = self.light_phase_machine;
+    LightPhaseMachine *lightPhase = self.light_phase_machine;
     
     double totalPhaseLen = (lightPhase.nsPhase + lightPhase.ewPhase) + 1;
     
@@ -80,7 +80,7 @@
 
 - (float)calculateRealtimePenalty:(PortDirection)inp outPort:(PortDirection)outp withRealTimestamp:(NSTimeInterval)times {
     
-    AATLightPhaseMachine *lightPhase = self.light_phase_machine;
+    LightPhaseMachine *lightPhase = self.light_phase_machine;
     
     if ((inp == NORTH_PORT && outp == NORTH_PORT)
         || (inp == SOUTH_PORT && outp == SOUTH_PORT)
@@ -146,7 +146,7 @@
 }
 
 - (void)createPhaseMachineIfNeeded {
-    _light_phase_machine = [[AATLightPhaseMachine alloc] init];
+    _light_phase_machine = [[LightPhaseMachine alloc] init];
     
 }
 

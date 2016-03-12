@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AAStopLightView.h"
+#import "StopLightView.h"
 
-@interface AATLightPhaseMachine : NSObject
+@interface LightPhaseMachine : NSObject
 
 typedef enum
 {

@@ -6,18 +6,18 @@
 //  Copyright © 2016 Andrew Aude. All rights reserved.
 //
 
-#import "AAStopLightView.h"
+#import "StopLightView.h"
 
 #define OFF 0.0f
 #define DIM 0.30f
 
-@interface AAStopLightView () {
+@interface StopLightView () {
     bool hasLeftArrow;
     AALightUnitColor _state;
 }
 @end
 
-@implementation AAStopLightView
+@implementation StopLightView
 
 
 - (void)setupSelf {

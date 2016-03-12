@@ -38,11 +38,14 @@
 // Who should maintain the state?
 // The graph, the edges, or the car itself?
 
-- (StreetEdge *)determineEdgeOfCar:(CityGraph *)graph;
+- (StreetEdge *)getCurrentEdge;
+- (IntersectionNode *)getFarNode;
+
 - (BOOL)isDrivingAtoBNode;
 - (CGPoint)getDirectionVectorForEdge:(StreetEdge *)edge andIsAToB:(BOOL)isAToB;
 
 - (void)initializeIfNeeded;
+- (void)markStartTime:(NSTimeInterval)time;
 - (void)didClickOnCar;
 
 - (BOOL)isSelectedByUser;

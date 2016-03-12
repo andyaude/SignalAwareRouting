@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ClickableGraphRenderedView.h"
 
-@interface SecondViewController : UIViewController {
+@interface SecondViewController : UIViewController <UIScrollViewDelegate> {
     double _timeMultiplier;
     NSMutableArray *_allCars;
     int _finishedCars;
@@ -17,6 +17,14 @@
 
     BOOL _autoEFEmit;
     BOOL _autorandoEmit;
+    
+    // Calculated E2E delays
+    NSMutableDictionary *_e2eDelays;
+    NSTimeInterval _cumulativee2eDelay;
+    int _numE2EReportedCars;
+    
+    BOOL _frequentUIUpdates;
+    BOOL _drawAllPaths;
 
 }
 
@@ -24,11 +32,10 @@
 
 
 @property (nonatomic) NSTimeInterval masterTime;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *scenarioSegment;
 
 @property (nonatomic) CityGraph *graph;
 @property (weak, nonatomic) IBOutlet UISwitch *considerLightSwitch;
-@property (weak, nonatomic) IBOutlet UISlider *timePhaseSlider;
-@property (weak, nonatomic) IBOutlet UILabel *timePhaseLabel;
 @property (weak, nonatomic) IBOutlet UITextField *startField;
 @property (weak, nonatomic) IBOutlet UITextField *endField;
 @property (weak, nonatomic) IBOutlet UISwitch *rtPenaltySwitch;
@@ -39,18 +46,35 @@
 
 @property (strong, nonatomic) NSTimer *activeTimer;
 @property (weak, nonatomic) IBOutlet UILabel *timeRateLabel;
-@property (weak, nonatomic) IBOutlet UISwitch *updateUISwitch;
 @property (weak, nonatomic) IBOutlet UIButton *startDFAutoEmitLabel;
 @property (weak, nonatomic) IBOutlet UIButton *startSlowRandoEmitLabel;
+@property (weak, nonatomic) IBOutlet UILabel *e2eDelayLabel;
 @property (weak, nonatomic) IBOutlet UIButton *startClockButton;
+@property (weak, nonatomic) IBOutlet UIButton *spawnStartEndCarButton;
+@property (weak, nonatomic) IBOutlet UIButton *spawnSingleRandoCarButton;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+@property (copy, nonatomic) NSString *startEmitNodename;
+@property (copy, nonatomic) NSString *endEmitNodename;
 
 - (NSArray *)getCarsToDraw;
 - (IBAction)considerPenaltyChanged:(id)sender;
+- (IBAction)segmentControlChanged:(id)sender;
 
+- (IBAction)openSimSettingsController:(id)sender;
 - (void)unselectAllCars;
 - (void)editNode:(IntersectionNode *)node atPoint:(CGPoint)point;
 - (void)putCarOnEdge:(StreetEdge *)edge andStartPoint:(IntersectionNode *)start withCar:(CarAndView*)car;
 - (IBAction)startEFAutoEmitPressed:(id)sender;
+
+
+// For CarAndView's use
+- (void)reportE2EDelayForID:(NSUInteger)uniqueID andInterval:(NSTimeInterval)interval;
+
+// For SimulationSettingsViewController's use
+- (BOOL)validateNodeName:(NSString *)name;
+- (void)updateSpawnButtons;
+
 
 @end
 

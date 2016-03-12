@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 @class StreetEdge;
-@class AATLightPhaseMachine;
+@class LightPhaseMachine;
 
 typedef enum {
     NORTH_PORT,
@@ -48,7 +48,7 @@ typedef enum {
 @property (nonatomic) NSDictionary *stoplight_info;
 
 // Strongify -- main owner of the phase machine
-@property (nonatomic, strong) AATLightPhaseMachine *light_phase_machine;
+@property (nonatomic, strong) LightPhaseMachine *light_phase_machine;
 
 - (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp;
 

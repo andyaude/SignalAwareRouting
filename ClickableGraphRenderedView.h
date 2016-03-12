@@ -25,6 +25,9 @@
 @property (nonatomic) float min_lati;
 @property (nonatomic) float max_lati;
 
+@property (nonatomic) BOOL drawAllPaths;
+
+
 @property (nonatomic) NSString *curRouteText;
 
 #warning sloppy delegate

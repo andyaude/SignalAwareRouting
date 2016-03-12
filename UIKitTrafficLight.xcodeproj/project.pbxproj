@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		690D1BA41C87B1A800FCC63F /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 690D1BA31C87B1A800FCC63F /* gear.png */; };
+		690D1BA61C87B27100FCC63F /* play1-150x150.png in Resources */ = {isa = PBXBuildFile; fileRef = 690D1BA51C87B27100FCC63F /* play1-150x150.png */; };
+		690D1BA81C87B27600FCC63F /* pause1-150x150.png in Resources */ = {isa = PBXBuildFile; fileRef = 690D1BA71C87B27600FCC63F /* pause1-150x150.png */; };
+		690D1BAB1C87B2F300FCC63F /* SimulationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 690D1BAA1C87B2F300FCC63F /* SimulationSettingsViewController.m */; };
 		6927EF9D1C4DDC49003344B6 /* IntersectionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EF9C1C4DDC49003344B6 /* IntersectionNode.m */; };
 		6927EFA01C4DDC56003344B6 /* StreetEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EF9F1C4DDC56003344B6 /* StreetEdge.m */; };
 		6927EFA31C4DE68E003344B6 /* CityGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFA21C4DE68E003344B6 /* CityGraph.m */; };
@@ -15,7 +19,7 @@
 		6927EFAC1C4DEF5A003344B6 /* ClickableGraphRenderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFAB1C4DEF5A003344B6 /* ClickableGraphRenderedView.m */; };
 		69729BDC1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */; };
 		69729BDF1C6DDF50003B7D1D /* CarAndView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDE1C6DDF50003B7D1D /* CarAndView.m */; };
-		69E69B8A1C38849D00C657E7 /* AATLightPhaseMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B891C38849D00C657E7 /* AATLightPhaseMachine.m */; };
+		69E69B8A1C38849D00C657E7 /* LightPhaseMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B891C38849D00C657E7 /* LightPhaseMachine.m */; };
 		69E69B8D1C38B00800C657E7 /* AACarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8C1C38B00800C657E7 /* AACarView.m */; };
 		69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */; };
 		69EBD93B1C38750F00FA7C87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93A1C38750F00FA7C87 /* main.m */; };
@@ -26,7 +30,7 @@
 		69EBD9491C38750F00FA7C87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD9481C38750F00FA7C87 /* Assets.xcassets */; };
 		69EBD94C1C38750F00FA7C87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD94A1C38750F00FA7C87 /* LaunchScreen.storyboard */; };
 		69EBD9571C38751000FA7C87 /* UIKitTrafficLightUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */; };
-		69EBD9631C38776B00FA7C87 /* AAStopLightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9621C38776B00FA7C87 /* AAStopLightView.m */; };
+		69EBD9631C38776B00FA7C87 /* StopLightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9621C38776B00FA7C87 /* StopLightView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		690D1BA31C87B1A800FCC63F /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
+		690D1BA51C87B27100FCC63F /* play1-150x150.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play1-150x150.png"; sourceTree = "<group>"; };
+		690D1BA71C87B27600FCC63F /* pause1-150x150.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause1-150x150.png"; sourceTree = "<group>"; };
+		690D1BA91C87B2F300FCC63F /* SimulationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimulationSettingsViewController.h; path = UIKitTrafficLight/SimulationSettingsViewController.h; sourceTree = "<group>"; };
+		690D1BAA1C87B2F300FCC63F /* SimulationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimulationSettingsViewController.m; path = UIKitTrafficLight/SimulationSettingsViewController.m; sourceTree = "<group>"; };
 		6927EF9B1C4DDC49003344B6 /* IntersectionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntersectionNode.h; sourceTree = "<group>"; };
 		6927EF9C1C4DDC49003344B6 /* IntersectionNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntersectionNode.m; sourceTree = "<group>"; };
 		6927EF9E1C4DDC56003344B6 /* StreetEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreetEdge.h; sourceTree = "<group>"; };
@@ -56,8 +65,8 @@
 		69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopLightTimingOptionsPopoverViewController.m; path = UIKitTrafficLight/StopLightTimingOptionsPopoverViewController.m; sourceTree = "<group>"; };
 		69729BDD1C6DDF50003B7D1D /* CarAndView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarAndView.h; sourceTree = "<group>"; };
 		69729BDE1C6DDF50003B7D1D /* CarAndView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarAndView.m; sourceTree = "<group>"; };
-		69E69B881C38849D00C657E7 /* AATLightPhaseMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AATLightPhaseMachine.h; path = UIKitTrafficLight/AATLightPhaseMachine.h; sourceTree = "<group>"; };
-		69E69B891C38849D00C657E7 /* AATLightPhaseMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AATLightPhaseMachine.m; path = UIKitTrafficLight/AATLightPhaseMachine.m; sourceTree = "<group>"; };
+		69E69B881C38849D00C657E7 /* LightPhaseMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightPhaseMachine.h; path = UIKitTrafficLight/LightPhaseMachine.h; sourceTree = "<group>"; };
+		69E69B891C38849D00C657E7 /* LightPhaseMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LightPhaseMachine.m; path = UIKitTrafficLight/LightPhaseMachine.m; sourceTree = "<group>"; };
 		69E69B8B1C38B00800C657E7 /* AACarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AACarView.h; path = UIKitTrafficLight/AACarView.h; sourceTree = "<group>"; };
 		69E69B8C1C38B00800C657E7 /* AACarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AACarView.m; path = UIKitTrafficLight/AACarView.m; sourceTree = "<group>"; };
 		69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AARoadModelViewUtils.h; path = UIKitTrafficLight/AARoadModelViewUtils.h; sourceTree = "<group>"; };
@@ -77,8 +86,8 @@
 		69EBD9521C38751000FA7C87 /* UIKitTrafficLightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitTrafficLightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitTrafficLightUITests.m; sourceTree = "<group>"; };
 		69EBD9581C38751000FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		69EBD9611C38776B00FA7C87 /* AAStopLightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AAStopLightView.h; path = UIKitTrafficLight/AAStopLightView.h; sourceTree = "<group>"; };
-		69EBD9621C38776B00FA7C87 /* AAStopLightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AAStopLightView.m; path = UIKitTrafficLight/AAStopLightView.m; sourceTree = "<group>"; };
+		69EBD9611C38776B00FA7C87 /* StopLightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopLightView.h; path = UIKitTrafficLight/StopLightView.h; sourceTree = "<group>"; };
+		69EBD9621C38776B00FA7C87 /* StopLightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopLightView.m; path = UIKitTrafficLight/StopLightView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,10 +132,10 @@
 				6927EFAB1C4DEF5A003344B6 /* ClickableGraphRenderedView.m */,
 				69729BDD1C6DDF50003B7D1D /* CarAndView.h */,
 				69729BDE1C6DDF50003B7D1D /* CarAndView.m */,
-				69EBD9611C38776B00FA7C87 /* AAStopLightView.h */,
-				69EBD9621C38776B00FA7C87 /* AAStopLightView.m */,
-				69E69B881C38849D00C657E7 /* AATLightPhaseMachine.h */,
-				69E69B891C38849D00C657E7 /* AATLightPhaseMachine.m */,
+				69EBD9611C38776B00FA7C87 /* StopLightView.h */,
+				69EBD9621C38776B00FA7C87 /* StopLightView.m */,
+				69E69B881C38849D00C657E7 /* LightPhaseMachine.h */,
+				69E69B891C38849D00C657E7 /* LightPhaseMachine.m */,
 				69E69B8B1C38B00800C657E7 /* AACarView.h */,
 				69E69B8C1C38B00800C657E7 /* AACarView.m */,
 				69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */,
@@ -138,6 +147,8 @@
 				69EBD9431C38750F00FA7C87 /* SecondViewController.m */,
 				69729BDA1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.h */,
 				69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */,
+				690D1BA91C87B2F300FCC63F /* SimulationSettingsViewController.h */,
+				690D1BAA1C87B2F300FCC63F /* SimulationSettingsViewController.m */,
 				69EBD9381C38750F00FA7C87 /* UIKitTrafficLight */,
 				69EBD9551C38751000FA7C87 /* UIKitTrafficLightUITests */,
 				69EBD9371C38750F00FA7C87 /* Products */,
@@ -159,6 +170,9 @@
 				69EBD93C1C38750F00FA7C87 /* AppDelegate.h */,
 				69EBD93D1C38750F00FA7C87 /* AppDelegate.m */,
 				69EBD9451C38750F00FA7C87 /* Main.storyboard */,
+				690D1BA31C87B1A800FCC63F /* gear.png */,
+				690D1BA71C87B27600FCC63F /* pause1-150x150.png */,
+				690D1BA51C87B27100FCC63F /* play1-150x150.png */,
 				69EBD9481C38750F00FA7C87 /* Assets.xcassets */,
 				69EBD94A1C38750F00FA7C87 /* LaunchScreen.storyboard */,
 				69EBD94D1C38750F00FA7C87 /* Info.plist */,
@@ -233,6 +247,7 @@
 				TargetAttributes = {
 					69EBD9351C38750F00FA7C87 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = 7CV4SBN5VP;
 					};
 					69EBD9511C38751000FA7C87 = {
 						CreatedOnToolsVersion = 7.2;
@@ -265,7 +280,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				69EBD94C1C38750F00FA7C87 /* LaunchScreen.storyboard in Resources */,
+				690D1BA81C87B27600FCC63F /* pause1-150x150.png in Resources */,
 				69EBD9491C38750F00FA7C87 /* Assets.xcassets in Resources */,
+				690D1BA41C87B1A800FCC63F /* gear.png in Resources */,
+				690D1BA61C87B27100FCC63F /* play1-150x150.png in Resources */,
 				69EBD9471C38750F00FA7C87 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,13 +309,14 @@
 				69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */,
 				69E69B8D1C38B00800C657E7 /* AACarView.m in Sources */,
 				6927EFA61C4DE75E003344B6 /* AAGraphRoute.m in Sources */,
+				690D1BAB1C87B2F300FCC63F /* SimulationSettingsViewController.m in Sources */,
 				69EBD9411C38750F00FA7C87 /* FirstViewController.m in Sources */,
 				69EBD93B1C38750F00FA7C87 /* main.m in Sources */,
-				69EBD9631C38776B00FA7C87 /* AAStopLightView.m in Sources */,
+				69EBD9631C38776B00FA7C87 /* StopLightView.m in Sources */,
 				69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */,
 				69729BDF1C6DDF50003B7D1D /* CarAndView.m in Sources */,
 				6927EFA01C4DDC56003344B6 /* StreetEdge.m in Sources */,
-				69E69B8A1C38849D00C657E7 /* AATLightPhaseMachine.m in Sources */,
+				69E69B8A1C38849D00C657E7 /* LightPhaseMachine.m in Sources */,
 				6927EFA31C4DE68E003344B6 /* CityGraph.m in Sources */,
 				6927EF9D1C4DDC49003344B6 /* IntersectionNode.m in Sources */,
 			);
@@ -427,10 +446,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UIKitTrafficLight/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andyaude.UIKitTrafficLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -438,10 +462,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = UIKitTrafficLight/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andyaude.UIKitTrafficLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

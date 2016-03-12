@@ -10,12 +10,12 @@
 #import "StreetEdge.h"
 #import "AAGraphRoute.h"
 #import "AAGraphRouteStep.h"
-#import "AATLightPhaseMachine.h"
+#import "LightPhaseMachine.h"
 #import "SecondViewController.h"
 #import "CarAndView.h"
 
 #define CIRCLE_BOX_SIZE 28.0
-#define ROAD_WIDTH 12.
+#define ROAD_WIDTH 16.
 
 @interface ClickableGraphRenderedView ()
 
@@ -337,6 +337,19 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
+- (CGPoint)getOffsetForRightOfRoad:(CarAndView *)cv {
+    StreetEdge *edge = [cv getCurrentEdge];
+    IntersectionNode *farNode = [cv getFarNode];
+    IntersectionNode *nearNode = [edge getOppositeNode:farNode];
+    CGPoint dirVector = [edge getDirectionVectorForStartNode:nearNode];
+    
+    CGPoint result = { -4* dirVector.y, 4* dirVector.x };
+    return result;
+//    CGPoint up = CGPointMake(0, -1);
+//    
+//    double angle =  atan2(dirVector.y, dirVector.x) - atan2(up.y, up.x);
+    
+}
 - (void)drawCarsAndStuff {
     NSArray *carViews = [self.containingViewController getCarsToDraw];
     
@@ -361,9 +374,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
             deferDraw = car;
         } else {
         
-//            int randodraw = arc4random() % 100;
-            
-//            if (randodraw < 30)
+            if (self.drawAllPaths)
                 [self drawRouteOverlay:car.intendedRoute andSpecialColorOrNil:override];
         }
 
@@ -372,6 +383,10 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
         
 //        NSLog(@"lat long : %@", NSStringFromCGPoint(car.currentLongLat));
         CGPoint newCenter = [self getCGPointForLongitude:car.currentLongLat.x andLatitude:car.currentLongLat.y];
+        
+        CGPoint offsetForRightOfRoad = [self getOffsetForRightOfRoad:car];
+        newCenter.x += offsetForRightOfRoad.x;
+        newCenter.y += offsetForRightOfRoad.y;
 //        NSLog(@"place at xy: %@", NSStringFromCGPoint(newCenter));
         carView.center = newCenter;
     }

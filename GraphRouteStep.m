@@ -1,16 +1,12 @@
 //
-//  PESGraphRouteStep.m
-//  PESGraph
-//
-//  Created by Peter Snyder on 8/25/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  GraphRouteStep.m
 //
 
-#import "AAGraphRouteStep.h"
+#import "GraphRouteStep.h"
 #import "IntersectionNode.h"
 #import "StreetEdge.h"
 
-@implementation AAGraphRouteStep
+@implementation GraphRouteStep
 
 @synthesize node, edge, isBeginningStep, isEndingStep;
 

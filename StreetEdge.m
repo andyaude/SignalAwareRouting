@@ -9,6 +9,9 @@
 #import "StreetEdge.h"
 #import "IntersectionNode.h"
 
+// Calibrated to fictional lat/long units fit to 30 mph.
+#define DIST_SCALE_MULTIPLIER 4.5
+
 @implementation StreetEdge
 
 + (StreetEdge *)edgeWithName:(NSString *)aName {
@@ -23,10 +26,9 @@
 - (double)getWeight {
         // x = vt... x/v -> t
     
-#warning todo make systematic
     double miles_per_second = self.max_mph / 60.0 / 60.0;
     
-    return self.distance / (miles_per_second*4.5);
+    return self.distance / (miles_per_second*DIST_SCALE_MULTIPLIER);
     
 }
 
@@ -79,7 +81,7 @@
     double long_a = [self.intersectionA longitude];
     double long_b = [self.intersectionB longitude];
     
-#warning UNTRUE
+#warning Fictional units such that lat/long are equal interval. Makes time and distance calculation much more straightforward.
     double diff_lat = fabs(lat_a - lat_b) * 10.0;
     double diff_long = fabs(long_a - long_b) * 10.;
     

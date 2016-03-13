@@ -52,7 +52,6 @@ typedef enum
 
 - (AALightUnitColor)lightColorForDirection:(AATrafficLightDirection)phase;
 
-#warning this is totally wrong!
 - (double)predictWaitTimeForMasterInterval:(NSTimeInterval)time andTrafficDir:(AATrafficLightDirection)dir;
 
 // Adaptive timing!

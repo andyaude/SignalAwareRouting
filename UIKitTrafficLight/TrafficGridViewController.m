@@ -9,13 +9,13 @@
 #import "TrafficGridViewController.h"
 #import "IntersectionNode.h"
 #import "StreetEdge.h"
-#import "AAGraphRoute.h"
+#import "GraphRoute.h"
 #import "ClickableGraphRenderedView.h"
 #import "LightPhaseMachine.h"
 #import "StopLightTimingOptionsPopoverViewController.h"
 #import "SimulationSettingsViewController.h"
 
-#import "CarAndView.h"
+#import "CarController.h"
 
 @interface TrafficGridViewController ()
 #pragma clang diagnostic push
@@ -277,7 +277,7 @@ float randomFloat(float min, float max)
     if (EtoJ) {
         [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"E <--> J"] fromNode:eNode fromPort:EAST_PORT toNode:JNode toDir:WEST_PORT];
 
-    } else {   //  Removes the bypass and returns to a square grid. uncomment H if you want to use it
+    } else {   //  Removes the E-J bypass and returns to a square grid. uncomment H if you want to use it
 
 //        [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"E <--> H"] fromNode:eNode fromPort:EAST_PORT toNode:hNode toDir:WEST_PORT];
 //        [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"H <--> C"] fromNode:hNode fromPort:NORTH_PORT toNode:cNode toDir:SOUTH_PORT];
@@ -311,7 +311,7 @@ float randomFloat(float min, float max)
 - (void)establishGreenFlowGraph {
     
     NSLog(@"Green flow graph");
-    self.routeLabel.text = @"TIMING:Originally, D to L Green Flow";
+    self.routeLabel.text = @"Timing notes: Originally, D to L offsets configured for Green Flow";
 
     CityGraph *graph = self.graph;
     
@@ -365,9 +365,6 @@ float randomFloat(float min, float max)
     IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R" andLatitude:45.05 andLongitude:45.38];
     [graph justAddNode:RNode];
     RNode.light_phase_machine.phase_offset = 25.0;
-    
-//    IntersectionNode *SNode = [IntersectionNode nodeWithIdentifier:@"S" andLatitude:45.05 andLongitude:45.46];
-    
     
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"A <--> B"] fromNode:aNode fromPort:EAST_PORT toNode:bNode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"A <--> D"] fromNode:aNode fromPort:SOUTH_PORT toNode:dNode toDir:NORTH_PORT];
@@ -487,7 +484,7 @@ float randomFloat(float min, float max)
     }
 }
 
-- (void)putCarOnEdge:(StreetEdge *)edge andStartPoint:(IntersectionNode *)start withCar:(CarAndView*)car {
+- (void)putCarOnEdge:(StreetEdge *)edge andStartPoint:(IntersectionNode *)start withCar:(CarController*)car {
     [self.graph putCarOnEdge:edge startPoint:start andCar:car];
 }
 
@@ -509,8 +506,8 @@ float randomFloat(float min, float max)
 }
 
 - (void)pruneCars:(NSTimeInterval)timeDiff {
-    for (NSUInteger i = [_allCars count] - 1; i >= 0; i--) {
-        CarAndView* element = _allCars[i];
+    for (int i = (int)[_allCars count] - 1; i >= 0; i--) {
+        CarController* element = _allCars[i];
         
         [element doTick:timeDiff];
         
@@ -582,6 +579,8 @@ float randomFloat(float min, float max)
     
 }
 
+
+#pragma mark extra defines
 #define TICKS_BETWEEN_EMITS 110.
 #define TICKS_BETWEEN_RANDO_EMITS 40.
 
@@ -601,49 +600,46 @@ float randomFloat(float min, float max)
     for (NSString *nodename in graph.nodes) {
         IntersectionNode *node = graph.nodes[nodename];
         
-        double NS_Cars = [node countIncomingCarsQueued:considerTimeSpentWaiting andIsNS:YES andIntxn:node];
-        double EW_Cars = [node countIncomingCarsQueued:considerTimeSpentWaiting andIsNS:NO andIntxn:node];
+        double nsCars = [node countIncomingCarsQueued:considerTimeSpentWaiting andIsNS:YES andIntxn:node];
+        double ewCars = [node countIncomingCarsQueued:considerTimeSpentWaiting andIsNS:NO andIntxn:node];
         
-        double NS_Prescient_Cars = 0;
-        double EW_Prescient_Cars = 0;
+        double nsPrescientCars = 0;
+        double ewPrescientCars = 0;
         if (prescienceOn) {
-            NS_Prescient_Cars = [node countPrescientCarsAndisNS:YES andIntxn:node];
-            EW_Prescient_Cars = [node countPrescientCarsAndisNS:NO andIntxn:node];
-            NS_Cars += NS_Prescient_Cars;
-            EW_Cars += EW_Prescient_Cars;
+            nsPrescientCars = [node countPrescientCarsAndisNS:YES andIntxn:node];
+            ewPrescientCars = [node countPrescientCarsAndisNS:NO andIntxn:node];
+            nsCars += nsPrescientCars;
+            ewCars += ewPrescientCars;
             
-            if ([nodename isEqualToString:@"K"] || [nodename isEqualToString:@"L"]) {
-                NSLog(@"%@'s NS Prescient :%.2f",nodename, NS_Prescient_Cars);
-                NSLog(@"%@'s EW Prescient: %.2f", nodename, EW_Prescient_Cars);
-            }
+//            if ([nodename isEqualToString:@"K"] || [nodename isEqualToString:@"L"]) {
+//                NSLog(@"%@'s NS Prescient :%.2f",nodename, NS_Prescient_Cars);
+//                NSLog(@"%@'s EW Prescient: %.2f", nodename, EW_Prescient_Cars);
+//            }
         }
         
-
+        // Prevent div by 0 in a Laplaceian way...
+        if (ewCars == 0) ewCars++;
+        if (nsCars == 0) nsCars++;
         
-        if (EW_Cars == 0) EW_Cars++; // handle div by 0 in a Laplaceian way...
-        if (NS_Cars == 0) NS_Cars++; // same for NS
         
-        
-        double NS_Scalar = NS_Cars / EW_Cars;
-        double EW_Scalar = EW_Cars / NS_Cars;
+        double NS_Scalar = nsCars / ewCars;
+        double EW_Scalar = ewCars / nsCars;
         
         if (NS_Scalar > EW_Scalar) {
-            // set a timing plan that satisifed scalar requests.
             if (NS_Scalar > 6)
                 NS_Scalar = 6; // cap at 5 to 1. Make in increments of 10.
             
-            // want to satisfy NS_Scalar x + x = 60
-            double ew_TIME = IDEAL_TOTAL_CYCLE_TIME / (NS_Scalar + 1);
-            double resulting_ns_TIME = IDEAL_TOTAL_CYCLE_TIME - ew_TIME;
-            [node.light_phase_machine setNextNSToDuration:resulting_ns_TIME];
-            [node.light_phase_machine setNextEWToDuration:ew_TIME];
+            double ewTime = IDEAL_TOTAL_CYCLE_TIME / (NS_Scalar + 1);
+            double resultingNsTime = IDEAL_TOTAL_CYCLE_TIME - ewTime;
+            [node.light_phase_machine setNextNSToDuration:resultingNsTime];
+            [node.light_phase_machine setNextEWToDuration:ewTime];
         } else {
             if (EW_Scalar > 6)
                 EW_Scalar = 6;
-            double ns_TIME = IDEAL_TOTAL_CYCLE_TIME / (EW_Scalar + 1);
-            double resulting_ew_TIME = IDEAL_TOTAL_CYCLE_TIME - ns_TIME;
-            [node.light_phase_machine setNextNSToDuration:ns_TIME];
-            [node.light_phase_machine setNextEWToDuration:resulting_ew_TIME];
+            double nsTime = IDEAL_TOTAL_CYCLE_TIME / (EW_Scalar + 1);
+            double resultingEwTime = IDEAL_TOTAL_CYCLE_TIME - nsTime;
+            [node.light_phase_machine setNextNSToDuration:nsTime];
+            [node.light_phase_machine setNextEWToDuration:resultingEwTime];
         }
         
         
@@ -666,7 +662,6 @@ float randomFloat(float min, float max)
         double scaled_thirty = TICKS_BETWEEN_EMITS / _timeMultiplier;
         
         if (E_F_Counts % (int)scaled_thirty == 0) {
-//            NSLog(@"Emitted car %d", E_F_Counts);
             [self placeCarOne:nil];
         }
     }
@@ -677,7 +672,6 @@ float randomFloat(float min, float max)
         double scaled_thirty = TICKS_BETWEEN_RANDO_EMITS / _timeMultiplier;
         
         if (Rando_counts % (int)scaled_thirty == 0) {
-//            NSLog(@"Emitted rando car %d", E_F_Counts);
             [self emitRandomCar:nil];
         }
     }
@@ -690,7 +684,6 @@ float randomFloat(float min, float max)
         double scaled_thirty = TICKS_BETWEEN_ADAPTATIONS / _timeMultiplier;
         
         if (AdaptTimerCycles_Counts % (int)scaled_thirty == 0) {
-            //            NSLog(@"Emitted rando car %d", E_F_Counts);
             [self adaptTimerCycles];
         }
     } else {
@@ -737,7 +730,7 @@ float randomFloat(float min, float max)
     
     _emittedCars++;
     
-    CarAndView *car = [[CarAndView alloc] init];
+    CarController *car = [[CarController alloc] init];
     car.secondVC = self;
     [car markStartTime:self.masterTime];
     [_allCars addObject:car];
@@ -749,7 +742,7 @@ float randomFloat(float min, float max)
     if (nodeStart) {
         car.currentLongLat = CGPointMake(nodeStart.longitude, nodeStart.latitude);
         
-        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeStart toNode:nodeEnd considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on andIsAdaptiveTimedSystem:self.adaptiveCycleTimesSwitch.on];
+        GraphRoute *route = [self.graph shortestRouteFromNode:nodeStart toNode:nodeEnd considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on andIsAdaptiveTimedSystem:self.adaptiveCycleTimesSwitch.on];
         
         car.intendedRoute = route;
     }
@@ -761,7 +754,7 @@ float randomFloat(float min, float max)
 - (IBAction)emitRandomCar:(id)sender {
 //    _emittedCars++;
     
-    CarAndView *car = [[CarAndView alloc] init];
+    CarController *car = [[CarController alloc] init];
     car.secondVC = self;
     [car markStartTime:self.masterTime];
 
@@ -781,7 +774,7 @@ float randomFloat(float min, float max)
     if (nodeD && nodeF) {
         car.currentLongLat = CGPointMake(nodeD.longitude, nodeD.latitude);
         
-        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeD toNode:nodeF considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on andIsAdaptiveTimedSystem:self.adaptiveCycleTimesSwitch.on];
+        GraphRoute *route = [self.graph shortestRouteFromNode:nodeD toNode:nodeF considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on andIsAdaptiveTimedSystem:self.adaptiveCycleTimesSwitch.on];
         
         car.intendedRoute = route;
         car.shadowRandomCar = YES;
@@ -793,21 +786,6 @@ float randomFloat(float min, float max)
 }
 
 
-- (IBAction)calculateButton:(id)sender {
-    
-    IntersectionNode *startNode = [self.graph nodeInGraphWithIdentifier:[[self.startField.text uppercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-    
-    IntersectionNode *endNode = [self.graph nodeInGraphWithIdentifier:[[self.endField.text uppercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-    
-    
-    if (startNode && endNode) {
-        [self.clickableRenderView drawShortestPathFromNodeNamed:startNode.identifier toNodeNamed:endNode.identifier consider:self.considerLightSwitch.on inRealtime:self.rtPenaltySwitch.on withTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on];
-        self.routeLabel.text = self.clickableRenderView.curRouteText;
-    } else {
-        self.routeLabel.text = @"Invalid start/end node";
-    }
-    
-}
 - (IBAction)changedTimeRateSlider:(UISlider *)sender {
     _timeMultiplier = sender.value;
     self.timeRateLabel.text = [NSString stringWithFormat:@"%.1f", sender.value];
@@ -819,11 +797,6 @@ float randomFloat(float min, float max)
     _numE2EReportedCars++;
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (BOOL)prefersStatusBarHidden {
     return YES;

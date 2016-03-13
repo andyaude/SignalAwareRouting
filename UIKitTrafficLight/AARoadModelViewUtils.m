@@ -7,7 +7,7 @@
 //
 
 #import "AARoadModelViewUtils.h"
-#import "AACarView.h"
+#import "CarView.h"
 
 @implementation AARoadModelViewUtils
 
@@ -31,17 +31,17 @@
 }
 
 
-+(AACarView *)getNextCarAhead:(AACarView *)curCar allCars:(NSArray *)allCars {
++(CarView *)getNextCarAhead:(CarView *)curCar allCars:(NSArray *)allCars {
     
     AApproachDirs approach = [curCar approachDir];
     
     CGPoint curCarCenter = curCar.center;
     
-    AACarView *nextGuy = nil;
+    CarView *nextGuy = nil;
     
     CGFloat smallest_pos_ahead_dist = -1;
     
-    for (AACarView *car in allCars) {
+    for (CarView *car in allCars) {
         if ([car approachDir] != approach || curCar == car) continue;
         CGPoint candidateCenter = car.center;
         

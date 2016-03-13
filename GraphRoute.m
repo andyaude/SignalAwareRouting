@@ -1,17 +1,12 @@
 //
-//  PESGraphRoute.m
-//  PESGraph
-//
-//  Created by Peter Snyder on 8/25/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
+//  GraphRoute.m
 
-#import "AAGraphRoute.h"
-#import "AAGraphRouteStep.h"
+#import "GraphRoute.h"
+#import "GraphRouteStep.h"
 #import "IntersectionNode.h"
 #import "StreetEdge.h"
 
-@implementation AAGraphRoute
+@implementation GraphRoute
 
 @synthesize steps;
 
@@ -29,7 +24,7 @@
 
 - (void)addStepFromNode:(IntersectionNode *)aNode withEdge:(StreetEdge *)anEdge
 {
-    AAGraphRouteStep *aStep = [[AAGraphRouteStep alloc] initWithNode:aNode
+    GraphRouteStep *aStep = [[GraphRouteStep alloc] initWithNode:aNode
                                                                 andEdge:anEdge
                                                             asBeginning:([steps count] == 0)];
     
@@ -42,7 +37,7 @@
     
     [string appendString:@"Start: "];
     
-    for (AAGraphRouteStep *aStep in steps) {
+    for (GraphRouteStep *aStep in steps) {
         
         if (aStep.edge) {
 
@@ -77,7 +72,7 @@
     
     float totalLength = 0;
     
-    for (AAGraphRouteStep *aStep in steps) {
+    for (GraphRouteStep *aStep in steps) {
         
         if (aStep.edge) {
 

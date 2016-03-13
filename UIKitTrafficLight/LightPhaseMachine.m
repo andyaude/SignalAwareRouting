@@ -144,7 +144,6 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     return NO;
 }
 
-#warning ASSUMES NS starts. breaks for adaptive timing???
 - (double)predictWaitTimeForMasterInterval:(NSTimeInterval)time andTrafficDir:(AATrafficLightDirection)dir {
     double wholeCycleTime = 0;
     
@@ -158,8 +157,6 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     
     BOOL NS_IS_GREEN = (time_into_cycle > self.all_red_duration && time_into_cycle < self.all_red_duration + self.nsPhase);
     BOOL EW_IS_GREEN = (time_into_cycle > 2 * self.all_red_duration + self.nsPhase);
-
-#warning convulated logic screw this
     
     if (dir == NS_DIRECTION)
     {

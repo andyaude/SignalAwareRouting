@@ -6,16 +6,16 @@
 //  Copyright © 2016 Andrew Aude. All rights reserved.
 //
 
-#import "AACarView.h"
-#import "CarAndView.h"
+#import "CarView.h"
+#import "CarController.h"
 
-@interface AACarView () {
+@interface CarView () {
     AApproachDirs _approachDir;
 }
 
 @end
 
-@implementation AACarView
+@implementation CarView
 
 - (instancetype)init {
     self = [super init];
@@ -70,21 +70,23 @@
 -(void)setApproachDir:(AApproachDirs)approach {
     
     _approachDir = approach;
+
+    if (!self.trafficFsmRequiresTransform) return;
     
-//    if (approach == NORTH_APPROACH) {
-//        self.transform = CGAffineTransformIdentity;
-//    }
-//    
-//    else if (approach == SOUTH_APPROACH) {
-//        self.transform = CGAffineTransformMakeRotation(M_PI);
-//    }
-//    
-//    else if (approach == EASTWARD_APPROACH) {
-//        self.transform = CGAffineTransformMakeRotation(M_PI/2.);
-//    }
-//    else if (approach == WESTWARD_APPROACH) {
-//        self.transform = CGAffineTransformMakeRotation(-M_PI/2.);
-//    }
+    if (approach == NORTH_APPROACH) {
+        self.transform = CGAffineTransformIdentity;
+    }
+    
+    else if (approach == SOUTH_APPROACH) {
+        self.transform = CGAffineTransformMakeRotation(M_PI);
+    }
+    
+    else if (approach == EASTWARD_APPROACH) {
+        self.transform = CGAffineTransformMakeRotation(M_PI/2.);
+    }
+    else if (approach == WESTWARD_APPROACH) {
+        self.transform = CGAffineTransformMakeRotation(-M_PI/2.);
+    }
 }
 -(AApproachDirs)approachDir {
     return _approachDir;

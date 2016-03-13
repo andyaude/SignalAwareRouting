@@ -55,8 +55,6 @@ typedef enum {
 - (NSUInteger)countIncomingCarsQueued:(BOOL)queued andIsNS:(BOOL)isNS andIntxn:(IntersectionNode *)intxn;
 - (double)countPrescientCarsAndisNS:(BOOL)isNS andIntxn:(IntersectionNode *)intxn;
 
-
-- (BOOL)isTurnForbidden:(PortDirection)inp outPort:(PortDirection)outp;
 - (float)calculateRealtimePenalty:(PortDirection)inp outPort:(PortDirection)outp withRealTimestamp:(NSTimeInterval)times;
 
 

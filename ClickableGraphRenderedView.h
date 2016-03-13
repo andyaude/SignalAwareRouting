@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "CityGraph.h"
-#import "AAGraphRoute.h"
+#import "GraphRoute.h"
 
 @class TrafficGridViewController;
 
 @interface ClickableGraphRenderedView : UIView {
-    AAGraphRoute *drawThisRoute;
+    GraphRoute *drawThisRoute;
 }
 
 @property (nonatomic, weak) CityGraph *graph;

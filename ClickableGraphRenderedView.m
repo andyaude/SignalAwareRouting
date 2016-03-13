@@ -8,11 +8,11 @@
 
 #import "ClickableGraphRenderedView.h"
 #import "StreetEdge.h"
-#import "AAGraphRoute.h"
-#import "AAGraphRouteStep.h"
+#import "GraphRoute.h"
+#import "GraphRouteStep.h"
 #import "LightPhaseMachine.h"
 #import "TrafficGridViewController.h"
-#import "CarAndView.h"
+#import "CarController.h"
 
 #define CIRCLE_BOX_SIZE 28.0
 #define ROAD_WIDTH 16.
@@ -179,7 +179,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     
 }
 
-- (void)drawRouteOverlay:(AAGraphRoute *)route andSpecialColorOrNil:(UIColor *)colorOrNil {
+- (void)drawRouteOverlay:(GraphRoute *)route andSpecialColorOrNil:(UIColor *)colorOrNil {
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
@@ -191,7 +191,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     
     CGContextSetLineWidth(ctx,2.5f);
     
-    for (AAGraphRouteStep *aStep in route.steps) {
+    for (GraphRouteStep *aStep in route.steps) {
         
         if (aStep.edge) {
             
@@ -217,7 +217,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     IntersectionNode *nodeB = [self.graph nodeInGraphWithIdentifier:second];
     
 
-    AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeA toNode:nodeB considerIntxnPenalty:considerPenalty realtimeTimings:rt andTime:time andCurrentQueuePenalty:currentQueuePenalty andIsAdaptiveTimedSystem:[[self.containingViewController adaptiveCycleTimesSwitch] isOn]];
+    GraphRoute *route = [self.graph shortestRouteFromNode:nodeA toNode:nodeB considerIntxnPenalty:considerPenalty realtimeTimings:rt andTime:time andCurrentQueuePenalty:currentQueuePenalty andIsAdaptiveTimedSystem:[[self.containingViewController adaptiveCycleTimesSwitch] isOn]];
     NSLog(@"Route :%@",route);
     self.curRouteText = [route description];
     drawThisRoute = route;
@@ -303,9 +303,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 //    NSLog(@"Touched here %@", NSStringFromCGPoint([self getLatLongForCGPoint:touchPoint]));
     
     NSDictionary *nodes = self.graph.nodes;
-    
-    IntersectionNode *foundNode = NULL;
-    
+        
     for (NSString * name in nodes) {
         IntersectionNode *obj = nodes[name];
         CGPoint loc = [self getCGPointForLongitude:obj.longitude andLatitude:obj.latitude];
@@ -323,7 +321,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
-- (CGPoint)getOffsetForRightOfRoad:(CarAndView *)cv {
+- (CGPoint)getOffsetForRightOfRoad:(CarController *)cv {
     StreetEdge *edge = [cv getCurrentEdge];
     IntersectionNode *farNode = [cv getFarNode];
     IntersectionNode *nearNode = [edge getOppositeNode:farNode];
@@ -337,10 +335,10 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 - (void)drawCarsAndPaths {
     NSArray *carViews = [self.containingViewController getCarsToDraw];
     
-    CarAndView *deferDraw = nil;
+    CarController *deferDraw = nil;
     
-    for (CarAndView *car in carViews) {
-        AACarView *carView = car.carView;
+    for (CarController *car in carViews) {
+        CarView *carView = car.carView;
         if (!carView.superview) {
             [self addSubview:carView];
         }

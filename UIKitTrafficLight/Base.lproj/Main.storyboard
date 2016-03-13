@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15C50" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="49e-Tb-3d3">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <scenes>
-        <!--Traffic FSM-->
+        <!--Signal FSM-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
                 <viewController id="9pv-A4-QxB" customClass="TrafficFSMViewController" sceneMemberID="viewController">
@@ -178,7 +179,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Traffic FSM" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Signal FSM" image="first" id="acW-dT-cKf"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
@@ -403,15 +404,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vxs-XX-A3b">
-                                <rect key="frame" x="61" y="289" width="200" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <state key="normal" title="Confirm set + print test route"/>
-                                <connections>
-                                    <action selector="calculateButton:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="9ge-fh-Of3"/>
-                                    <action selector="confirmSetButtonTouched:" destination="g2A-i1-TxN" eventType="touchUpInside" id="7tn-yf-Mlf"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Green Car Route:" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="T6l-WB-tbH">
                                 <rect key="frame" x="55" y="173" width="164" height="46"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -419,6 +411,15 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vxs-XX-A3b">
+                                <rect key="frame" x="109" y="289" width="155" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <state key="normal" title="Validate and Set Route"/>
+                                <connections>
+                                    <action selector="calculateButton:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="9ge-fh-Of3"/>
+                                    <action selector="confirmSetButtonTouched:" destination="g2A-i1-TxN" eventType="touchUpInside" id="7tn-yf-Mlf"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.8799970158055519" green="0.95928664434523814" blue="0.86174078553544786" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -435,7 +436,7 @@
             </objects>
             <point key="canvasLocation" x="1782" y="47"/>
         </scene>
-        <!--Graph Vis-->
+        <!--Traffic Grid-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
                 <viewController id="8rJ-Kc-sve" customClass="TrafficGridViewController" sceneMemberID="viewController">
@@ -682,7 +683,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Graph Vis" image="second" id="cPa-gy-q4n"/>
+                    <tabBarItem key="tabBarItem" title="Traffic Grid" image="second" id="cPa-gy-q4n"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
                         <outlet property="adaptiveCycleTimesSwitch" destination="2xy-Xk-jXj" id="0iz-of-ovE"/>

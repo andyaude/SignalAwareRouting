@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class AACarView;
+@class CarView;
 
 @interface AARoadModelViewUtils : NSObject
 
@@ -21,11 +21,9 @@ typedef enum {
 } AApproachDirs;
 
 
-// NSArray of road/uiview thingies?
-// Or make a road UIView subclass?
 +(CGPoint)stopLineForRoads:(NSArray *)roads andApproachDir:(AApproachDirs)dir andCarSize:(CGFloat)squareSize;
 +(CGPoint)getBaseCoordinateForRoads:(NSArray *)roads andApproachDir:(AApproachDirs)dir;
-+(AACarView *)getNextCarAhead:(AACarView *)curCar allCars:(NSArray *)allCars;
++(CarView *)getNextCarAhead:(CarView *)curCar allCars:(NSArray *)allCars;
 
 
 @end

@@ -7,20 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AACarView.h"
-#import "AAGraphRoute.h"
+#import "CarView.h"
+#import "GraphRoute.h"
 #import "StreetEdge.h"
 
 @class CityGraph, TrafficGridViewController;
-@interface CarAndView : NSObject
+@interface CarController : NSObject
 
-@property (strong, nonatomic) AACarView *carView;
+@property (strong, nonatomic) CarView *carView;
 
 @property (weak, nonatomic) TrafficGridViewController *secondVC;
 
 @property (nonatomic) CGPoint currentLongLat;
 
-@property (nonatomic) AAGraphRoute *intendedRoute;
+@property (nonatomic) GraphRoute *intendedRoute;
 
 @property (nonatomic) long uniqueID;
 
@@ -40,9 +40,6 @@
 
 - (StreetEdge *)getCurrentEdge;
 - (IntersectionNode *)getFarNode;
-
-- (BOOL)isDrivingAtoBNode;
-- (CGPoint)getDirectionVectorForEdge:(StreetEdge *)edge andIsAToB:(BOOL)isAToB;
 
 - (void)initializeIfNeeded;
 - (void)markStartTime:(NSTimeInterval)time;

@@ -1,32 +1,27 @@
 //
-//  PESGraphRoute.h
-//  PESGraph
-//
-//  Created by Peter Snyder on 8/25/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
+//  GraphRoute.h
 
 #import <Foundation/Foundation.h>
 
 @class IntersectionNode, StreetEdge;
 
 /**
-	Describes a complete route between two nodes in a PESGraph.  Not meant
+	Describes a complete route between two nodes in a CityGraph.  Not meant
     to be constructed directly from client programs, but instead managed
-    by calls to methods like shortestRouteFromNode:toNode: in PESGraph
+    by calls to methods like shortestRouteFromNode:toNode: in CityGraph
  */
-@interface AAGraphRoute : NSObject {
+@interface GraphRoute : NSObject {
 
     /**
-        A collection of PESGraphRouteStep objects that describe a route
+        A collection of GraphRouteStep objects that describe a route
         between two nodes in a graph
      */
     NSMutableArray *steps;
 }
 
 /**
-    A collection of PESGraphRouteStep objects that describe a route
-    between two nodes in a graph.  The first returned PESGraphRouteStep will
+    A collection of GraphRouteStep objects that describe a route
+    between two nodes in a graph.  The first returned GraphRouteStep will
     be from the starting node, and the last will refer to the ending node
     with no further edge
  */

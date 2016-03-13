@@ -14,13 +14,13 @@
 		6927EF9D1C4DDC49003344B6 /* IntersectionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EF9C1C4DDC49003344B6 /* IntersectionNode.m */; };
 		6927EFA01C4DDC56003344B6 /* StreetEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EF9F1C4DDC56003344B6 /* StreetEdge.m */; };
 		6927EFA31C4DE68E003344B6 /* CityGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFA21C4DE68E003344B6 /* CityGraph.m */; };
-		6927EFA61C4DE75E003344B6 /* AAGraphRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFA51C4DE75E003344B6 /* AAGraphRoute.m */; };
-		6927EFA91C4DE7D9003344B6 /* AAGraphRouteStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFA81C4DE7D9003344B6 /* AAGraphRouteStep.m */; };
+		6927EFA61C4DE75E003344B6 /* GraphRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFA51C4DE75E003344B6 /* GraphRoute.m */; };
+		6927EFA91C4DE7D9003344B6 /* GraphRouteStep.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFA81C4DE7D9003344B6 /* GraphRouteStep.m */; };
 		6927EFAC1C4DEF5A003344B6 /* ClickableGraphRenderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFAB1C4DEF5A003344B6 /* ClickableGraphRenderedView.m */; };
 		69729BDC1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */; };
-		69729BDF1C6DDF50003B7D1D /* CarAndView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDE1C6DDF50003B7D1D /* CarAndView.m */; };
+		69729BDF1C6DDF50003B7D1D /* CarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDE1C6DDF50003B7D1D /* CarController.m */; };
 		69E69B8A1C38849D00C657E7 /* LightPhaseMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B891C38849D00C657E7 /* LightPhaseMachine.m */; };
-		69E69B8D1C38B00800C657E7 /* AACarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8C1C38B00800C657E7 /* AACarView.m */; };
+		69E69B8D1C38B00800C657E7 /* CarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8C1C38B00800C657E7 /* CarView.m */; };
 		69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */; };
 		69EBD93B1C38750F00FA7C87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93A1C38750F00FA7C87 /* main.m */; };
 		69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93D1C38750F00FA7C87 /* AppDelegate.m */; };
@@ -44,20 +44,20 @@
 		6927EF9F1C4DDC56003344B6 /* StreetEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StreetEdge.m; sourceTree = "<group>"; };
 		6927EFA11C4DE68E003344B6 /* CityGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityGraph.h; sourceTree = "<group>"; };
 		6927EFA21C4DE68E003344B6 /* CityGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityGraph.m; sourceTree = "<group>"; };
-		6927EFA41C4DE75E003344B6 /* AAGraphRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAGraphRoute.h; sourceTree = "<group>"; };
-		6927EFA51C4DE75E003344B6 /* AAGraphRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAGraphRoute.m; sourceTree = "<group>"; };
-		6927EFA71C4DE7D9003344B6 /* AAGraphRouteStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAGraphRouteStep.h; sourceTree = "<group>"; };
-		6927EFA81C4DE7D9003344B6 /* AAGraphRouteStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAGraphRouteStep.m; sourceTree = "<group>"; };
+		6927EFA41C4DE75E003344B6 /* GraphRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphRoute.h; sourceTree = "<group>"; };
+		6927EFA51C4DE75E003344B6 /* GraphRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphRoute.m; sourceTree = "<group>"; };
+		6927EFA71C4DE7D9003344B6 /* GraphRouteStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphRouteStep.h; sourceTree = "<group>"; };
+		6927EFA81C4DE7D9003344B6 /* GraphRouteStep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphRouteStep.m; sourceTree = "<group>"; };
 		6927EFAA1C4DEF5A003344B6 /* ClickableGraphRenderedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClickableGraphRenderedView.h; sourceTree = "<group>"; };
 		6927EFAB1C4DEF5A003344B6 /* ClickableGraphRenderedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClickableGraphRenderedView.m; sourceTree = "<group>"; };
 		69729BDA1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopLightTimingOptionsPopoverViewController.h; path = UIKitTrafficLight/StopLightTimingOptionsPopoverViewController.h; sourceTree = "<group>"; };
 		69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopLightTimingOptionsPopoverViewController.m; path = UIKitTrafficLight/StopLightTimingOptionsPopoverViewController.m; sourceTree = "<group>"; };
-		69729BDD1C6DDF50003B7D1D /* CarAndView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarAndView.h; sourceTree = "<group>"; };
-		69729BDE1C6DDF50003B7D1D /* CarAndView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarAndView.m; sourceTree = "<group>"; };
+		69729BDD1C6DDF50003B7D1D /* CarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarController.h; sourceTree = "<group>"; };
+		69729BDE1C6DDF50003B7D1D /* CarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarController.m; sourceTree = "<group>"; };
 		69E69B881C38849D00C657E7 /* LightPhaseMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightPhaseMachine.h; path = UIKitTrafficLight/LightPhaseMachine.h; sourceTree = "<group>"; };
 		69E69B891C38849D00C657E7 /* LightPhaseMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LightPhaseMachine.m; path = UIKitTrafficLight/LightPhaseMachine.m; sourceTree = "<group>"; };
-		69E69B8B1C38B00800C657E7 /* AACarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AACarView.h; path = UIKitTrafficLight/AACarView.h; sourceTree = "<group>"; };
-		69E69B8C1C38B00800C657E7 /* AACarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AACarView.m; path = UIKitTrafficLight/AACarView.m; sourceTree = "<group>"; };
+		69E69B8B1C38B00800C657E7 /* CarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CarView.h; path = UIKitTrafficLight/CarView.h; sourceTree = "<group>"; };
+		69E69B8C1C38B00800C657E7 /* CarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CarView.m; path = UIKitTrafficLight/CarView.m; sourceTree = "<group>"; };
 		69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AARoadModelViewUtils.h; path = UIKitTrafficLight/AARoadModelViewUtils.h; sourceTree = "<group>"; };
 		69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AARoadModelViewUtils.m; path = UIKitTrafficLight/AARoadModelViewUtils.m; sourceTree = "<group>"; };
 		69EBD9361C38750F00FA7C87 /* SignalAwareRouting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignalAwareRouting.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,7 +89,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6927EF9A1C4DDC14003344B6 /* model_objs */ = {
+		6927EF9A1C4DDC14003344B6 /* ModelObjects */ = {
 			isa = PBXGroup;
 			children = (
 				6927EFA11C4DE68E003344B6 /* CityGraph.h */,
@@ -98,12 +98,12 @@
 				6927EF9C1C4DDC49003344B6 /* IntersectionNode.m */,
 				6927EF9F1C4DDC56003344B6 /* StreetEdge.m */,
 				6927EF9E1C4DDC56003344B6 /* StreetEdge.h */,
-				6927EFA41C4DE75E003344B6 /* AAGraphRoute.h */,
-				6927EFA51C4DE75E003344B6 /* AAGraphRoute.m */,
-				6927EFA71C4DE7D9003344B6 /* AAGraphRouteStep.h */,
-				6927EFA81C4DE7D9003344B6 /* AAGraphRouteStep.m */,
+				6927EFA41C4DE75E003344B6 /* GraphRoute.h */,
+				6927EFA51C4DE75E003344B6 /* GraphRoute.m */,
+				6927EFA71C4DE7D9003344B6 /* GraphRouteStep.h */,
+				6927EFA81C4DE7D9003344B6 /* GraphRouteStep.m */,
 			);
-			name = model_objs;
+			name = ModelObjects;
 			sourceTree = "<group>";
 		};
 		69EBD92D1C38750F00FA7C87 = {
@@ -111,17 +111,17 @@
 			children = (
 				6927EFAA1C4DEF5A003344B6 /* ClickableGraphRenderedView.h */,
 				6927EFAB1C4DEF5A003344B6 /* ClickableGraphRenderedView.m */,
-				69729BDD1C6DDF50003B7D1D /* CarAndView.h */,
-				69729BDE1C6DDF50003B7D1D /* CarAndView.m */,
+				69729BDD1C6DDF50003B7D1D /* CarController.h */,
+				69729BDE1C6DDF50003B7D1D /* CarController.m */,
 				69EBD9611C38776B00FA7C87 /* StopLightView.h */,
 				69EBD9621C38776B00FA7C87 /* StopLightView.m */,
 				69E69B881C38849D00C657E7 /* LightPhaseMachine.h */,
 				69E69B891C38849D00C657E7 /* LightPhaseMachine.m */,
-				69E69B8B1C38B00800C657E7 /* AACarView.h */,
-				69E69B8C1C38B00800C657E7 /* AACarView.m */,
+				69E69B8B1C38B00800C657E7 /* CarView.h */,
+				69E69B8C1C38B00800C657E7 /* CarView.m */,
 				69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */,
-				6927EF9A1C4DDC14003344B6 /* model_objs */,
 				69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */,
+				6927EF9A1C4DDC14003344B6 /* ModelObjects */,
 				69EBD93F1C38750F00FA7C87 /* TrafficFSMViewController.h */,
 				69EBD9401C38750F00FA7C87 /* TrafficFSMViewController.m */,
 				69EBD9421C38750F00FA7C87 /* TrafficGridViewController.h */,
@@ -253,18 +253,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				69729BDC1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m in Sources */,
-				6927EFA91C4DE7D9003344B6 /* AAGraphRouteStep.m in Sources */,
+				6927EFA91C4DE7D9003344B6 /* GraphRouteStep.m in Sources */,
 				6927EFAC1C4DEF5A003344B6 /* ClickableGraphRenderedView.m in Sources */,
 				69EBD9441C38750F00FA7C87 /* TrafficGridViewController.m in Sources */,
 				69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */,
-				69E69B8D1C38B00800C657E7 /* AACarView.m in Sources */,
-				6927EFA61C4DE75E003344B6 /* AAGraphRoute.m in Sources */,
+				69E69B8D1C38B00800C657E7 /* CarView.m in Sources */,
+				6927EFA61C4DE75E003344B6 /* GraphRoute.m in Sources */,
 				690D1BAB1C87B2F300FCC63F /* SimulationSettingsViewController.m in Sources */,
 				69EBD9411C38750F00FA7C87 /* TrafficFSMViewController.m in Sources */,
 				69EBD93B1C38750F00FA7C87 /* main.m in Sources */,
 				69EBD9631C38776B00FA7C87 /* StopLightView.m in Sources */,
 				69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */,
-				69729BDF1C6DDF50003B7D1D /* CarAndView.m in Sources */,
+				69729BDF1C6DDF50003B7D1D /* CarController.m in Sources */,
 				6927EFA01C4DDC56003344B6 /* StreetEdge.m in Sources */,
 				69E69B8A1C38849D00C657E7 /* LightPhaseMachine.m in Sources */,
 				6927EFA31C4DE68E003344B6 /* CityGraph.m in Sources */,

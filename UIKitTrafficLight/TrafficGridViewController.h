@@ -65,7 +65,7 @@
 - (IBAction)openSimSettingsController:(id)sender;
 - (void)unselectAllCars;
 - (void)editNode:(IntersectionNode *)node atPoint:(CGPoint)point;
-- (void)putCarOnEdge:(StreetEdge *)edge andStartPoint:(IntersectionNode *)start withCar:(CarAndView*)car;
+- (void)putCarOnEdge:(StreetEdge *)edge andStartPoint:(IntersectionNode *)start withCar:(CarController*)car;
 - (IBAction)startEFAutoEmitPressed:(id)sender;
 
 

@@ -9,19 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "AARoadModelViewUtils.h"
 
-@class CarAndView;
-@interface AACarView : UIView
+@class CarController;
+@interface CarView : UIView
 
 -(void)setApproachDir:(AApproachDirs)approach;
 -(AApproachDirs)approachDir;
 
 -(void)moveInApproachDir:(CGFloat)units;
 
-@property (nonatomic, weak) AACarView *stopped_behind;
+@property (nonatomic, weak) CarView *stopped_behind;
 
-@property (nonatomic, weak) CarAndView *containingCar;
+@property (nonatomic, weak) CarController *containingCar;
 
 @property (nonatomic) BOOL stopped;
+@property (nonatomic) BOOL trafficFsmRequiresTransform;
 
 @property (nonatomic, strong) UIColor *overrideColor;
 

@@ -9,7 +9,7 @@
 #import "IntersectionNode.h"
 #import "LightPhaseMachine.h"
 #import "StreetEdge.h"
-#import "CarAndView.h"
+#import "CarController.h"
 
 @implementation IntersectionNode
 
@@ -53,7 +53,6 @@
 //    }
     
 
-#warning TODO IMPELMENT CORRECT TURN VIOLATION BEHAVIORS!!
 //    if ((inp == NORTH_PORT && outp == WEST_PORT)
 //        || (inp == SOUTH_PORT && outp == EAST_PORT)
 //        || (inp == EAST_PORT && outp == NORTH_PORT)
@@ -72,9 +71,9 @@
 //#warning TODO: Determine signal phases
 //        return 60.0;
 //    
-    NSLog(@"Uh, this shouldn't happen");
-    NSAssert(0, @"Invalid turn direction");
-    return 100.0;
+//    NSLog(@"Uh, this shouldn't happen");
+//    NSAssert(0, @"Invalid turn direction");
+//    return 100.0;
     
         
 }
@@ -138,7 +137,7 @@
     
 }
 
-// Ever minute a car spends at an intxn increase the urgency/priority in the system
+// Ever minute a car spends at an intxn increases the urgency/priority of the edge in the system
 - (NSUInteger)getCountForIntxn:(IntersectionNode *)intxn andPort:(StreetEdge *)port andTimeSpentWaiting:(BOOL)timeSpentWaiting{
     
     if(port) {
@@ -155,6 +154,7 @@
             }
             return [theArray count] + penalties;
             
+            // Counts how many cars have waited an egregious time
 //            NSUInteger baseNumCars = [theArray count];
 //            NSUInteger waitersPenalty = [[theArray filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
 //                CarAndView *car = (CarAndView *)evaluatedObject;
@@ -184,7 +184,7 @@
             carsOnAB = port.futureABCars;
     
         for (int i = 0; i < carsOnAB.count; i++) {
-            CarAndView *car = carsOnAB[i];
+            CarController *car = carsOnAB[i];
             int num_steps = [car numStepsUntilEdge:port];
             // count of prescient cars!
             scaled_count += 1.0 / (double) num_steps ;

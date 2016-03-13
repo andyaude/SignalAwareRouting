@@ -1,9 +1,6 @@
 //
-//  PESGraphRouteStep.h
-//  PESGraph
+//  AAGraphRouteStep.h
 //
-//  Created by Peter Snyder on 8/25/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -17,9 +14,9 @@
     the edge will be empty.
  
     This class is not intented to be used directly, but instead from a
-    PESGraphRoute object
+    GraphRoute object
  */
-@interface AAGraphRouteStep : NSObject {
+@interface GraphRouteStep : NSObject {
 
     /**
         The node that this step is starting at / traveling from

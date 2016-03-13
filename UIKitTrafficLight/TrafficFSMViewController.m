@@ -9,7 +9,7 @@
 #import "TrafficFSMViewController.h"
 #import "StopLightView.h"
 #import "LightPhaseMachine.h"
-#import "AACarView.h"
+#import "CarView.h"
 
 @interface TrafficFSMViewController ()
 {
@@ -42,6 +42,7 @@
 @implementation TrafficFSMViewController
 
 #define CAR_SIZE 20.0
+#define CAR_MOVE_ITERATION (1.0 * _timeMultiplier)
 
 #pragma mark CarMoveStuff
 
@@ -59,7 +60,7 @@
     NSMutableArray *removalCandidates = [NSMutableArray new];
     
     
-    for (AACarView *car in self.activeCars) {
+    for (CarView *car in self.activeCars) {
         
         CGPoint carOrigin = car.frame.origin;
         CGPoint ewOrigin = self.eastWestRoad.frame.origin;
@@ -94,7 +95,7 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
 
 
 
-- (BOOL)shouldCarBeInMotion:(AACarView *)car {
+- (BOOL)shouldCarBeInMotion:(CarView *)car {
     BOOL doMoveCar = NO;
     CGPoint approach_max = [AARoadModelViewUtils stopLineForRoads:self.road_pair andApproachDir:car.approachDir andCarSize:CAR_SIZE];
     
@@ -130,7 +131,7 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
 
 }
 
-- (CGFloat)howMuchFartherNextCar:(AACarView *)local nextCar:(AACarView *)nextCar {
+- (CGFloat)howMuchFartherNextCar:(CarView *)local nextCar:(CarView *)nextCar {
     if (local.approachDir == NORTH_APPROACH || local.approachDir == SOUTH_APPROACH) {
         CGFloat prelim = local.center.y - nextCar.center.y;
         return fabs(prelim);
@@ -143,27 +144,16 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
 - (void)moveCarsIntelligently {
 
     [self pruneOutOfBoundsCars];
-    
 
-#define CAR_MOVE_ITERATION (1.0 * _timeMultiplier)
-
-    
-
-    for (AACarView *car in self.activeCars) {
+    for (CarView *car in self.activeCars) {
         
         BOOL shouldBeInMotion = [self shouldCarBeInMotion:car];
         
-        AACarView *firstNextCarAhead = [AARoadModelViewUtils getNextCarAhead:car allCars:self.activeCars];
+        CarView *firstNextCarAhead = [AARoadModelViewUtils getNextCarAhead:car allCars:self.activeCars];
 
-        BOOL firstNextIsStopped = ![self shouldCarBeInMotion:firstNextCarAhead];
-
-        // REDO THIS LOGIC!
-        
         BOOL farthestNextInMotion = [self shouldCarBeInMotion:firstNextCarAhead];
         
-        BOOL nextCarTooClose = [self howMuchFartherNextCar:car nextCar:firstNextCarAhead] < INTERCAR_SPACING;
-
-        AACarView *curNextCar = firstNextCarAhead;
+        CarView *curNextCar = firstNextCarAhead;
         while (curNextCar && farthestNextInMotion) {
             curNextCar = [AARoadModelViewUtils getNextCarAhead:curNextCar allCars:self.activeCars];
             if (!curNextCar) break;
@@ -196,7 +186,8 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
     CGPoint startingPoint = [AARoadModelViewUtils getBaseCoordinateForRoads:self.road_pair andApproachDir:approachDir];
     CGSize carSize = CGSizeMake(CAR_SIZE, CAR_SIZE);
     
-    AACarView *car = [[AACarView alloc] initWithFrame:(CGRect){startingPoint,carSize}];
+    CarView *car = [[CarView alloc] initWithFrame:(CGRect){startingPoint,carSize}];
+    car.trafficFsmRequiresTransform = YES;
     [car setApproachDir:approachDir];
     car.backgroundColor = [UIColor clearColor];
     car.clipsToBounds = NO;

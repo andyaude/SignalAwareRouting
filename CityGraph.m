@@ -9,8 +9,8 @@
 #import "CityGraph.h"
 #import "IntersectionNode.h"
 #import "StreetEdge.h"
-#import "AAGraphRoute.h"
-#import "CarAndView.h"
+#import "GraphRoute.h"
+#import "CarController.h"
 
 @implementation CityGraph
 @synthesize nodes = nodes;
@@ -47,7 +47,7 @@
 
 }
 
-- (void)removeCarFromGraph:(CarAndView *)car {
+- (void)removeCarFromGraph:(CarController *)car {
     // Sanity check!
     for (StreetEdge *edge in [edges allValues]) {
         [edge.ABCars removeObject:car];
@@ -56,7 +56,7 @@
 }
 
 
-- (void)putCarOnEdge:(StreetEdge *)edge startPoint:(IntersectionNode*)node andCar:(CarAndView *)car {
+- (void)putCarOnEdge:(StreetEdge *)edge startPoint:(IntersectionNode*)node andCar:(CarController *)car {
     
     // Sanity check!
     for (StreetEdge *edge in [edges allValues]) {
@@ -284,7 +284,7 @@
 
 // Returns the quickest possible path between two nodes, using Dijkstra's algorithm
 // http://en.wikipedia.org/wiki/Dijkstra's_algorithm
-- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty andIsAdaptiveTimedSystem:(BOOL)adaptive
+- (GraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty andIsAdaptiveTimedSystem:(BOOL)adaptive
 {
     NSMutableDictionary *unexaminedNodes = [NSMutableDictionary dictionaryWithDictionary:self.nodes];
     
@@ -401,7 +401,7 @@
         
         // If we did successfully find a path, create and populate a route object, describing each step
         // of the path.
-        AAGraphRoute *route = [[AAGraphRoute alloc] init];
+        GraphRoute *route = [[GraphRoute alloc] init];
         
         // We do this by first building the route backwards, so the below array with have the last step
         // in the route (the destination) in the 0th position, and the origin in the last position

@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "IntersectionNode.h"
 
-@class StreetEdge, AAGraphRoute, CarAndView;
+@class StreetEdge, GraphRoute, CarController;
 
 @interface CityGraph : NSObject {
 
 /**
- A collection of PESGraphNodes managed by the graph.  Keys will be identifiers for
+ A collection of IntersectionNodes managed by the graph.  Keys will be identifiers for
  each node in the graph, with coresponding values also being NSMutableDictionaries.
  The keys in each sub NSMutableDictionary will then also be identifiers for nodes,
- with those coresponding values being PESGraphEdge objects
+ with those coresponding values being StreetEdge objects
  */
 //NSMutableDictionary *nodeEdges;
 
@@ -126,12 +126,12 @@ NSMutableDictionary *edges;
 	@param endNode a node in graph to calculate a route to
 	@returns either a AAGraphRoute object or nil, if no route is possible
  */
-- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty andIsAdaptiveTimedSystem:(BOOL)adaptive;
+- (GraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty andIsAdaptiveTimedSystem:(BOOL)adaptive;
 
 - (void)justAddNode:(IntersectionNode *)node;
 
-- (void)putCarOnEdge:(StreetEdge *)edge startPoint:(IntersectionNode*)node andCar:(CarAndView *)car;
+- (void)putCarOnEdge:(StreetEdge *)edge startPoint:(IntersectionNode*)node andCar:(CarController *)car;
 + (NSArray *)getCarsOnEdge:(StreetEdge *)edge startPoint:(IntersectionNode *)start;
-- (void)removeCarFromGraph:(CarAndView *)car;
+- (void)removeCarFromGraph:(CarController *)car;
 
 @end

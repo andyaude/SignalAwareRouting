@@ -38,6 +38,14 @@
     
 }
 
+- (BOOL)isAtoBForStartNode:(IntersectionNode*)start {
+    assert (start == self.intersectionA || start == self.intersectionB);
+    
+    if (start == self.intersectionA) return YES;
+    return NO;
+}
+
+
 - (CGPoint)getDirectionVectorForStartNode:(IntersectionNode *)startNode {
     if (self.intersectionA == startNode)
         return [self getDirectionVector:NO];
@@ -95,6 +103,9 @@
         
         self.ABCars = [NSMutableArray new];
         self.BACars = [NSMutableArray new];
+        
+        self.futureABCars = [NSMutableArray new];
+        self.futureBACars = [NSMutableArray new];
         
         self.is_unidirectional = NO;
     }

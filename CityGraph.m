@@ -103,21 +103,23 @@
     PortDirection inPort = [self getPortDirForNode:viaNode andEdge:firstEdge];
     PortDirection outPort = [self getPortDirForNode:viaNode andEdge:lastEdge];
         
-    if (considerPenalty) {
-        
-        double penalty;
-        if (!rt)
-            penalty = [sourceNode calculateTurnPenaltyForInPort:inPort outPort:outPort];
-        else
-            penalty = [sourceNode calculateRealtimePenalty:inPort outPort:outPort withRealTimestamp:time+baseWeight];
-        
-        
-        baseWeight += penalty;
-        
-//        NSLog(@"Penalty from source:%@ via:%@ dest:%@ amount :%.2f, forTime %.2f t+b %.2f", sourceNode.identifier, viaNode.identifier, destinationNode.identifier, penalty, time, time+baseWeight-penalty);
-    }
-    } else if (considerPenalty) {
-//        NSLog(@"Didn't have a first edge and was supposed to add penalty...");
+        if (considerPenalty) {
+            
+            double penalty;
+            if (!rt)
+                penalty = [sourceNode calculateTurnPenaltyForInPort:inPort outPort:outPort];
+            else
+                penalty = [sourceNode calculateRealtimePenalty:inPort outPort:outPort withRealTimestamp:time+baseWeight];
+            
+            
+            baseWeight += penalty;
+            
+    //        NSLog(@"Penalty from source:%@ via:%@ dest:%@ amount :%.2f, forTime %.2f t+b %.2f", sourceNode.identifier, viaNode.identifier, destinationNode.identifier, penalty, time, time+baseWeight-penalty);
+        } else {
+            // fixed thirty seconds
+#warning FIXED TIME 30 S!
+            baseWeight += 30.0;
+        }
     }
     
     if (queuePenalty) {
@@ -282,7 +284,7 @@
 
 // Returns the quickest possible path between two nodes, using Dijkstra's algorithm
 // http://en.wikipedia.org/wiki/Dijkstra's_algorithm
-- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty
+- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty andIsAdaptiveTimedSystem:(BOOL)adaptive
 {
     NSMutableDictionary *unexaminedNodes = [NSMutableDictionary dictionaryWithDictionary:self.nodes];
     
@@ -359,14 +361,16 @@
                     NSNumber *distanceFromNeighborToOrigin = [distancesFromSource objectForKey:neighboringNode.identifier];
                     
                     // need to consider full candidate route??
-#warning routing logic mindfuck
+
+                    double calculatedWeight = [[self weightFromNode:[previousNodeInOptimalPath objectForKey:nodeMostRecentlyExamined.identifier]
+                                                            viaNode:nodeMostRecentlyExamined
+                                                  toNeighboringNode:neighboringNode
+                                             andConsiderLightPenalty:penalty andRT:realtime andTime:time andQueuePenalty:currentQueuePenalty]  doubleValue];
                     
+                                               
                     NSNumber *alt = [NSNumber numberWithFloat:
                                      [[distancesFromSource objectForKey:identifierOfSmallestDist] floatValue] +
-                                     [[self weightFromNode:[previousNodeInOptimalPath objectForKey:nodeMostRecentlyExamined.identifier]
-                                                   viaNode:nodeMostRecentlyExamined
-                                                    toNeighboringNode:neighboringNode
-                                                    andConsiderLightPenalty:penalty andRT:realtime andTime:time andQueuePenalty:currentQueuePenalty] floatValue]];
+                                      calculatedWeight];
                     
                     
                     // If its quicker to get to the neighboring node going through the node we're about the remove

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ClickableGraphRenderedView.h"
 
-@interface SecondViewController : UIViewController <UIScrollViewDelegate> {
+@interface TrafficGridViewController : UIViewController <UIScrollViewDelegate> {
     double _timeMultiplier;
     NSMutableArray *_allCars;
     int _finishedCars;
@@ -53,6 +53,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *spawnStartEndCarButton;
 @property (weak, nonatomic) IBOutlet UIButton *spawnSingleRandoCarButton;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UISwitch *adaptiveCycleTimesSwitch;
 
 @property (copy, nonatomic) NSString *startEmitNodename;
 @property (copy, nonatomic) NSString *endEmitNodename;

@@ -6,12 +6,12 @@
 //  Copyright © 2016 Andrew Aude. All rights reserved.
 //
 
-#import "FirstViewController.h"
+#import "TrafficFSMViewController.h"
 #import "StopLightView.h"
 #import "LightPhaseMachine.h"
 #import "AACarView.h"
 
-@interface FirstViewController ()
+@interface TrafficFSMViewController ()
 {
     double _timeMultiplier;
 }
@@ -39,7 +39,7 @@
 
 @end
 
-@implementation FirstViewController
+@implementation TrafficFSMViewController
 
 #define CAR_SIZE 20.0
 

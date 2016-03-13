@@ -24,24 +24,13 @@
 		69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */; };
 		69EBD93B1C38750F00FA7C87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93A1C38750F00FA7C87 /* main.m */; };
 		69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93D1C38750F00FA7C87 /* AppDelegate.m */; };
-		69EBD9411C38750F00FA7C87 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9401C38750F00FA7C87 /* FirstViewController.m */; };
-		69EBD9441C38750F00FA7C87 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9431C38750F00FA7C87 /* SecondViewController.m */; };
+		69EBD9411C38750F00FA7C87 /* TrafficFSMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9401C38750F00FA7C87 /* TrafficFSMViewController.m */; };
+		69EBD9441C38750F00FA7C87 /* TrafficGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9431C38750F00FA7C87 /* TrafficGridViewController.m */; };
 		69EBD9471C38750F00FA7C87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD9451C38750F00FA7C87 /* Main.storyboard */; };
 		69EBD9491C38750F00FA7C87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD9481C38750F00FA7C87 /* Assets.xcassets */; };
 		69EBD94C1C38750F00FA7C87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD94A1C38750F00FA7C87 /* LaunchScreen.storyboard */; };
-		69EBD9571C38751000FA7C87 /* UIKitTrafficLightUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */; };
 		69EBD9631C38776B00FA7C87 /* StopLightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9621C38776B00FA7C87 /* StopLightView.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		69EBD9531C38751000FA7C87 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 69EBD92E1C38750F00FA7C87 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 69EBD9351C38750F00FA7C87;
-			remoteInfo = UIKitTrafficLight;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		690D1BA31C87B1A800FCC63F /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
@@ -71,19 +60,18 @@
 		69E69B8C1C38B00800C657E7 /* AACarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AACarView.m; path = UIKitTrafficLight/AACarView.m; sourceTree = "<group>"; };
 		69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AARoadModelViewUtils.h; path = UIKitTrafficLight/AARoadModelViewUtils.h; sourceTree = "<group>"; };
 		69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AARoadModelViewUtils.m; path = UIKitTrafficLight/AARoadModelViewUtils.m; sourceTree = "<group>"; };
-		69EBD9361C38750F00FA7C87 /* UIKitTrafficLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitTrafficLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69EBD9361C38750F00FA7C87 /* SignalAwareRouting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignalAwareRouting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EBD93A1C38750F00FA7C87 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		69EBD93C1C38750F00FA7C87 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		69EBD93D1C38750F00FA7C87 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		69EBD93F1C38750F00FA7C87 /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FirstViewController.h; path = UIKitTrafficLight/FirstViewController.h; sourceTree = "<group>"; };
-		69EBD9401C38750F00FA7C87 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FirstViewController.m; path = UIKitTrafficLight/FirstViewController.m; sourceTree = "<group>"; };
-		69EBD9421C38750F00FA7C87 /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SecondViewController.h; path = UIKitTrafficLight/SecondViewController.h; sourceTree = "<group>"; };
-		69EBD9431C38750F00FA7C87 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SecondViewController.m; path = UIKitTrafficLight/SecondViewController.m; sourceTree = "<group>"; };
+		69EBD93F1C38750F00FA7C87 /* TrafficFSMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrafficFSMViewController.h; path = UIKitTrafficLight/TrafficFSMViewController.h; sourceTree = "<group>"; };
+		69EBD9401C38750F00FA7C87 /* TrafficFSMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TrafficFSMViewController.m; path = UIKitTrafficLight/TrafficFSMViewController.m; sourceTree = "<group>"; };
+		69EBD9421C38750F00FA7C87 /* TrafficGridViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrafficGridViewController.h; path = UIKitTrafficLight/TrafficGridViewController.h; sourceTree = "<group>"; };
+		69EBD9431C38750F00FA7C87 /* TrafficGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TrafficGridViewController.m; path = UIKitTrafficLight/TrafficGridViewController.m; sourceTree = "<group>"; };
 		69EBD9461C38750F00FA7C87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		69EBD9481C38750F00FA7C87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		69EBD94B1C38750F00FA7C87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69EBD94D1C38750F00FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		69EBD9521C38751000FA7C87 /* UIKitTrafficLightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UIKitTrafficLightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitTrafficLightUITests.m; sourceTree = "<group>"; };
 		69EBD9581C38751000FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69EBD9611C38776B00FA7C87 /* StopLightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopLightView.h; path = UIKitTrafficLight/StopLightView.h; sourceTree = "<group>"; };
@@ -92,13 +80,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		69EBD9331C38750F00FA7C87 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		69EBD94F1C38751000FA7C87 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -141,10 +122,10 @@
 				69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */,
 				6927EF9A1C4DDC14003344B6 /* model_objs */,
 				69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */,
-				69EBD93F1C38750F00FA7C87 /* FirstViewController.h */,
-				69EBD9401C38750F00FA7C87 /* FirstViewController.m */,
-				69EBD9421C38750F00FA7C87 /* SecondViewController.h */,
-				69EBD9431C38750F00FA7C87 /* SecondViewController.m */,
+				69EBD93F1C38750F00FA7C87 /* TrafficFSMViewController.h */,
+				69EBD9401C38750F00FA7C87 /* TrafficFSMViewController.m */,
+				69EBD9421C38750F00FA7C87 /* TrafficGridViewController.h */,
+				69EBD9431C38750F00FA7C87 /* TrafficGridViewController.m */,
 				69729BDA1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.h */,
 				69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */,
 				690D1BA91C87B2F300FCC63F /* SimulationSettingsViewController.h */,
@@ -158,8 +139,7 @@
 		69EBD9371C38750F00FA7C87 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				69EBD9361C38750F00FA7C87 /* UIKitTrafficLight.app */,
-				69EBD9521C38751000FA7C87 /* UIKitTrafficLightUITests.xctest */,
+				69EBD9361C38750F00FA7C87 /* SignalAwareRouting.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,9 +181,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		69EBD9351C38750F00FA7C87 /* UIKitTrafficLight */ = {
+		69EBD9351C38750F00FA7C87 /* SignalAwareRouting */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 69EBD95B1C38751000FA7C87 /* Build configuration list for PBXNativeTarget "UIKitTrafficLight" */;
+			buildConfigurationList = 69EBD95B1C38751000FA7C87 /* Build configuration list for PBXNativeTarget "SignalAwareRouting" */;
 			buildPhases = (
 				69EBD9321C38750F00FA7C87 /* Sources */,
 				69EBD9331C38750F00FA7C87 /* Frameworks */,
@@ -213,28 +193,10 @@
 			);
 			dependencies = (
 			);
-			name = UIKitTrafficLight;
+			name = SignalAwareRouting;
 			productName = UIKitTrafficLight;
-			productReference = 69EBD9361C38750F00FA7C87 /* UIKitTrafficLight.app */;
+			productReference = 69EBD9361C38750F00FA7C87 /* SignalAwareRouting.app */;
 			productType = "com.apple.product-type.application";
-		};
-		69EBD9511C38751000FA7C87 /* UIKitTrafficLightUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 69EBD95E1C38751000FA7C87 /* Build configuration list for PBXNativeTarget "UIKitTrafficLightUITests" */;
-			buildPhases = (
-				69EBD94E1C38751000FA7C87 /* Sources */,
-				69EBD94F1C38751000FA7C87 /* Frameworks */,
-				69EBD9501C38751000FA7C87 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				69EBD9541C38751000FA7C87 /* PBXTargetDependency */,
-			);
-			name = UIKitTrafficLightUITests;
-			productName = UIKitTrafficLightUITests;
-			productReference = 69EBD9521C38751000FA7C87 /* UIKitTrafficLightUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -249,13 +211,9 @@
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 7CV4SBN5VP;
 					};
-					69EBD9511C38751000FA7C87 = {
-						CreatedOnToolsVersion = 7.2;
-						TestTargetID = 69EBD9351C38750F00FA7C87;
-					};
 				};
 			};
-			buildConfigurationList = 69EBD9311C38750F00FA7C87 /* Build configuration list for PBXProject "UIKitTrafficLight" */;
+			buildConfigurationList = 69EBD9311C38750F00FA7C87 /* Build configuration list for PBXProject "SignalAwareRouting" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -268,8 +226,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				69EBD9351C38750F00FA7C87 /* UIKitTrafficLight */,
-				69EBD9511C38751000FA7C87 /* UIKitTrafficLightUITests */,
+				69EBD9351C38750F00FA7C87 /* SignalAwareRouting */,
 			);
 		};
 /* End PBXProject section */
@@ -288,13 +245,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		69EBD9501C38751000FA7C87 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -305,12 +255,12 @@
 				69729BDC1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m in Sources */,
 				6927EFA91C4DE7D9003344B6 /* AAGraphRouteStep.m in Sources */,
 				6927EFAC1C4DEF5A003344B6 /* ClickableGraphRenderedView.m in Sources */,
-				69EBD9441C38750F00FA7C87 /* SecondViewController.m in Sources */,
+				69EBD9441C38750F00FA7C87 /* TrafficGridViewController.m in Sources */,
 				69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */,
 				69E69B8D1C38B00800C657E7 /* AACarView.m in Sources */,
 				6927EFA61C4DE75E003344B6 /* AAGraphRoute.m in Sources */,
 				690D1BAB1C87B2F300FCC63F /* SimulationSettingsViewController.m in Sources */,
-				69EBD9411C38750F00FA7C87 /* FirstViewController.m in Sources */,
+				69EBD9411C38750F00FA7C87 /* TrafficFSMViewController.m in Sources */,
 				69EBD93B1C38750F00FA7C87 /* main.m in Sources */,
 				69EBD9631C38776B00FA7C87 /* StopLightView.m in Sources */,
 				69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */,
@@ -322,23 +272,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		69EBD94E1C38751000FA7C87 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				69EBD9571C38751000FA7C87 /* UIKitTrafficLightUITests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		69EBD9541C38751000FA7C87 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 69EBD9351C38750F00FA7C87 /* UIKitTrafficLight */;
-			targetProxy = 69EBD9531C38751000FA7C87 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		69EBD9451C38750F00FA7C87 /* Main.storyboard */ = {
@@ -452,7 +386,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andyaude.UIKitTrafficLight;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SignalAwareRouting;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -468,40 +402,16 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.andyaude.UIKitTrafficLight;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SignalAwareRouting;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		69EBD95F1C38751000FA7C87 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = UIKitTrafficLightUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.andyaude.UIKitTrafficLightUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = UIKitTrafficLight;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		69EBD9601C38751000FA7C87 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = UIKitTrafficLightUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.andyaude.UIKitTrafficLightUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = UIKitTrafficLight;
-				USES_XCTRUNNER = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		69EBD9311C38750F00FA7C87 /* Build configuration list for PBXProject "UIKitTrafficLight" */ = {
+		69EBD9311C38750F00FA7C87 /* Build configuration list for PBXProject "SignalAwareRouting" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				69EBD9591C38751000FA7C87 /* Debug */,
@@ -510,20 +420,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		69EBD95B1C38751000FA7C87 /* Build configuration list for PBXNativeTarget "UIKitTrafficLight" */ = {
+		69EBD95B1C38751000FA7C87 /* Build configuration list for PBXNativeTarget "SignalAwareRouting" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				69EBD95C1C38751000FA7C87 /* Debug */,
 				69EBD95D1C38751000FA7C87 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		69EBD95E1C38751000FA7C87 /* Build configuration list for PBXNativeTarget "UIKitTrafficLightUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				69EBD95F1C38751000FA7C87 /* Debug */,
-				69EBD9601C38751000FA7C87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

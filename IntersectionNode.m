@@ -8,6 +8,8 @@
 
 #import "IntersectionNode.h"
 #import "LightPhaseMachine.h"
+#import "StreetEdge.h"
+#import "CarAndView.h"
 
 @implementation IntersectionNode
 
@@ -125,8 +127,8 @@
         
         // LEFT Turn Delay
         if (inp == NORTH_PORT || inp == SOUTH_PORT)
-            return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION] * 1.3;
-        else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION] * 1.3; // Extra wait for left turns. Scalar should depend on probe data traffic loads. :/
+            return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION] * 1.0;
+        else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION] * 1.0; // Extra wait for left turns. Scalar should depend on probe data traffic loads. :/
     
     }
     NSLog(@"Uh, this shouldn't happen");
@@ -134,6 +136,100 @@
     return 100.0;
     
     
+}
+
+// Ever minute a car spends at an intxn increase the urgency/priority in the system
+- (NSUInteger)getCountForIntxn:(IntersectionNode *)intxn andPort:(StreetEdge *)port andTimeSpentWaiting:(BOOL)timeSpentWaiting{
+    
+    if(port) {
+        BOOL isA_B = port.intersectionA == intxn;
+        NSArray *theArray = isA_B ? port.BACars : port.ABCars;
+        // if true intxn --> B... then we are itnerested in B-A> cars.
+        if (!timeSpentWaiting)
+            return [theArray count];
+        else {
+            int penalties = 0;
+            
+            for (NSUInteger i = 0; i < theArray.count; i++) {
+                penalties += [theArray[i] getTimeSpentWaitingOnThisEdge] / 60;
+            }
+            return [theArray count] + penalties;
+            
+//            NSUInteger baseNumCars = [theArray count];
+//            NSUInteger waitersPenalty = [[theArray filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+//                CarAndView *car = (CarAndView *)evaluatedObject;
+//                return [car getTimeSpentWaitingOnThisEdge] > 90; // waiting longer than 90?
+//            }]] count] * 3;
+//            return baseNumCars + waitersPenalty;
+        }
+        
+    }
+
+    
+    return 0;
+    
+}
+
+- (double)getPrescientCountForIntxn:(IntersectionNode *)intxn andPort:(StreetEdge *)port {
+    
+    if(port) {
+        
+        double scaled_count = 0;
+        
+        BOOL isA_B = port.intersectionA == intxn;
+        // if true intxn --> B... then we are itnerested in B-A> cars.
+        NSArray *carsOnAB = port.futureBACars;
+
+        if (!isA_B)
+            carsOnAB = port.futureABCars;
+    
+        for (int i = 0; i < carsOnAB.count; i++) {
+            CarAndView *car = carsOnAB[i];
+            int num_steps = [car numStepsUntilEdge:port];
+            // count of prescient cars!
+            scaled_count += 1.0 / (double) num_steps ;
+        }
+        
+
+        return scaled_count;
+    }
+    
+    
+    return 0;
+    
+}
+
+// Set queued to NO if you want all cars on link, not just the queued ones.
+- (NSUInteger)countIncomingCarsQueued:(BOOL)queued andIsNS:(BOOL)isNS andIntxn:(IntersectionNode *)intxn{
+    
+    int count = 0;
+    
+    if (!isNS) {
+        
+        count += [self getCountForIntxn:intxn andPort:intxn.e_port andTimeSpentWaiting:queued];
+        count += [self getCountForIntxn:intxn andPort:intxn.w_port andTimeSpentWaiting:queued];
+        
+    } else {
+        count += [self getCountForIntxn:intxn andPort:intxn.n_port andTimeSpentWaiting:queued];
+        count += [self getCountForIntxn:intxn andPort:intxn.s_port andTimeSpentWaiting:queued];
+    }
+    return count;
+}
+
+- (double)countPrescientCarsAndisNS:(BOOL)isNS andIntxn:(IntersectionNode *)intxn{
+    
+    double count = 0;
+    
+    if (!isNS) {
+        
+        count += [self getPrescientCountForIntxn:intxn andPort:intxn.e_port];
+        count += [self getPrescientCountForIntxn:intxn andPort:intxn.w_port];
+        
+    } else {
+        count += [self getPrescientCountForIntxn:intxn andPort:intxn.n_port];
+        count += [self getPrescientCountForIntxn:intxn andPort:intxn.s_port];
+    }
+    return count;
 }
 
 - (NSSet *)getEdgeSet {
@@ -158,11 +254,13 @@
     return self;
 }
 
-+ (IntersectionNode *)nodeWithIdentifier:(NSString *)anIdentifier {
++ (IntersectionNode *)nodeWithIdentifier:(NSString *)anIdentifier andLatitude:(double)latitude andLongitude:(double)longitude {
     
     IntersectionNode *aNode = [[IntersectionNode alloc] init];
     
     aNode.identifier = anIdentifier;
+    aNode.longitude = longitude;
+    aNode.latitude = latitude;
     
     return aNode;
 }

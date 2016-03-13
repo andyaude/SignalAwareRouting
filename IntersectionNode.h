@@ -52,6 +52,9 @@ typedef enum {
 
 - (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp;
 
+- (NSUInteger)countIncomingCarsQueued:(BOOL)queued andIsNS:(BOOL)isNS andIntxn:(IntersectionNode *)intxn;
+- (double)countPrescientCarsAndisNS:(BOOL)isNS andIntxn:(IntersectionNode *)intxn;
+
 
 - (BOOL)isTurnForbidden:(PortDirection)inp outPort:(PortDirection)outp;
 - (float)calculateRealtimePenalty:(PortDirection)inp outPort:(PortDirection)outp withRealTimestamp:(NSTimeInterval)times;
@@ -62,7 +65,7 @@ typedef enum {
 	@param anIdentifier a unique identifier for the node.  Must be unique for all nodes in a graph
  @returns an initialized and un-retained edge
  */
-+ (IntersectionNode *)nodeWithIdentifier:(NSString *)anIdentifier;
++ (IntersectionNode *)nodeWithIdentifier:(NSString *)anIdentifier andLatitude:(double)latitude andLongitude:(double)longitude;
 - (void)nillifyPortWithThisEdge:(StreetEdge *)edge;
 
 

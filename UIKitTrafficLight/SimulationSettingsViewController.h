@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class SecondViewController;
+@class TrafficGridViewController;
 @interface SimulationSettingsViewController : UIViewController
 
 @property (nonatomic) BOOL *parentFrequentUIUpdates;
 @property (nonatomic) BOOL *parentDrawAllPaths;
-@property (nonatomic, weak) SecondViewController *secondVC;
+@property (nonatomic, weak) TrafficGridViewController *trafficVC;
 @property (weak, nonatomic) IBOutlet UITextField *startField;
 @property (weak, nonatomic) IBOutlet UITextField *endField;
 - (IBAction)confirmSetButtonTouched:(id)sender;

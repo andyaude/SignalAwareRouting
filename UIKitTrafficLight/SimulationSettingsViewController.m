@@ -7,7 +7,7 @@
 //
 
 #import "SimulationSettingsViewController.h"
-#import "SecondViewController.h"
+#import "TrafficGridViewController.h"
 
 @interface SimulationSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UISwitch *freqUIUpdatesSwitch;
@@ -22,15 +22,11 @@
     
     self.freqUIUpdatesSwitch.on = *self.parentFrequentUIUpdates;
     self.drawAllPathsSwitch.on = *self.parentDrawAllPaths;
-    self.startField.text = self.secondVC.startEmitNodename;
-    self.endField.text = self.secondVC.endEmitNodename;
+    self.startField.text = self.trafficVC.startEmitNodename;
+    self.endField.text = self.trafficVC.endEmitNodename;
 
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 - (IBAction)frequentUIUpdatesChanged:(UISwitch*)sender {
     *self.parentFrequentUIUpdates = sender.on;
 }
@@ -73,8 +69,8 @@
         return;
     }
     
-    BOOL startValid = [self.secondVC validateNodeName:candidateStart];
-    BOOL endValid = [self.secondVC validateNodeName:candidateEnd];
+    BOOL startValid = [self.trafficVC validateNodeName:candidateStart];
+    BOOL endValid = [self.trafficVC validateNodeName:candidateEnd];
     if (!startValid) {
         [self displayGenericAlert:@"You must enter a VALID start nodename!" andField:self.startField];
         return;
@@ -84,9 +80,9 @@
         return;
     }
     
-    [self.secondVC setStartEmitNodename:candidateStart];
-    [self.secondVC setEndEmitNodename:candidateEnd];
-    [self.secondVC updateSpawnButtons];
+    [self.trafficVC setStartEmitNodename:candidateStart];
+    [self.trafficVC setEndEmitNodename:candidateEnd];
+    [self.trafficVC updateSpawnButtons];
     
 }
 @end

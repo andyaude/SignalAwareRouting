@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "69EBD9351C38750F00FA7C87"
-               BuildableName = "UIKitTrafficLight.app"
-               BlueprintName = "UIKitTrafficLight"
-               ReferencedContainer = "container:UIKitTrafficLight.xcodeproj">
+               BuildableName = "SignalAwareRouting.app"
+               BlueprintName = "SignalAwareRouting"
+               ReferencedContainer = "container:SignalAwareRouting.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "69EBD9511C38751000FA7C87"
                BuildableName = "UIKitTrafficLightUITests.xctest"
                BlueprintName = "UIKitTrafficLightUITests"
-               ReferencedContainer = "container:UIKitTrafficLight.xcodeproj">
+               ReferencedContainer = "container:SignalAwareRouting.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "69EBD9351C38750F00FA7C87"
-            BuildableName = "UIKitTrafficLight.app"
-            BlueprintName = "UIKitTrafficLight"
-            ReferencedContainer = "container:UIKitTrafficLight.xcodeproj">
+            BuildableName = "SignalAwareRouting.app"
+            BlueprintName = "SignalAwareRouting"
+            ReferencedContainer = "container:SignalAwareRouting.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -66,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "69EBD9351C38750F00FA7C87"
-            BuildableName = "UIKitTrafficLight.app"
-            BlueprintName = "UIKitTrafficLight"
-            ReferencedContainer = "container:UIKitTrafficLight.xcodeproj">
+            BuildableName = "SignalAwareRouting.app"
+            BlueprintName = "SignalAwareRouting"
+            ReferencedContainer = "container:SignalAwareRouting.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "69EBD9351C38750F00FA7C87"
-            BuildableName = "UIKitTrafficLight.app"
-            BlueprintName = "UIKitTrafficLight"
-            ReferencedContainer = "container:UIKitTrafficLight.xcodeproj">
+            BuildableName = "SignalAwareRouting.app"
+            BlueprintName = "SignalAwareRouting"
+            ReferencedContainer = "container:SignalAwareRouting.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

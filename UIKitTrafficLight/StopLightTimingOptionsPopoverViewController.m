@@ -40,13 +40,18 @@
 
     [self.progressIndicator setProgress:[phase getCurrentPhaseProgress] animated:NO];
     
-    self.ewWaitLabel.text = [NSString stringWithFormat:@"NS: %.1f", [phase predictWaitTimeForMasterInterval:[phase getMasterInterval] andTrafficDir:NS_DIRECTION]];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    LightPhaseMachine *phase = self.intxnnode.light_phase_machine;
+    self.ewWaitLabel.text = [NSString stringWithFormat:@"Until NS: %.1f", [phase predictWaitTimeForMasterInterval:[phase getMasterInterval] andTrafficDir:NS_DIRECTION]];
     
-    
+    double nextEW = [phase getNextEWPhase];
+    double nextNS = [phase getNextNSPhase];
+    if (nextEW + nextNS > 0) {
+        self.nextNSLabel.hidden = self.nextEWLabel.hidden = NO;
+        self.nextNSLabel.text = [NSString stringWithFormat:@"next: %.1f", nextNS];
+        self.nextEWLabel.text = [NSString stringWithFormat:@"next: %.1f", nextEW];
+    } else {
+        self.nextNSLabel.hidden = self.nextEWLabel.hidden = YES;
+       
+    }
     self.NWPhaseLbl.text = [NSString stringWithFormat:@"%.2f", phase.nsPhase];
     self.EWPhaseLbl.text = [NSString stringWithFormat:@"%.2f", phase.ewPhase];
     self.PhaseOffsetLabel.text = [NSString stringWithFormat:@"%.2f", phase.phase_offset];
@@ -54,6 +59,10 @@
     self.NSPhaseSlider.value = phase.nsPhase;
     self.EWPhaseSlider.value = phase.ewPhase;
     self.phaseOffsetSlider.value = phase.phase_offset;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self updateTimerProg];
 
 }
 

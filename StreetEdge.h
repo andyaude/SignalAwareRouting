@@ -28,6 +28,12 @@
 @property (nonatomic, weak) IntersectionNode *intersectionB;
 
 
+// Prescience feature!
+
+// Array of cars destined to take this route....
+@property NSMutableArray* futureABCars;
+@property NSMutableArray* futureBACars;
+
 // Here be cars! 
 @property (nonatomic, strong) NSMutableArray *ABCars;
 @property (nonatomic, strong) NSMutableArray *BACars;
@@ -42,6 +48,7 @@
 @property (nonatomic, getter=getWeight) double weight;
 
 - (IntersectionNode *)getOppositeNode: (IntersectionNode *)thisNode;
+- (BOOL)isAtoBForStartNode:(IntersectionNode*)start;
 
 /**
  Convenience initializer that allows for setting the edge's name at initilization

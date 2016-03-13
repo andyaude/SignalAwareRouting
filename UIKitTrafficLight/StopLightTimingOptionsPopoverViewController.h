@@ -12,5 +12,7 @@
 @interface StopLightTimingOptionsPopoverViewController : UIViewController
 
 @property (nonatomic,weak) IntersectionNode *intxnnode;
+@property (weak, nonatomic) IBOutlet UILabel *nextNSLabel;
+@property (weak, nonatomic) IBOutlet UILabel *nextEWLabel;
 
 @end

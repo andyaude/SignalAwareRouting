@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:UIKitTrafficLight.xcodeproj">
+      location = "self:/Users/andyaude/Dropbox/UIKitTrafficLight/SignalAwareRouting.xcodeproj">
    </FileRef>
 </Workspace>

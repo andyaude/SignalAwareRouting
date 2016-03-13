@@ -11,11 +11,12 @@
 #import "AAGraphRoute.h"
 #import "AAGraphRouteStep.h"
 #import "LightPhaseMachine.h"
-#import "SecondViewController.h"
+#import "TrafficGridViewController.h"
 #import "CarAndView.h"
 
 #define CIRCLE_BOX_SIZE 28.0
 #define ROAD_WIDTH 16.
+#define RIGHT_SIDE_OF_ROAD_OFFSET 4.0
 
 @interface ClickableGraphRenderedView ()
 
@@ -28,7 +29,6 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _intxn_lights = [NSMutableDictionary new];
     }
     return self;
 }
@@ -42,24 +42,24 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 }
 
 - (CGPoint)getCGPointForLongitude:(double)longitude andLatitude:(double)latitude {
-    double long_progress = (longitude - self.min_long) / (self.max_long - self.min_long);
-    double lat_progress = (latitude - self.min_lati) / (self.max_lati - self.min_lati);
+    double long_progress = (longitude - self.minLong) / (self.maxLong - self.minLong);
+    double lat_progress = (latitude - self.minLati) / (self.maxLati - self.minLati);
     
-    double x_coord = long_progress * self.bounds.size.width;
-    double y_coord = (1.0 - lat_progress) * self.bounds.size.height;
+    double xCoord = long_progress * self.bounds.size.width;
+    double yCoord = (1.0 - lat_progress) * self.bounds.size.height;
     
-    return CGPointMake(x_coord, y_coord);
+    return CGPointMake(xCoord, yCoord);
 }
 
 - (CGPoint)getLatLongForCGPoint:(CGPoint) point {
-    double x_prog = point.x / self.bounds.size.width;
-    double y_prog = 1.0 - point.y / self.bounds.size.height;
+    double xProg = point.x / self.bounds.size.width;
+    double yProg = 1.0 - point.y / self.bounds.size.height;
     
-    double long_dist = (self.max_long - self.min_long);
-    double lat_dist = (self.max_lati - self.min_lati);
+    double long_dist = (self.maxLong - self.minLong);
+    double lat_dist = (self.maxLati - self.minLati);
 
-    double longitude = self.min_long + long_dist * x_prog;
-    double latitude = self.min_lati + lat_dist * y_prog;
+    double longitude = self.minLong + long_dist * xProg;
+    double latitude = self.minLati + lat_dist * yProg;
     
     return CGPointMake(longitude, latitude);
 }
@@ -87,8 +87,6 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
             CGPoint updated = [self getCGPointForLongitude:obj.longitude andLatitude:obj.latitude];
             
             NSString *label = obj.identifier;
-
-//            NSLog(@"Placing %@ at x:%f y:%f", name, x_coord, y_coord);
             
             circleSpace.origin = updated;
             updated.x -= CIRCLE_BOX_SIZE /2.;
@@ -119,6 +117,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     
     double result = atan2(diffY, diffX);
     
+    // Tuned by hand.
     return fabs(result - 0.60) < .20;
 }
 
@@ -143,12 +142,9 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     for (int i = 0; i < 2; i++) {
         for (NSString * name in edges) {
             StreetEdge *edge = edges[name];
-//            NSLog(@"Intxn %@", edge.identifier);
             
             CGPoint pointA = [self getCGPointForLongitude:edge.intersectionA.longitude andLatitude:edge.intersectionA.latitude];
-//            pointA.x += CIRCLE_BOX_SIZE/2.0; pointA.y += CIRCLE_BOX_SIZE/2.0;
             CGPoint pointB = [self getCGPointForLongitude:edge.intersectionB.longitude andLatitude:edge.intersectionB.latitude];
-//            pointB.x += CIRCLE_BOX_SIZE/2.0; pointB.y += CIRCLE_BOX_SIZE/2.0;
             
             if (i == EDGE_STEP) {
                 CGContextMoveToPoint(ctx,pointA.x, pointA.y);
@@ -162,16 +158,16 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
             
 
             if (i == TEXT_STEP) {
-                double x_offset = [self pointsAreMostlyVertical:pointA andPointTwo:pointB] ? -45.0 : -15.0; // vert : horizontal
-                double y_offset = [self pointsAreMostlyVertical:pointA andPointTwo:pointB] ? -15.0 : -20; // vert: horizontal
+                double xOffset = [self pointsAreMostlyVertical:pointA andPointTwo:pointB] ? -45.0 : -15.0; // vert : horizontal
+                double yOffset = [self pointsAreMostlyVertical:pointA andPointTwo:pointB] ? -15.0 : -20; // vert: horizontal
                 
                 if ([self pointsAreDiagonal:pointA andPointTwo:pointB]) {
-                    x_offset = 10.0;
-                    y_offset = 10.0;
+                    xOffset = 10.0;
+                    yOffset = 10.0;
                 }
-
                 
-                [label drawAtPoint:CGPointMake(mid.x + x_offset , mid.y + y_offset) withAttributes:@ { NSForegroundColorAttributeName : [UIColor darkGrayColor]} ];
+                [label drawAtPoint:CGPointMake(mid.x + xOffset , mid.y + yOffset) withAttributes:
+                            @{ NSForegroundColorAttributeName : [UIColor darkGrayColor]} ];
             }
             
         }
@@ -195,22 +191,18 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     
     CGContextSetLineWidth(ctx,2.5f);
     
-//    NSDictionary *edges = [self.graph edges];
     for (AAGraphRouteStep *aStep in route.steps) {
         
         if (aStep.edge) {
             
             StreetEdge *edge = aStep.edge;
-//            NSLog(@"Tryna draw overlay for edge %@", edge.identifier);
-            
+    
             CGPoint pointA = [self getCGPointForLongitude:edge.intersectionA.longitude andLatitude:edge.intersectionA.latitude];
-//            pointA.x += CIRCLE_BOX_SIZE/2.0; pointA.y += CIRCLE_BOX_SIZE/2.0;
             CGPoint pointB = [self getCGPointForLongitude:edge.intersectionB.longitude andLatitude:edge.intersectionB.latitude];
-//            pointB.x += CIRCLE_BOX_SIZE/2.0; pointB.y += CIRCLE_BOX_SIZE/2.0;
-            
-                CGContextMoveToPoint(ctx,pointA.x, pointA.y);
-                CGContextAddLineToPoint(ctx, pointB.x, pointB.y);
-                CGContextStrokePath(ctx);
+        
+            CGContextMoveToPoint(ctx,pointA.x, pointA.y);
+            CGContextAddLineToPoint(ctx, pointB.x, pointB.y);
+            CGContextStrokePath(ctx);
         
         }
     }
@@ -225,7 +217,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     IntersectionNode *nodeB = [self.graph nodeInGraphWithIdentifier:second];
     
 
-    AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeA toNode:nodeB considerIntxnPenalty:considerPenalty realtimeTimings:rt andTime:time andCurrentQueuePenalty:currentQueuePenalty];
+    AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeA toNode:nodeB considerIntxnPenalty:considerPenalty realtimeTimings:rt andTime:time andCurrentQueuePenalty:currentQueuePenalty andIsAdaptiveTimedSystem:[[self.containingViewController adaptiveCycleTimesSwitch] isOn]];
     NSLog(@"Route :%@",route);
     self.curRouteText = [route description];
     drawThisRoute = route;
@@ -254,9 +246,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 }
 
 - (void)drawTrafficLights {
-    
-    CGRect bounds = self.bounds;
-    
+        
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
     
@@ -295,8 +285,6 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
         }
 }
 
-// Assuming deg latitude = 69.0
-// Assuming deg longitude = 53.0
 + (double)distance:(CGPoint)latLongOne andPoint:(CGPoint)latLongTwo {
     double lat_a = latLongOne.y;
     double lat_b = latLongTwo.y;
@@ -321,8 +309,6 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     for (NSString * name in nodes) {
         IntersectionNode *obj = nodes[name];
         CGPoint loc = [self getCGPointForLongitude:obj.longitude andLatitude:obj.latitude];
-//        loc.y += CIRCLE_BOX_SIZE/2.0;
-//        loc.x += CIRCLE_BOX_SIZE/2.0;
         
         double dist = [[self class] distance:loc andPoint:touchPoint];
         if (dist < 30.0) {
@@ -343,14 +329,12 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
     IntersectionNode *nearNode = [edge getOppositeNode:farNode];
     CGPoint dirVector = [edge getDirectionVectorForStartNode:nearNode];
     
-    CGPoint result = { -4* dirVector.y, 4* dirVector.x };
+    // 4 or so pixels total offset.
+    CGPoint result = { -RIGHT_SIDE_OF_ROAD_OFFSET* dirVector.y, RIGHT_SIDE_OF_ROAD_OFFSET* dirVector.x };
     return result;
-//    CGPoint up = CGPointMake(0, -1);
-//    
-//    double angle =  atan2(dirVector.y, dirVector.x) - atan2(up.y, up.x);
     
 }
-- (void)drawCarsAndStuff {
+- (void)drawCarsAndPaths {
     NSArray *carViews = [self.containingViewController getCarsToDraw];
     
     CarAndView *deferDraw = nil;
@@ -359,7 +343,6 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
         AACarView *carView = car.carView;
         if (!carView.superview) {
             [self addSubview:carView];
-            
         }
         
         [car initializeIfNeeded];
@@ -380,14 +363,10 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 
         
         carView.hidden = NO;
-        
-//        NSLog(@"lat long : %@", NSStringFromCGPoint(car.currentLongLat));
         CGPoint newCenter = [self getCGPointForLongitude:car.currentLongLat.x andLatitude:car.currentLongLat.y];
-        
         CGPoint offsetForRightOfRoad = [self getOffsetForRightOfRoad:car];
         newCenter.x += offsetForRightOfRoad.x;
         newCenter.y += offsetForRightOfRoad.y;
-//        NSLog(@"place at xy: %@", NSStringFromCGPoint(newCenter));
         carView.center = newCenter;
     }
     
@@ -397,8 +376,6 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 
 }
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     // Drawing code
     
@@ -412,10 +389,7 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
 
     [self drawTrafficLights];
     
-    [self drawCarsAndStuff];
-    
-//    [self drawShortestPathFromNodeNamed:@"D" toNodeNamed:@"F"];
-
+    [self drawCarsAndPaths];
 
 }
 

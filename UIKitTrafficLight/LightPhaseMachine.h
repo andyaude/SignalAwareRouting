@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "StopLightView.h"
 
-@interface LightPhaseMachine : NSObject
+@interface LightPhaseMachine : NSObject {
+    NSTimeInterval _nextEWTime;
+    NSTimeInterval _nextNSTime;
+}
 
 typedef enum
 {
@@ -49,8 +52,16 @@ typedef enum
 
 - (AALightUnitColor)lightColorForDirection:(AATrafficLightDirection)phase;
 
-// TODO fix when tampering with stuff. ??
+#warning this is totally wrong!
 - (double)predictWaitTimeForMasterInterval:(NSTimeInterval)time andTrafficDir:(AATrafficLightDirection)dir;
+
+// Adaptive timing!
+- (void)setNextNSToDuration:(NSTimeInterval)interval;
+- (void)setNextEWToDuration:(NSTimeInterval)interval;
+// For info purposes only
+- (NSTimeInterval)getNextNSPhase;
+- (NSTimeInterval)getNextEWPhase;
+
 
 
 @end

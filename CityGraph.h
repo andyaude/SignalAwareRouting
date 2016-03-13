@@ -124,9 +124,9 @@ NSMutableDictionary *edges;
 	is possible, or either of the given start or end nodes are not in the graph, returns nil.
 	@param startNode a node in the graph to begin calculating a path from
 	@param endNode a node in graph to calculate a route to
-	@returns either a PESGraphRoute object or nil, if no route is possible
+	@returns either a AAGraphRoute object or nil, if no route is possible
  */
-- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty;
+- (AAGraphRoute *)shortestRouteFromNode:(IntersectionNode *)startNode toNode:(IntersectionNode *)endNode considerIntxnPenalty:(BOOL)penalty realtimeTimings:(BOOL)realtime andTime:(double)time andCurrentQueuePenalty:(BOOL)currentQueuePenalty andIsAdaptiveTimedSystem:(BOOL)adaptive;
 
 - (void)justAddNode:(IntersectionNode *)node;
 

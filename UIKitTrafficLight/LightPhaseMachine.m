@@ -49,10 +49,19 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     self.phase_offset = 0.;
     self.ewPhase = 30.0;
     self.nsPhase = 30.0;
+    _nextEWTime = -1.0;
+    _nextNSTime = -1.0;
     self.all_red_duration = 1.0; // CHANGEME 1 to 4
     self.yellow_duration = 1.0; // CHANGEME
     
     return self;
+}
+
+- (void)setNextNSToDuration:(NSTimeInterval)nsTime {
+    _nextNSTime = nsTime;
+}
+- (void)setNextEWToDuration:(NSTimeInterval)ewTime {
+    _nextEWTime = ewTime;
 }
 
 - (NSTimeInterval)getMasterInterval {
@@ -77,14 +86,41 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
 
 }
 
+- (NSTimeInterval)getNextNSPhase {
+    return _nextNSTime;
+}
+- (NSTimeInterval)getNextEWPhase {
+    return _nextEWTime;
+}
+
 - (void)setNewPhase: (AATIntersectionPhase)phase {
 //    NSLog(@"Set new phase: %@", nameForPhaseEnum(phase));
+    if (phase == EW_PHASE && _nextEWTime > 0.0) {
+        self.ewPhase = _nextEWTime;
+        _nextEWTime = -1.0;
+        // Also set NS {
+        if (_nextNSTime > 0.0) {
+            self.nsPhase = _nextNSTime;
+            _nextNSTime = -1.0;
+        }
+        
+
+    }
+    
+    if (phase == NS_PHASE && _nextNSTime > 0.0) {
+        self.nsPhase = _nextNSTime;
+        _nextNSTime = -1.0;
+        if (_nextEWTime > 0.0) {
+            self.ewPhase = _nextEWTime;
+        }   _nextEWTime = -1.0;
+    }
+    
     self.phase = phase;
     self.current_phase_yellow = NO;
     self.current_phase_time_interval = 0;
 }
 
-- (AATIntersectionPhase)nextPhaseForTurningPhase:(AATIntersectionPhase)phase {
+- (AATIntersectionPhase)nextPhaseForClearingPhase:(AATIntersectionPhase)phase {
     assert (phase == ALL_RED_TURNING_NS || phase == ALL_RED_TURNING_EW);
     if (phase == ALL_RED_TURNING_NS) return NS_PHASE;
     else return EW_PHASE;
@@ -108,7 +144,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     return NO;
 }
 
-#warning ASSUMES NS starts
+#warning ASSUMES NS starts. breaks for adaptive timing???
 - (double)predictWaitTimeForMasterInterval:(NSTimeInterval)time andTrafficDir:(AATrafficLightDirection)dir {
     double wholeCycleTime = 0;
     
@@ -173,7 +209,7 @@ NSString *nameForPhaseEnum(AATIntersectionPhase phase) {
     // When All RED turns over to a new direction
     if (self.phase == ALL_RED_TURNING_NS || self.phase == ALL_RED_TURNING_EW) {
         if (self.current_phase_time_interval >= self.all_red_duration) {
-            [self setNewPhase:[self nextPhaseForTurningPhase:self.phase]];
+            [self setNewPhase:[self nextPhaseForClearingPhase:self.phase]];
             
         }
     }

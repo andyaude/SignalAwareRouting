@@ -6,7 +6,7 @@
 //  Copyright © 2016 Andrew Aude. All rights reserved.
 //
 
-#import "SecondViewController.h"
+#import "TrafficGridViewController.h"
 #import "IntersectionNode.h"
 #import "StreetEdge.h"
 #import "AAGraphRoute.h"
@@ -17,7 +17,7 @@
 
 #import "CarAndView.h"
 
-@interface SecondViewController ()
+@interface TrafficGridViewController ()
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @property (nonatomic,strong) UIPopoverController *timingsPopover;
@@ -26,7 +26,7 @@
 
 @end
 
-@implementation SecondViewController
+@implementation TrafficGridViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -71,6 +71,18 @@
     if (!sender.on)
         [self.rtPenaltySwitch setOn:NO animated:YES];
 }
+- (IBAction)rtPenaltyChanged:(UISwitch *)sender {
+    if (sender.on) {
+        [self.considerLightSwitch setOn:YES animated:YES];
+        if (self.adaptiveCycleTimesSwitch.on)
+            [self.adaptiveCycleTimesSwitch setOn:NO animated:YES];
+    }
+}
+- (IBAction)adaptiveCycleChanged:(UISwitch *)sender {
+    if (sender.on) {
+        [self.rtPenaltySwitch setOn:NO animated:YES];
+    }
+}
 
 - (IBAction)segmentControlChanged:(id)sender {
     [self.activeTimer invalidate];
@@ -81,7 +93,7 @@
 - (IBAction)openSimSettingsController:(UIButton *)sender {
     UIStoryboard *story = self.storyboard;
     SimulationSettingsViewController *vc = [story instantiateViewControllerWithIdentifier:@"simSettingsController"];
-    vc.secondVC = self;
+    vc.trafficVC = self;
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -173,7 +185,7 @@ float randomFloat(float min, float max)
         case 0:
             [self establishBasicGraph];
             self.startEmitNodename = @"A";
-            self.endEmitNodename = @"K";
+            self.endEmitNodename = @"S";
         break;
         case 1:
             [self establishGreenFlowGraph];
@@ -191,99 +203,86 @@ float randomFloat(float min, float max)
 }
 - (void)establishBasicGraph {
     
-    
     CityGraph *graph = self.graph;
     
-    self.routeLabel.text = @"TIMING: Timing cycles between 3 \"best\" flows for A->K .";
+    self.routeLabel.text = @"Timing notes: Orignally configured for 6 \"best\" flows for A->S .";
 
     
-    self.clickableRenderView.min_long = 45.10;
-    self.clickableRenderView.max_long = 45.50;
-    //.7117
-    self.clickableRenderView.min_lati = 45.00;
-    self.clickableRenderView.max_lati = 45.285;
+    self.clickableRenderView.minLong = 45.13;
+    self.clickableRenderView.maxLong = 45.48;
+    self.clickableRenderView.minLati = 45.03;
+    self.clickableRenderView.maxLati = 45.275;
     
-    IntersectionNode *aNode = [IntersectionNode nodeWithIdentifier:@"A"];
-    aNode.latitude = 45.26; aNode.longitude = 45.16;
+    IntersectionNode *aNode = [IntersectionNode nodeWithIdentifier:@"A" andLatitude:45.26 andLongitude:45.16];
     
-    IntersectionNode *ATNode = [IntersectionNode nodeWithIdentifier:@"AT"];
-    ATNode.latitude = 45.26; ATNode.longitude = 45.01;
+    IntersectionNode *ATNode = [IntersectionNode nodeWithIdentifier:@"AT" andLatitude:45.26 andLongitude:45.01];
     
-    IntersectionNode *bNode = [IntersectionNode nodeWithIdentifier:@"B"];
-    bNode.latitude = 45.26; bNode.longitude = 45.24;[graph justAddNode:bNode];
-//    fNode.light_phase_machine.ewPhase = 120.0; fNode.light_phase_machine.nsPhase = 4;
+    IntersectionNode *bNode = [IntersectionNode nodeWithIdentifier:@"B" andLatitude:45.26 andLongitude:45.24];
+    [graph justAddNode:bNode];
     bNode.light_phase_machine.phase_offset = 15.0;
     
     
-    IntersectionNode *cNode = [IntersectionNode nodeWithIdentifier:@"C"];
-    cNode.latitude = 45.15; cNode.longitude = 45.234; [graph justAddNode:cNode];
-//#warning PUT THESE BACK!
+    IntersectionNode *cNode = [IntersectionNode nodeWithIdentifier:@"C" andLatitude:45.15 andLongitude:45.234];
+    [graph justAddNode:cNode];
     cNode.light_phase_machine.phase_offset = 30.0;
     cNode.light_phase_machine.ewPhase = 50.0;
     
-    IntersectionNode *dNode = [IntersectionNode nodeWithIdentifier:@"D"];
-    dNode.latitude = 45.14; dNode.longitude = 45.16;
+    IntersectionNode *dNode = [IntersectionNode nodeWithIdentifier:@"D" andLatitude:45.14 andLongitude:45.16];
     
-    IntersectionNode *eNode = [IntersectionNode nodeWithIdentifier:@"E"]; [graph justAddNode:eNode];
-    eNode.latitude = 45.07; eNode.longitude = 45.165;
+    IntersectionNode *eNode = [IntersectionNode nodeWithIdentifier:@"E" andLatitude:45.07 andLongitude:45.165];
+    [graph justAddNode:eNode];
     eNode.light_phase_machine.ewPhase = 4.0;
 
-    IntersectionNode *fNode = [IntersectionNode nodeWithIdentifier:@"F"];
-    fNode.latitude = 45.26; fNode.longitude = 45.37; [graph justAddNode:fNode];
-
+    IntersectionNode *fNode = [IntersectionNode nodeWithIdentifier:@"F" andLatitude:45.26 andLongitude:45.37];
     
-    IntersectionNode *gNode = [IntersectionNode nodeWithIdentifier:@"G"];
-    gNode.latitude = 45.15; gNode.longitude = 45.31;
+    IntersectionNode *gNode = [IntersectionNode nodeWithIdentifier:@"G" andLatitude:45.15 andLongitude:45.31];
+    [graph justAddNode:gNode];
     gNode.light_phase_machine.nsPhase = 10.0;
     
-//    IntersectionNode *hNode = [IntersectionNode nodeWithIdentifier:@"H"]; [graph justAddNode:hNode];
-//    hNode.latitude = 45.045; hNode.longitude = 45.24;
+//    IntersectionNode *hNode = [IntersectionNode nodeWithIdentifier:@"H" andLatitude:45.045 andLongitude:45.24];
+//    [graph justAddNode:hNode];
 //    hNode.light_phase_machine.nsPhase = 4.0;
 
     
-    IntersectionNode *INode = [IntersectionNode nodeWithIdentifier:@"I"]; [graph justAddNode:INode];
+    IntersectionNode *INode = [IntersectionNode nodeWithIdentifier:@"I" andLatitude:45.26 andLongitude:45.45];
+    [graph justAddNode:INode];
     INode.latitude = 45.26; INode.longitude = 45.45;
     INode.light_phase_machine.phase_offset = 18.0;
     
-    IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J"];    [graph justAddNode:JNode];
-    JNode.latitude = 45.05; JNode.longitude = 45.315;
+    IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J" andLatitude:45.05 andLongitude:45.315];
+    [graph justAddNode:JNode];
     JNode.light_phase_machine.phase_offset = 32.0;
 
-    
-    IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K"];
-    kNode.latitude = 45.15; kNode.longitude = 45.38;
+    IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K" andLatitude:45.15 andLongitude:45.38];
 
-    IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L"]; [graph justAddNode:lNode];
-    lNode.latitude = 45.15; lNode.longitude = 45.46;
+    IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L" andLatitude:45.15 andLongitude:45.46];
+    [graph justAddNode:lNode];
     lNode.light_phase_machine.phase_offset = 15.0;
 
     
-    IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R"]; [graph justAddNode:RNode];
-    RNode.latitude = 45.05; RNode.longitude = 45.38;
+    IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R" andLatitude:45.05 andLongitude:45.38];
+    [graph justAddNode:RNode];
     RNode.light_phase_machine.phase_offset = 25.0;
     
-    IntersectionNode *SNode = [IntersectionNode nodeWithIdentifier:@"S"];
-    SNode.latitude = 45.05; SNode.longitude = 45.46;
-
+    IntersectionNode *SNode = [IntersectionNode nodeWithIdentifier:@"S" andLatitude:45.05 andLongitude:45.46];
     
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"A <--> AT"] fromNode:aNode fromPort:WEST_PORT toNode:ATNode toDir:EAST_PORT];
-
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"A <--> B"] fromNode:aNode fromPort:EAST_PORT toNode:bNode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"A <--> D"] fromNode:aNode fromPort:SOUTH_PORT toNode:dNode toDir:NORTH_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"D <--> C"] fromNode:dNode fromPort:EAST_PORT toNode:cNode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"B <--> F"] fromNode:bNode fromPort:EAST_PORT toNode:fNode toDir:WEST_PORT];
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"D <--> E"] fromNode:dNode fromPort:SOUTH_PORT toNode:eNode toDir:NORTH_PORT];
 
-    BOOL EtoJ = YES;;
+    BOOL EtoJ = YES;
     if (EtoJ) {
         [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"E <--> J"] fromNode:eNode fromPort:EAST_PORT toNode:JNode toDir:WEST_PORT];
 
-    } else {
+    } else {   //  Removes the bypass and returns to a square grid. uncomment H if you want to use it
+
 //        [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"E <--> H"] fromNode:eNode fromPort:EAST_PORT toNode:hNode toDir:WEST_PORT];
 //        [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"H <--> C"] fromNode:hNode fromPort:NORTH_PORT toNode:cNode toDir:SOUTH_PORT];
 //        [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"H <--> J"] fromNode:hNode fromPort:EAST_PORT toNode:JNode toDir:WEST_PORT];
     }
-    // DON'T NORMALLY USE THIS
     
     
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"C <--> B"] fromNode:cNode fromPort:NORTH_PORT toNode:bNode toDir:SOUTH_PORT];
@@ -304,76 +303,70 @@ float randomFloat(float min, float max)
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"S <--> L"] fromNode:SNode fromPort:NORTH_PORT toNode:lNode toDir:SOUTH_PORT];
 
     
-
+    // If you want to experiment with 10 second cycle times...
 //    [self setShortCycleTimes];
+//    [self setRandomOffsetTimes]; // experiment with random offsets to hopefully beat gridlocks
 }
 
 - (void)establishGreenFlowGraph {
     
     NSLog(@"Green flow graph");
-    self.routeLabel.text = @"TIMING: D to L Green Flow";
+    self.routeLabel.text = @"TIMING:Originally, D to L Green Flow";
 
     CityGraph *graph = self.graph;
     
-    self.clickableRenderView.min_long = 45.10;
-    self.clickableRenderView.max_long = 45.50;
-    //.7117
-    self.clickableRenderView.min_lati = 45.00;
-    self.clickableRenderView.max_lati = 45.285;
+    self.clickableRenderView.minLong = 45.13;
+    self.clickableRenderView.maxLong = 45.48;
+    self.clickableRenderView.minLati = 45.03;
+    self.clickableRenderView.maxLati = 45.275;
     
-    IntersectionNode *aNode = [IntersectionNode nodeWithIdentifier:@"A"];
-    aNode.latitude = 45.26; aNode.longitude = 45.16;
+    IntersectionNode *aNode = [IntersectionNode nodeWithIdentifier:@"A" andLatitude:45.26 andLongitude:45.16];
     
-    IntersectionNode *bNode = [IntersectionNode nodeWithIdentifier:@"B"];
-    bNode.latitude = 45.26; bNode.longitude = 45.24;[graph justAddNode:bNode];
-    //    fNode.light_phase_machine.ewPhase = 120.0; fNode.light_phase_machine.nsPhase = 4;
+    IntersectionNode *bNode = [IntersectionNode nodeWithIdentifier:@"B" andLatitude:45.26 andLongitude:45.24];
+    [graph justAddNode:bNode];
     bNode.light_phase_machine.phase_offset = 15.0;
     
     
-    IntersectionNode *cNode = [IntersectionNode nodeWithIdentifier:@"C"];
-    cNode.latitude = 45.15; cNode.longitude = 45.234; [graph justAddNode:cNode];
-    //#warning PUT THESE BACK!
+    IntersectionNode *cNode = [IntersectionNode nodeWithIdentifier:@"C" andLatitude:45.15 andLongitude:45.234];
+    [graph justAddNode:cNode];
     cNode.light_phase_machine.phase_offset = 14.0;
     
-    IntersectionNode *dNode = [IntersectionNode nodeWithIdentifier:@"D"];  [graph justAddNode:dNode];
-    dNode.latitude = 45.14; dNode.longitude = 45.16;
+    IntersectionNode *dNode = [IntersectionNode nodeWithIdentifier:@"D"andLatitude:45.14 andLongitude:45.16];
+    [graph justAddNode:dNode];
     dNode.light_phase_machine.phase_offset = 30.0;
     
     
-    IntersectionNode *gNode = [IntersectionNode nodeWithIdentifier:@"G"]; [graph justAddNode:gNode];
-    gNode.latitude = 45.15; gNode.longitude = 45.31;
+    IntersectionNode *gNode = [IntersectionNode nodeWithIdentifier:@"G" andLatitude:45.15 andLongitude:45.31];
+    [graph justAddNode:gNode];
     gNode.light_phase_machine.phase_offset = -7.0;
     
-    IntersectionNode *eNode = [IntersectionNode nodeWithIdentifier:@"E"]; [graph justAddNode:eNode];
-    eNode.latitude = 45.07; eNode.longitude = 45.165;
+    IntersectionNode *eNode = [IntersectionNode nodeWithIdentifier:@"E" andLatitude:45.07 andLongitude:45.165];
+    [graph justAddNode:eNode];
     eNode.light_phase_machine.ewPhase = 4.0;
     
-    IntersectionNode *fNode = [IntersectionNode nodeWithIdentifier:@"F"];
-    fNode.latitude = 45.26; fNode.longitude = 45.37; [graph justAddNode:fNode];
+    IntersectionNode *fNode = [IntersectionNode nodeWithIdentifier:@"F" andLatitude:45.26 andLongitude:45.37];
     
-    
-    IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L"]; [graph justAddNode:lNode];
-    lNode.latitude = 45.15; lNode.longitude = 45.46;
+    IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L" andLatitude:45.15 andLongitude:45.46];
+    [graph justAddNode:lNode];
     lNode.light_phase_machine.phase_offset = 16.0;
     lNode.light_phase_machine.ewPhase = 50;
     lNode.light_phase_machine.nsPhase = 10;
 
     
-    IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K"]; [graph justAddNode:kNode];
-    kNode.latitude = 45.15; kNode.longitude = 45.38;
+    IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K" andLatitude:45.15 andLongitude:45.38];
+    [graph justAddNode:kNode];
     kNode.light_phase_machine.phase_offset = -26.0;
     
-    IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J"];    [graph justAddNode:JNode];
-    JNode.latitude = 45.05; JNode.longitude = 45.315;
+    IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J" andLatitude:45.05 andLongitude:45.315];
+    [graph justAddNode:JNode];
     JNode.light_phase_machine.phase_offset = 32.0;
     
     
-    IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R"]; [graph justAddNode:RNode];
-    RNode.latitude = 45.05; RNode.longitude = 45.38;
+    IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R" andLatitude:45.05 andLongitude:45.38];
+    [graph justAddNode:RNode];
     RNode.light_phase_machine.phase_offset = 25.0;
     
-    IntersectionNode *SNode = [IntersectionNode nodeWithIdentifier:@"S"];
-    SNode.latitude = 45.05; SNode.longitude = 45.46;
+//    IntersectionNode *SNode = [IntersectionNode nodeWithIdentifier:@"S" andLatitude:45.05 andLongitude:45.46];
     
     
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"A <--> B"] fromNode:aNode fromPort:EAST_PORT toNode:bNode toDir:WEST_PORT];
@@ -397,65 +390,60 @@ float randomFloat(float min, float max)
     NSLog(@"Rush hour graph");
     CityGraph *graph = self.graph;
     
-    self.routeLabel.text = @"TIMING: D to L ALL GREEN. J->G is infinitely starved when C->L is fully loaded.";
+    self.routeLabel.text = @"Timing: Originally D to L ALL GREEN. J->G is infinitely starved when C->L is fully loaded.";
 
     
     // Cross section starvation can result otherwise!
     BOOL withDecongestionOffset = NO;
     
-    self.clickableRenderView.min_long = 45.10;
-    self.clickableRenderView.max_long = 45.50;
-    //.7117
-    self.clickableRenderView.min_lati = 45.00;
-    self.clickableRenderView.max_lati = 45.285;
+    self.clickableRenderView.minLong = 45.13;
+    self.clickableRenderView.maxLong = 45.48;
+    self.clickableRenderView.minLati = 45.03;
+    self.clickableRenderView.maxLati = 45.275;
     
-    IntersectionNode *aNode = [IntersectionNode nodeWithIdentifier:@"A"];
-    aNode.latitude = 45.26; aNode.longitude = 45.16;
+    IntersectionNode *aNode = [IntersectionNode nodeWithIdentifier:@"A" andLatitude:45.26 andLongitude:45.16];
     
-    IntersectionNode *bNode = [IntersectionNode nodeWithIdentifier:@"B"];
-    bNode.latitude = 45.26; bNode.longitude = 45.24;[graph justAddNode:bNode];
-    //    fNode.light_phase_machine.ewPhase = 120.0; fNode.light_phase_machine.nsPhase = 4;
+    IntersectionNode *bNode = [IntersectionNode nodeWithIdentifier:@"B" andLatitude:45.26 andLongitude:45.24];
+    [graph justAddNode:bNode];
     bNode.light_phase_machine.phase_offset = 15.0;
     
     
-    IntersectionNode *cNode = [IntersectionNode nodeWithIdentifier:@"C"];
-    cNode.latitude = 45.15; cNode.longitude = 45.234; [graph justAddNode:cNode];
+    IntersectionNode *cNode = [IntersectionNode nodeWithIdentifier:@"C" andLatitude:45.15 andLongitude:45.234];
+    [graph justAddNode:cNode];
     if (withDecongestionOffset) cNode.light_phase_machine.phase_offset = -25.0;
     
-    IntersectionNode *dNode = [IntersectionNode nodeWithIdentifier:@"D"];  [graph justAddNode:dNode];
-    dNode.latitude = 45.14; dNode.longitude = 45.16;
+    IntersectionNode *dNode = [IntersectionNode nodeWithIdentifier:@"D" andLatitude:45.14 andLongitude:45.16];
+
     
-    
-    IntersectionNode *gNode = [IntersectionNode nodeWithIdentifier:@"G"]; [graph justAddNode:gNode];
-    gNode.latitude = 45.15; gNode.longitude = 45.31;
+    IntersectionNode *gNode = [IntersectionNode nodeWithIdentifier:@"G" andLatitude:45.15 andLongitude:45.31];
+    [graph justAddNode:gNode];
     if (withDecongestionOffset)  gNode.light_phase_machine.phase_offset = -15.0;
     
-    IntersectionNode *eNode = [IntersectionNode nodeWithIdentifier:@"E"]; [graph justAddNode:eNode];
-    eNode.latitude = 45.07; eNode.longitude = 45.165;
+    IntersectionNode *eNode = [IntersectionNode nodeWithIdentifier:@"E" andLatitude:45.07 andLongitude:45.165];
+    [graph justAddNode:eNode];
     eNode.light_phase_machine.ewPhase = 5.0;
     
-    IntersectionNode *fNode = [IntersectionNode nodeWithIdentifier:@"F"];
-    fNode.latitude = 45.26; fNode.longitude = 45.37; [graph justAddNode:fNode];
+    IntersectionNode *fNode = [IntersectionNode nodeWithIdentifier:@"F" andLatitude:45.26 andLongitude:45.37];
     
     
-    IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L"]; [graph justAddNode:lNode];
-    lNode.latitude = 45.15; lNode.longitude = 45.46;
+    IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L" andLatitude:45.15 andLongitude:45.46];
+    [graph justAddNode:lNode];
     if (withDecongestionOffset) lNode.light_phase_machine.phase_offset = 15.0;
     lNode.light_phase_machine.ewPhase = 50;
     lNode.light_phase_machine.nsPhase = 10;
     
-    IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K"]; [graph justAddNode:kNode];
-    kNode.latitude = 45.15; kNode.longitude = 45.38;
+    IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K" andLatitude:45.15 andLongitude:45.38];
+    [graph justAddNode:kNode];
     if (withDecongestionOffset)  kNode.light_phase_machine.phase_offset = 0.0;
     
     
-    IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J"];    [graph justAddNode:JNode];
-    JNode.latitude = 45.05; JNode.longitude = 45.315;
+    IntersectionNode *JNode = [IntersectionNode nodeWithIdentifier:@"J" andLatitude:45.05 andLongitude:45.315];
+    [graph justAddNode:JNode];
     JNode.light_phase_machine.phase_offset = 32.0;
     
     
-    IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R"]; [graph justAddNode:RNode];
-    RNode.latitude = 45.05; RNode.longitude = 45.38;
+    IntersectionNode *RNode = [IntersectionNode nodeWithIdentifier:@"R" andLatitude:45.05 andLongitude:45.38];
+    [graph justAddNode:RNode];
     RNode.light_phase_machine.phase_offset = 25.0;
     
     
@@ -479,7 +467,7 @@ float randomFloat(float min, float max)
     [graph addBiDirectionalEdge:[StreetEdge edgeWithName:@"R <--> K"] fromNode:RNode fromPort:NORTH_PORT toNode:kNode toDir:SOUTH_PORT];
 
     
-#warning RANDOM OFFSETS APPLIED
+// Set Random offset times to relieve congestion if desired.
 //    [self setRandomOffsetTimes];
 }
 
@@ -491,14 +479,11 @@ float randomFloat(float min, float max)
         [self setEmitButtonsEnabled:YES];
         [self setStartClockButtonToPause:YES];
 
-//        [sender_as_label setTitle:@"Stop" forState:UIControlStateNormal];
     } else {
         [self.activeTimer invalidate];
         self.activeTimer = nil;
         [self setEmitButtonsEnabled:NO];
         [self setStartClockButtonToPause:NO];
-
-//        [sender_as_label setTitle:@"Start timer" forState:UIControlStateNormal];
     }
 }
 
@@ -524,7 +509,7 @@ float randomFloat(float min, float max)
 }
 
 - (void)pruneCars:(NSTimeInterval)timeDiff {
-    for (int i = [_allCars count] - 1; i >= 0; i--) {
+    for (NSUInteger i = [_allCars count] - 1; i >= 0; i--) {
         CarAndView* element = _allCars[i];
         
         [element doTick:timeDiff];
@@ -554,8 +539,9 @@ float randomFloat(float min, float max)
 }
 
 - (void)updateSpawnButtons {
+    NSString *startStop = _autoEFEmit ? @"Stop" : @"Start";
     NSString *routeName = [NSString stringWithFormat:@"%@-%@", self.startEmitNodename, self.endEmitNodename];
-    [self.startDFAutoEmitLabel setTitle:[NSString stringWithFormat:@"Start Auto %@ Emit",routeName] forState:UIControlStateNormal];
+    [self.startDFAutoEmitLabel setTitle:[NSString stringWithFormat:@"%@ Auto %@ Emit",startStop, routeName] forState:UIControlStateNormal];
     [self.spawnStartEndCarButton setTitle:[NSString stringWithFormat:@"Spawn %@",routeName] forState:UIControlStateNormal];
 
 }
@@ -575,7 +561,7 @@ float randomFloat(float min, float max)
     self.routeLabel.text = @"Route";
     self.flowRateLabel.text = @"Flow Rate:";
     self.throughputLabel.text = @"Throughput:";
-    _frequentUIUpdates = YES;
+//    _frequentUIUpdates = YES;
     _drawAllPaths = YES;
     
     self.graph = [CityGraph new];
@@ -588,7 +574,6 @@ float randomFloat(float min, float max)
     self.clickableRenderView.graph = self.graph;
     _allCars = [NSMutableArray new];
         [self.startSlowRandoEmitLabel setTitle:@"Start Rando Emit" forState:UIControlStateNormal];
-    //    [self.startClockButton setTitle:@"Start timer" forState:UIControlStateNormal];
     [self setStartClockButtonToPause:NO];
     
     [self.clickableRenderView removeAllSubviews];
@@ -597,7 +582,75 @@ float randomFloat(float min, float max)
     
 }
 
-#define TICKS_BETWEEN_EMITS 100
+#define TICKS_BETWEEN_EMITS 110.
+#define TICKS_BETWEEN_RANDO_EMITS 40.
+
+// How many timer cycles between traffic light adapations?
+#define TICKS_BETWEEN_ADAPTATIONS 200.
+
+// so that pedestrians don't get too antsy... assumes press button can preempt signals
+#define IDEAL_TOTAL_CYCLE_TIME 60.
+
+- (void)adaptTimerCycles {
+    
+    
+    BOOL considerTimeSpentWaiting = YES;
+    BOOL prescienceOn = YES;
+    
+    CityGraph *graph = self.graph;
+    for (NSString *nodename in graph.nodes) {
+        IntersectionNode *node = graph.nodes[nodename];
+        
+        double NS_Cars = [node countIncomingCarsQueued:considerTimeSpentWaiting andIsNS:YES andIntxn:node];
+        double EW_Cars = [node countIncomingCarsQueued:considerTimeSpentWaiting andIsNS:NO andIntxn:node];
+        
+        double NS_Prescient_Cars = 0;
+        double EW_Prescient_Cars = 0;
+        if (prescienceOn) {
+            NS_Prescient_Cars = [node countPrescientCarsAndisNS:YES andIntxn:node];
+            EW_Prescient_Cars = [node countPrescientCarsAndisNS:NO andIntxn:node];
+            NS_Cars += NS_Prescient_Cars;
+            EW_Cars += EW_Prescient_Cars;
+            
+            if ([nodename isEqualToString:@"K"] || [nodename isEqualToString:@"L"]) {
+                NSLog(@"%@'s NS Prescient :%.2f",nodename, NS_Prescient_Cars);
+                NSLog(@"%@'s EW Prescient: %.2f", nodename, EW_Prescient_Cars);
+            }
+        }
+        
+
+        
+        if (EW_Cars == 0) EW_Cars++; // handle div by 0 in a Laplaceian way...
+        if (NS_Cars == 0) NS_Cars++; // same for NS
+        
+        
+        double NS_Scalar = NS_Cars / EW_Cars;
+        double EW_Scalar = EW_Cars / NS_Cars;
+        
+        if (NS_Scalar > EW_Scalar) {
+            // set a timing plan that satisifed scalar requests.
+            if (NS_Scalar > 6)
+                NS_Scalar = 6; // cap at 5 to 1. Make in increments of 10.
+            
+            // want to satisfy NS_Scalar x + x = 60
+            double ew_TIME = IDEAL_TOTAL_CYCLE_TIME / (NS_Scalar + 1);
+            double resulting_ns_TIME = IDEAL_TOTAL_CYCLE_TIME - ew_TIME;
+            [node.light_phase_machine setNextNSToDuration:resulting_ns_TIME];
+            [node.light_phase_machine setNextEWToDuration:ew_TIME];
+        } else {
+            if (EW_Scalar > 6)
+                EW_Scalar = 6;
+            double ns_TIME = IDEAL_TOTAL_CYCLE_TIME / (EW_Scalar + 1);
+            double resulting_ew_TIME = IDEAL_TOTAL_CYCLE_TIME - ns_TIME;
+            [node.light_phase_machine setNextNSToDuration:ns_TIME];
+            [node.light_phase_machine setNextEWToDuration:resulting_ew_TIME];
+        }
+        
+        
+    }
+    
+    
+}
 
 - (void)timerTick:(id)something {
     NSTimeInterval timeDiff = 1.0/30.0 * _timeMultiplier;
@@ -606,6 +659,7 @@ float randomFloat(float min, float max)
     
     static int E_F_Counts = 0;
     static int Rando_counts = 0;
+    static int AdaptTimerCycles_Counts = 0;
     if (_autoEFEmit) {
         E_F_Counts++;
         
@@ -620,12 +674,27 @@ float randomFloat(float min, float max)
     if (_autorandoEmit) {
         Rando_counts++;
         
-        double scaled_thirty = 100.0 / _timeMultiplier;
+        double scaled_thirty = TICKS_BETWEEN_RANDO_EMITS / _timeMultiplier;
         
         if (Rando_counts % (int)scaled_thirty == 0) {
 //            NSLog(@"Emitted rando car %d", E_F_Counts);
             [self emitRandomCar:nil];
         }
+    }
+    
+    if (self.adaptiveCycleTimesSwitch.on) {
+        self.rtPenaltySwitch.on = NO;
+        self.rtPenaltySwitch.enabled = NO;
+        AdaptTimerCycles_Counts++;
+        
+        double scaled_thirty = TICKS_BETWEEN_ADAPTATIONS / _timeMultiplier;
+        
+        if (AdaptTimerCycles_Counts % (int)scaled_thirty == 0) {
+            //            NSLog(@"Emitted rando car %d", E_F_Counts);
+            [self adaptTimerCycles];
+        }
+    } else {
+        self.rtPenaltySwitch.enabled = YES;
     }
     
     
@@ -649,7 +718,7 @@ float randomFloat(float min, float max)
     
     if (_numE2EReportedCars)
         self.e2eDelayLabel.text = [NSString stringWithFormat:@"End-to-end delay: %.2f for %d cars", _cumulativee2eDelay/_numE2EReportedCars, _numE2EReportedCars];
-    self.flowRateLabel.text = [NSString stringWithFormat:@"Flow Rate: %.2f%% of %lu are moving", [self aggregateSpeed]/0.11111*100.0, (unsigned long)[_allCars count]];
+    self.flowRateLabel.text = [NSString stringWithFormat:@"Flow Rate: %.2f%% of %lu are moving", [self aggregateSpeed]/0.114504*100.0, (unsigned long)[_allCars count]];
     self.throughputLabel.text = [NSString stringWithFormat:@"Throughput: %d in %.2f sec", _finishedCars, self.masterTime];
 
     
@@ -680,7 +749,7 @@ float randomFloat(float min, float max)
     if (nodeStart) {
         car.currentLongLat = CGPointMake(nodeStart.longitude, nodeStart.latitude);
         
-        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeStart toNode:nodeEnd considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on];
+        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeStart toNode:nodeEnd considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on andIsAdaptiveTimedSystem:self.adaptiveCycleTimesSwitch.on];
         
         car.intendedRoute = route;
     }
@@ -694,6 +763,8 @@ float randomFloat(float min, float max)
     
     CarAndView *car = [[CarAndView alloc] init];
     car.secondVC = self;
+    [car markStartTime:self.masterTime];
+
     [_allCars addObject:car];
     
     
@@ -710,7 +781,7 @@ float randomFloat(float min, float max)
     if (nodeD && nodeF) {
         car.currentLongLat = CGPointMake(nodeD.longitude, nodeD.latitude);
         
-        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeD toNode:nodeF considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on];
+        AAGraphRoute *route = [self.graph shortestRouteFromNode:nodeD toNode:nodeF considerIntxnPenalty:self.considerLightSwitch.on realtimeTimings:self.rtPenaltySwitch.on andTime:self.masterTime andCurrentQueuePenalty:self.queingPenaltySwitch.on andIsAdaptiveTimedSystem:self.adaptiveCycleTimesSwitch.on];
         
         car.intendedRoute = route;
         car.shadowRandomCar = YES;

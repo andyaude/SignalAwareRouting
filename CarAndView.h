@@ -11,12 +11,12 @@
 #import "AAGraphRoute.h"
 #import "StreetEdge.h"
 
-@class CityGraph, SecondViewController;
+@class CityGraph, TrafficGridViewController;
 @interface CarAndView : NSObject
 
 @property (strong, nonatomic) AACarView *carView;
 
-@property (weak, nonatomic) SecondViewController *secondVC;
+@property (weak, nonatomic) TrafficGridViewController *secondVC;
 
 @property (nonatomic) CGPoint currentLongLat;
 
@@ -52,8 +52,12 @@
 - (void)setUnselected;
 
 -(CGFloat)lastSpeedPerSecond;
+- (NSTimeInterval)getTimeSpentWaitingOnThisEdge;
 
 // Respond to timer tick
 - (void)doTick:(NSTimeInterval) timeDiff;
+
+// For Prescience
+- (int)numStepsUntilEdge:(StreetEdge *)edge;
 
 @end

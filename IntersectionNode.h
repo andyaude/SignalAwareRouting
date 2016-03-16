@@ -35,7 +35,7 @@ typedef enum {
 
 @property (nonatomic) double latitude; // center point ?
 @property (nonatomic) double longitude; // center point ?
-@property (nonatomic, getter=getLatLong) CGPoint latlong; // center point ?
+@property (nonatomic, getter=getLongLat) CGPoint longLat; // center point ?
 
 
 // IF STOP SIGN

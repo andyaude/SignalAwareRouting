@@ -3,8 +3,7 @@
 //  UIKitTrafficLight
 //
 //  Created by Andrew Aude on 1/18/16.
-//  Copyright © 2016 Andrew Aude. All rights reserved.
-//
+//  CityGraph, IntersectionNode, StreetEdge, GraphRoute, GraphRouteStep orginally based around PES Graph by Peter Snyder - https://github.com/snyderp/PESGraph ... Modified extensively to handle road traffic simulation!
 
 #import <Foundation/Foundation.h>
 #import "IntersectionNode.h"
@@ -57,15 +56,6 @@ NSMutableDictionary *edges;
  */
 - (StreetEdge *)edgeFromNode:(IntersectionNode *)sourceNode toNeighboringNode:(IntersectionNode *)destinationNode;
 
-/**
-	Returns the distance / weight from one node to another.  If either node is not
- found in the graph, or there is no edge from the source node to the destination node,
- nil is retuned.  This is a simple convenience wrapper around toNeighboringNode:
-	@param sourceNode the node to check the weight from
-	@param destinationNode the node to check the weight to
-	@returns either nil, or a number object describing the weight from one node to the other
- */
-- (NSNumber *)weightFromNode:(IntersectionNode *)sourceNode viaNode:(IntersectionNode *)viaNode toNeighboringNode:(IntersectionNode *)destinationNode andConsiderLightPenalty:(BOOL)considerPenalty andRT:(BOOL)rt andTime:(double)time andQueuePenalty:(BOOL)queuePenalty;
 
 /**
 	Returns an unordered collection of all nodes that receive edges from the given node.

@@ -14,9 +14,16 @@
 #import "LightPhaseMachine.h"
 #import "TrafficGridViewController.h"
 
-#define REPORT_E2E_DELAY_EVEN_IF_SHADOW 1
+// Should random cars count in E2E calculations?
+#define REPORT_E2E_DELAY_EVEN_IF_SHADOW 0
+
+// How far should car back off of intersection when light is Y/R?
 #define DIST_TO_YELLOWIFY 0.006
-#define CAR_STOP_SEP 0.0071
+
+// Minimum separation between cars
+#define CAR_MIN_SEP 0.0062
+
+// Calibrated to 30 mph considering graph distances
 #define STANDARD_SPEED 1/262.0 // units per time tick?
 
 @interface CarController () {
@@ -104,57 +111,31 @@
     StreetEdge *farStep = self.currentStep.edge;
     IntersectionNode *farNode = [farStep getOppositeNode:self.currentStep.node];
     
-    double dist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.latlong];
-//    NSLog(@"Dist of car %f", dist);
+    double dist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.longLat];
     
     return (dist < DIST_TO_YELLOWIFY);
 }
 
 
 
-- (BOOL)carIsWithin2XFollowDist:(CarController *)other {
+- (BOOL)carIsWithinExpandedFollowDist:(CarController *)other {
     double distBetween = [ClickableGraphRenderedView distance:other.currentLongLat andPoint:self.currentLongLat];
-    if (distBetween <= 1.4*CAR_STOP_SEP) return YES;
+    if (distBetween <= 1.3*CAR_MIN_SEP) return YES;
     return NO;
 
 }
 
-- (CarController *)carExistsInVeryShortProxAhead {
-    
+- (NSArray *)carsAheadOfMeSorted {
     NSArray *cars = [CityGraph getCarsOnEdge:self.currentStep.edge startPoint:self.currentStep.node];
     
     IntersectionNode *farNode = [self getFarNode];
     
     NSMutableArray *forwardDirCars = [NSMutableArray new];
     
-    double myDist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.latlong];
+    double myDist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.longLat];
     // Filter to only cars ahead of me.
     for (CarController *other in cars) {
-        if (other->_uniqueID == _uniqueID) continue; // ignore self
-        
-        double theirDist = [ClickableGraphRenderedView distance:other.currentLongLat andPoint:farNode.latlong];
-        if (theirDist < myDist) [forwardDirCars addObject:other];
-    }
-    
-    for (CarController *other in forwardDirCars) {
-        double distBetween = [ClickableGraphRenderedView distance:other.currentLongLat andPoint:self.currentLongLat];
-        if (distBetween < CAR_STOP_SEP) return other;
-    }
-    
-    return nil;
-}
-
-- (CarController *)getImmediateNextCar {
-    NSArray *cars = [CityGraph getCarsOnEdge:self.currentStep.edge startPoint:self.currentStep.node];
-    
-    IntersectionNode *farNode = [self getFarNode];
-    
-    NSMutableArray *forwardDirCars = [NSMutableArray new];
-    
-    double myDist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.latlong];
-    // Filter to only cars ahead of me.
-    for (CarController *other in cars) {
-        double theirDist = [ClickableGraphRenderedView distance:other.currentLongLat andPoint:farNode.latlong];
+        double theirDist = [ClickableGraphRenderedView distance:other.currentLongLat andPoint:farNode.longLat];
         if (theirDist < myDist) [forwardDirCars addObject:other];
     }
     
@@ -169,64 +150,44 @@
             return NSOrderedSame;
         }
     }];
-    
-    if (sortedArray.count == 0) return nil;
-    
 
-    return sortedArray[0];
-    
+    return sortedArray;
+}
 
+- (CarController *)getImmediateNextCar {
+    NSArray *carsAhead = [self carsAheadOfMeSorted];
+    if (!carsAhead || carsAhead.count == 0) return nil;
+    return carsAhead[0];
 }
 
 
 - (BOOL)chainedHardStopImpending {
     
-    NSArray *cars = [CityGraph getCarsOnEdge:self.currentStep.edge startPoint:self.currentStep.node];
+    NSArray *carsAhead = [self carsAheadOfMeSorted];
     
-    IntersectionNode *farNode = [self getFarNode];
-    
-    NSMutableArray *forwardDirCars = [NSMutableArray new];
-    
-    double myDist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.latlong];
-    // Filter to only cars ahead of me.
-    for (CarController *other in cars) {
-        double theirDist = [ClickableGraphRenderedView distance:other.currentLongLat andPoint:farNode.latlong];
-        if (theirDist < myDist) [forwardDirCars addObject:other];
-    }
-    
-    NSArray *sortedArray = [forwardDirCars sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-        double dist_a = [ClickableGraphRenderedView distance:((CarController*)a).currentLongLat andPoint:self.currentLongLat];
-        double dist_b = [ClickableGraphRenderedView distance:((CarController*)b).currentLongLat andPoint:self.currentLongLat];
-        if (dist_a < dist_b) {
-            return NSOrderedAscending;
-        } else if (dist_a > dist_b) {
-            return NSOrderedDescending;
-        } else {
-            return NSOrderedSame;
-        }
-    }];
-    
-    if (sortedArray.count == 0) return NO;
+    if (carsAhead.count == 0) return NO;
     
     // Check immediate next car!
-    if (sortedArray.count >= 1) {
-        CarController *closest = sortedArray[0];
+    if (carsAhead.count >= 1) {
+        CarController *closest = carsAhead[0];
         double distBetween = [ClickableGraphRenderedView distance:closest.currentLongLat andPoint:self.currentLongLat];
-        if (distBetween > 1.41*CAR_STOP_SEP) return NO;
+        if (distBetween > 1.31*CAR_MIN_SEP) return NO;
+        // Next car is hard stopped. That means we'll end up hard stopped. :(
         if (closest.hardStopped) return YES;
 
     }
     
-    // If we have more than immediate next car, check for more backup
-    for (int i = 0; i < sortedArray.count - 1; i++) {
-        CarController *carA = sortedArray[i];
-        CarController *carB = sortedArray[i+1];
+    // If we have more than 1 immediate next car, check for more backup
+    for (int i = 0; i < carsAhead.count - 1; i++) {
+        CarController *carA = carsAhead[i];
+        CarController *carB = carsAhead[i+1];
         
         double distBetween = [ClickableGraphRenderedView distance:carA.currentLongLat andPoint:carB.currentLongLat];
-        if (distBetween > 1.41*CAR_STOP_SEP) return NO;
-        else {
-            if (carB.hardStopped) return YES;
-        }
+        // No worry, the next car is far enough away anyway
+        if (distBetween > 1.31*CAR_MIN_SEP) return NO;
+        
+        // Next car is hard stopped. That means we'll end up hard stopped. :(
+        if (carB.hardStopped) return YES;
         
     }
     
@@ -249,20 +210,18 @@
         
         NSArray *cars = [CityGraph getCarsOnEdge:first.edge startPoint:first.node];
         
-        
-        for (CarController *carCand in cars) {
-            double dist_between = [ClickableGraphRenderedView distance:carCand.currentLongLat andPoint:first.node.getLatLong];
-            if (dist_between < CAR_STOP_SEP*0.3) {
-//                if ([carCand chainedHardStopImpending])
-                    return YES;
-            }
-                
+        if (cars.count > 0) {
+            CarController *firstCarOnEdge = cars[0];
+            double dist_between = [ClickableGraphRenderedView distance:firstCarOnEdge.currentLongLat andPoint:first.node.longLat];
+             if (dist_between < CAR_MIN_SEP*0.35)
+                 return YES;
         }
+        
     }
     return NO;
 }
 
-// Per second?
+// Calculates velocity in terms of pixel values
 - (double)velocity_helper {
     IntersectionNode *farNode = [self getFarNode];
     LightPhaseMachine *lightPhase = farNode.light_phase_machine;
@@ -271,6 +230,7 @@
     
     AALightUnitColor color = [lightPhase lightColorForDirection:( isNS ? NS_DIRECTION : EW_DIRECTION)];
     
+    // Respect the signal.
     if ([self isInIntersectionRange]) {
         
         if ([self checkBackedUpIntxn]) {
@@ -286,33 +246,32 @@
             return STANDARD_SPEED;
         } else {
             self.hardStopped = YES;
-            return 0.0; // TODO DECEL
+            return 0.0;
         }
     }
     
-
-    if ([self carExistsInVeryShortProxAhead]) {
-        return 0.0;
-    }
-    
+    // If no signal, get the immediate next car on the edge.
     CarController *immediateNextCar = [self getImmediateNextCar];
     
     if (immediateNextCar) {
+
+        // Distance is way too close? Stop
+        double distBetween = [ClickableGraphRenderedView distance:immediateNextCar.currentLongLat andPoint:self.currentLongLat];
+        if (distBetween < CAR_MIN_SEP) return 0;
+
+    
+        // Here's the magic where we implement 2x following distance while cars ahead are in motion!
         BOOL chainedStop = [self chainedHardStopImpending];
             if (chainedStop)
-                return STANDARD_SPEED; // creep up to "very short prox" distance
+                return STANDARD_SPEED; // We must creep up to "very short prox" distance.
             else {
-                if ([self carIsWithin2XFollowDist:immediateNextCar])
+                // If the cars in front are flowing, we need to bcak off
+                if ([self carIsWithinExpandedFollowDist:immediateNextCar])
                     return 0; // stay back!
             }
     }
-//    if ([self chainedHardStopImpending]) {
-//        return 0.0;
-//        
-//    }
 
-
-    
+    // If no car, proceed ahead!
     return STANDARD_SPEED;
 }
 
@@ -320,7 +279,7 @@
     double result = [self velocity_helper];
     _lastSpeed = result;
     
-    // Previously in motion.
+    // State machine logic to properly accumulate time spent stopped on this edge... It works...
     if (_lastTimeStopped == -1.) {
         if (result == 0.0)
             _lastTimeStopped = [self.secondVC masterTime];
@@ -332,16 +291,14 @@
             _lastTimeStopped = -1.;
         }
     }
+    
     return result;
 }
 
 
+
 - (void)setUnselected {
     _wasClicked = NO;
-}
-
-- (NSTimeInterval)getTimeSpentWaitingOnThisEdge {
-    return self.timeStoppedOnThisEdge;
 }
 
 - (void)didClickOnCar {
@@ -408,15 +365,15 @@
 }
 
 // This method checks if the car needs to turn onto the next node...
-- (BOOL)didCarGoTooFarForStep:(GraphRouteStep *)step andStep:(CGPoint)stepP {
+- (void)placeCarOnNextStepIfNeeded:(GraphRouteStep *)step currentStepSize:(CGPoint)stepP {
     StreetEdge *farStep = self.currentStep.edge;
     IntersectionNode *farNode = [farStep getOppositeNode:self.currentStep.node];
     
-    double dist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.latlong];
+    double dist = [ClickableGraphRenderedView distance:self.currentLongLat andPoint:farNode.longLat];
 
     if (dist <= _oldDist) {
         _oldDist = dist;
-        return NO;
+        return;
     } else {
         
         // Distance increased too far, logic to undo a step
@@ -426,16 +383,10 @@
         self.currentLongLat = oldCenter;
 
         [self advanceToNextStepIndex];
-        return YES; // Distance increased!
+        return; // Distance increased!
         
     }
-    
-    
-    return NO;
-    
 }
-
-
 
 - (void)turnCarYellowIfCloseToIntersection {
     
@@ -478,6 +429,10 @@
     _inited = true;
 }
 
+- (NSTimeInterval)getTimeSpentWaitingOnThisEdge {
+    return self.timeStoppedOnThisEdge;
+}
+
 - (void)doTick:(NSTimeInterval )timeDiff {
     
     GraphRouteStep *first = self.currentStep;
@@ -504,12 +459,8 @@
     
     [self turnCarYellowIfCloseToIntersection];
     
-    [self didCarGoTooFarForStep:first andStep:translateMe];
+    [self placeCarOnNextStepIfNeeded:first currentStepSize:translateMe];
 
-    
-    
-//    IntersectionNode *end = [startEdge getOppositeNode:start];
-    
     
 }
 

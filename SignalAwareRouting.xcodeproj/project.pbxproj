@@ -21,14 +21,13 @@
 		69729BDF1C6DDF50003B7D1D /* CarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDE1C6DDF50003B7D1D /* CarController.m */; };
 		69E69B8A1C38849D00C657E7 /* LightPhaseMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B891C38849D00C657E7 /* LightPhaseMachine.m */; };
 		69E69B8D1C38B00800C657E7 /* CarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8C1C38B00800C657E7 /* CarView.m */; };
-		69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */; };
+		69E69B901C38B7F800C657E7 /* TrafficFSMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8F1C38B7F800C657E7 /* TrafficFSMUtilities.m */; };
 		69EBD93B1C38750F00FA7C87 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93A1C38750F00FA7C87 /* main.m */; };
 		69EBD93E1C38750F00FA7C87 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD93D1C38750F00FA7C87 /* AppDelegate.m */; };
 		69EBD9411C38750F00FA7C87 /* TrafficFSMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9401C38750F00FA7C87 /* TrafficFSMViewController.m */; };
 		69EBD9441C38750F00FA7C87 /* TrafficGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9431C38750F00FA7C87 /* TrafficGridViewController.m */; };
 		69EBD9471C38750F00FA7C87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD9451C38750F00FA7C87 /* Main.storyboard */; };
 		69EBD9491C38750F00FA7C87 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD9481C38750F00FA7C87 /* Assets.xcassets */; };
-		69EBD94C1C38750F00FA7C87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69EBD94A1C38750F00FA7C87 /* LaunchScreen.storyboard */; };
 		69EBD9631C38776B00FA7C87 /* StopLightView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69EBD9621C38776B00FA7C87 /* StopLightView.m */; };
 /* End PBXBuildFile section */
 
@@ -58,8 +57,8 @@
 		69E69B891C38849D00C657E7 /* LightPhaseMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LightPhaseMachine.m; path = UIKitTrafficLight/LightPhaseMachine.m; sourceTree = "<group>"; };
 		69E69B8B1C38B00800C657E7 /* CarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CarView.h; path = UIKitTrafficLight/CarView.h; sourceTree = "<group>"; };
 		69E69B8C1C38B00800C657E7 /* CarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CarView.m; path = UIKitTrafficLight/CarView.m; sourceTree = "<group>"; };
-		69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AARoadModelViewUtils.h; path = UIKitTrafficLight/AARoadModelViewUtils.h; sourceTree = "<group>"; };
-		69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AARoadModelViewUtils.m; path = UIKitTrafficLight/AARoadModelViewUtils.m; sourceTree = "<group>"; };
+		69E69B8E1C38B7F800C657E7 /* TrafficFSMUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrafficFSMUtilities.h; path = UIKitTrafficLight/TrafficFSMUtilities.h; sourceTree = "<group>"; };
+		69E69B8F1C38B7F800C657E7 /* TrafficFSMUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TrafficFSMUtilities.m; path = UIKitTrafficLight/TrafficFSMUtilities.m; sourceTree = "<group>"; };
 		69EBD9361C38750F00FA7C87 /* SignalAwareRouting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignalAwareRouting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69EBD93A1C38750F00FA7C87 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		69EBD93C1C38750F00FA7C87 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -70,7 +69,6 @@
 		69EBD9431C38750F00FA7C87 /* TrafficGridViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TrafficGridViewController.m; path = UIKitTrafficLight/TrafficGridViewController.m; sourceTree = "<group>"; };
 		69EBD9461C38750F00FA7C87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		69EBD9481C38750F00FA7C87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		69EBD94B1C38750F00FA7C87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69EBD94D1C38750F00FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitTrafficLightUITests.m; sourceTree = "<group>"; };
 		69EBD9581C38751000FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -89,7 +87,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6927EF9A1C4DDC14003344B6 /* ModelObjects */ = {
+		6927EF9A1C4DDC14003344B6 /* Graph Classes */ = {
 			isa = PBXGroup;
 			children = (
 				6927EFA11C4DE68E003344B6 /* CityGraph.h */,
@@ -103,7 +101,7 @@
 				6927EFA71C4DE7D9003344B6 /* GraphRouteStep.h */,
 				6927EFA81C4DE7D9003344B6 /* GraphRouteStep.m */,
 			);
-			name = ModelObjects;
+			name = "Graph Classes";
 			sourceTree = "<group>";
 		};
 		69EBD92D1C38750F00FA7C87 = {
@@ -119,9 +117,9 @@
 				69E69B891C38849D00C657E7 /* LightPhaseMachine.m */,
 				69E69B8B1C38B00800C657E7 /* CarView.h */,
 				69E69B8C1C38B00800C657E7 /* CarView.m */,
-				69E69B8E1C38B7F800C657E7 /* AARoadModelViewUtils.h */,
-				69E69B8F1C38B7F800C657E7 /* AARoadModelViewUtils.m */,
-				6927EF9A1C4DDC14003344B6 /* ModelObjects */,
+				69E69B8E1C38B7F800C657E7 /* TrafficFSMUtilities.h */,
+				69E69B8F1C38B7F800C657E7 /* TrafficFSMUtilities.m */,
+				6927EF9A1C4DDC14003344B6 /* Graph Classes */,
 				69EBD93F1C38750F00FA7C87 /* TrafficFSMViewController.h */,
 				69EBD9401C38750F00FA7C87 /* TrafficFSMViewController.m */,
 				69EBD9421C38750F00FA7C87 /* TrafficGridViewController.h */,
@@ -154,7 +152,6 @@
 				690D1BA71C87B27600FCC63F /* pause1-150x150.png */,
 				690D1BA51C87B27100FCC63F /* play1-150x150.png */,
 				69EBD9481C38750F00FA7C87 /* Assets.xcassets */,
-				69EBD94A1C38750F00FA7C87 /* LaunchScreen.storyboard */,
 				69EBD94D1C38750F00FA7C87 /* Info.plist */,
 				69EBD9391C38750F00FA7C87 /* Supporting Files */,
 			);
@@ -236,7 +233,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69EBD94C1C38750F00FA7C87 /* LaunchScreen.storyboard in Resources */,
 				690D1BA81C87B27600FCC63F /* pause1-150x150.png in Resources */,
 				69EBD9491C38750F00FA7C87 /* Assets.xcassets in Resources */,
 				690D1BA41C87B1A800FCC63F /* gear.png in Resources */,
@@ -263,7 +259,7 @@
 				69EBD9411C38750F00FA7C87 /* TrafficFSMViewController.m in Sources */,
 				69EBD93B1C38750F00FA7C87 /* main.m in Sources */,
 				69EBD9631C38776B00FA7C87 /* StopLightView.m in Sources */,
-				69E69B901C38B7F800C657E7 /* AARoadModelViewUtils.m in Sources */,
+				69E69B901C38B7F800C657E7 /* TrafficFSMUtilities.m in Sources */,
 				69729BDF1C6DDF50003B7D1D /* CarController.m in Sources */,
 				6927EFA01C4DDC56003344B6 /* StreetEdge.m in Sources */,
 				69E69B8A1C38849D00C657E7 /* LightPhaseMachine.m in Sources */,
@@ -281,14 +277,6 @@
 				69EBD9461C38750F00FA7C87 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		69EBD94A1C38750F00FA7C87 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				69EBD94B1C38750F00FA7C87 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

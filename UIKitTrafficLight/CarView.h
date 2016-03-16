@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AARoadModelViewUtils.h"
+#import "TrafficFSMUtilities.h"
 
 @class CarController;
 @interface CarView : UIView

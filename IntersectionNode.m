@@ -14,7 +14,7 @@
 @implementation IntersectionNode
 
 
-- (CGPoint)getLatLong {
+- (CGPoint)getLongLat {
     return CGPointMake(self.longitude, self.latitude);
 }
 // Rewrite dijkstra to consider time/path.
@@ -25,12 +25,13 @@
 
 // Make car aware of other cars.
 
-#warning todo:Assuming 60 second phase
 - (float)calculateTurnPenaltyForInPort:(PortDirection)inp outPort:(PortDirection)outp {
     
     LightPhaseMachine *lightPhase = self.light_phase_machine;
     
     double totalPhaseLen = (lightPhase.nsPhase + lightPhase.ewPhase) + 1;
+    double percentOfTimeEast = lightPhase.ewPhase / totalPhaseLen;
+    double percentOfTimeNorth = 1 - percentOfTimeEast;
     
     if ((inp == NORTH_PORT && outp == NORTH_PORT)
         || (inp == SOUTH_PORT && outp == SOUTH_PORT)
@@ -38,42 +39,19 @@
         || (inp == WEST_PORT && outp == WEST_PORT))
         
         // U-Turn delay
-        return (lightPhase.nsPhase + lightPhase.ewPhase)/2.; // calculate based on stop light average timing OR ACTUAL timing
+        return (lightPhase.nsPhase + lightPhase.ewPhase)/2.;
     
-//    if ((inp == NORTH_PORT && outp == SOUTH_PORT)
-//        || (inp == SOUTH_PORT && outp == NORTH_PORT)
-//        || (inp == EAST_PORT && outp == WEST_PORT)
-//        || (inp == WEST_PORT && outp == EAST_PORT)) {
     
-        // STRAIGHT THRU ? delay
-        // STRAIGHT THRU delays
-        if (inp == NORTH_PORT || inp == SOUTH_PORT)
-            return lightPhase.ewPhase / totalPhaseLen ; // expected num seconds? // clear for (percent time in NS) * 0 + percent time in EW * EW
-        else return lightPhase.nsPhase / totalPhaseLen;
-//    }
+    // Entering north/South...
+    if (inp == NORTH_PORT || inp == SOUTH_PORT) {
+        return percentOfTimeEast * lightPhase.ewPhase; // expected num seconds? // clear for (percent time in NS) * 0 + percent time in EW * EW
+    }
+    else {
+        return percentOfTimeNorth * lightPhase.nsPhase;
+    }
+
     
 
-//    if ((inp == NORTH_PORT && outp == WEST_PORT)
-//        || (inp == SOUTH_PORT && outp == EAST_PORT)
-//        || (inp == EAST_PORT && outp == NORTH_PORT)
-//        || (inp == WEST_PORT && outp == SOUTH_PORT))
-//        
-//        // RIGHT Turn Delay
-//#warning TODO: Make factor of cross street congestion!
-//        return 20.0;
-//
-//    if ((inp == NORTH_PORT && outp == EAST_PORT)
-//        || (inp == SOUTH_PORT && outp == WEST_PORT)
-//        || (inp == EAST_PORT && outp == SOUTH_PORT)
-//        || (inp == WEST_PORT && outp == NORTH_PORT))
-//        
-//        // LEFT Turn Delay
-//#warning TODO: Determine signal phases
-//        return 60.0;
-//    
-//    NSLog(@"Uh, this shouldn't happen");
-//    NSAssert(0, @"Invalid turn direction");
-//    return 100.0;
     
         
 }
@@ -111,8 +89,6 @@
         || (inp == WEST_PORT && outp == SOUTH_PORT)) {
         
         // RIGHT Turn Delay
-#warning TODO: RIGHT TURN ON RED!??
-
         if (inp == NORTH_PORT || inp == SOUTH_PORT)
             return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION];
         else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION]; // 2.0 for right turn on red
@@ -187,7 +163,7 @@
             CarController *car = carsOnAB[i];
             int num_steps = [car numStepsUntilEdge:port];
             // count of prescient cars!
-            scaled_count += 1.0 / (double) num_steps ;
+            scaled_count += 1.0 / (double) num_steps / (double)(num_steps) ;
         }
         
 

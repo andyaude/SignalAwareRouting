@@ -97,7 +97,7 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
 
 - (BOOL)shouldCarBeInMotion:(CarView *)car {
     BOOL doMoveCar = NO;
-    CGPoint approach_max = [AARoadModelViewUtils stopLineForRoads:self.road_pair andApproachDir:car.approachDir andCarSize:CAR_SIZE];
+    CGPoint approach_max = [TrafficFSMUtilities stopLineForRoads:self.road_pair andApproachDir:car.approachDir andCarSize:CAR_SIZE];
     
     
     if (car.approachDir == NORTH_APPROACH) {
@@ -149,13 +149,13 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
         
         BOOL shouldBeInMotion = [self shouldCarBeInMotion:car];
         
-        CarView *firstNextCarAhead = [AARoadModelViewUtils getNextCarAhead:car allCars:self.activeCars];
+        CarView *firstNextCarAhead = [TrafficFSMUtilities getNextCarAhead:car allCars:self.activeCars];
 
         BOOL farthestNextInMotion = [self shouldCarBeInMotion:firstNextCarAhead];
         
         CarView *curNextCar = firstNextCarAhead;
         while (curNextCar && farthestNextInMotion) {
-            curNextCar = [AARoadModelViewUtils getNextCarAhead:curNextCar allCars:self.activeCars];
+            curNextCar = [TrafficFSMUtilities getNextCarAhead:curNextCar allCars:self.activeCars];
             if (!curNextCar) break;
             
             farthestNextInMotion = [self shouldCarBeInMotion:curNextCar];
@@ -164,9 +164,6 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
         // If next car is moving, we need the larger intercar spacing
         CGFloat max_intercar = (farthestNextInMotion) ? INTERCAR_SPACING :INTERCAR_SPACING_STOPPED;
 
-        // All of this screwed, rewrite with KD or grid? more state?
-//        if (firstNextIsStopped && nextCarTooClose) max_intercar = INTERCAR_SPACING_STOPPED;
-        
         if (firstNextCarAhead && distanceTwoViewCenters(car, firstNextCarAhead) < max_intercar)
             shouldBeInMotion = NO;
         
@@ -174,16 +171,11 @@ CGFloat distanceTwoViewCenters(UIView *viewOne, UIView *viewTwo) {
             [car moveInApproachDir:CAR_MOVE_ITERATION];
     }
 }
-- (IBAction)sliderChanged:(id)sender {
-    
-    NSLog(@"What you talking bout");
-}
 
-// TODO: UpdateName
 - (void)placeNewCarForApproach:(AApproachDirs)approachDir {
     
     
-    CGPoint startingPoint = [AARoadModelViewUtils getBaseCoordinateForRoads:self.road_pair andApproachDir:approachDir];
+    CGPoint startingPoint = [TrafficFSMUtilities getBaseCoordinateForRoads:self.road_pair andApproachDir:approachDir];
     CGSize carSize = CGSizeMake(CAR_SIZE, CAR_SIZE);
     
     CarView *car = [[CarView alloc] initWithFrame:(CGRect){startingPoint,carSize}];

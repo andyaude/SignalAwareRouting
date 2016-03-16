@@ -81,7 +81,7 @@
     double long_a = [self.intersectionA longitude];
     double long_b = [self.intersectionB longitude];
     
-#warning Fictional units such that lat/long are equal interval. Makes time and distance calculation much more straightforward.
+// Note: These are fictional units such that lat/long are equal interval. Makes time and distance calculation much more straightforward.
     double diff_lat = fabs(lat_a - lat_b) * 10.0;
     double diff_long = fabs(long_a - long_b) * 10.;
     

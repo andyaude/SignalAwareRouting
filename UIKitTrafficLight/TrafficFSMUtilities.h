@@ -11,7 +11,7 @@
 
 @class CarView;
 
-@interface AARoadModelViewUtils : NSObject
+@interface TrafficFSMUtilities : NSObject
 
 typedef enum {
     NORTH_APPROACH,

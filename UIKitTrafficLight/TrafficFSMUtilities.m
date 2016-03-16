@@ -6,10 +6,10 @@
 //  Copyright © 2016 Andrew Aude. All rights reserved.
 //
 
-#import "AARoadModelViewUtils.h"
+#import "TrafficFSMUtilities.h"
 #import "CarView.h"
 
-@implementation AARoadModelViewUtils
+@implementation TrafficFSMUtilities
 
 +(UIView *)chooseNSRoad:(NSArray *)roads {
     assert(roads.count == 2);

@@ -25,7 +25,6 @@
     
     if (self) {
         
-//        nodeEdges = [[NSMutableDictionary alloc] init];
         nodes = [[NSMutableDictionary alloc] init];
         edges = [[NSMutableDictionary alloc] init];
     }
@@ -58,16 +57,11 @@
 
 - (void)putCarOnEdge:(StreetEdge *)edge startPoint:(IntersectionNode*)node andCar:(CarController *)car {
     
-    // Sanity check!
-    for (StreetEdge *edge in [edges allValues]) {
-        [edge.ABCars removeObject:car];
-        [edge.BACars removeObject:car];
-    }
-    
+
     if (edge.intersectionA == node) {
-        [edge.ABCars addObject:car];
+        [edge.ABCars insertObject:car atIndex:0]; // FIFO property! Adding at front
     } else {
-        [edge.BACars addObject:car];
+        [edge.BACars insertObject:car atIndex:0];
     }
 }
 
@@ -90,13 +84,16 @@
     return -1;
 }
 
-// TODO: UNTESTED MESS
-- (NSNumber *)weightFromNode:(IntersectionNode *)sourceNode viaNode:(IntersectionNode *)viaNode toNeighboringNode:(IntersectionNode *)destinationNode andConsiderLightPenalty:(BOOL)considerPenalty andRT:(BOOL)rt andTime:(double)time andQueuePenalty:(BOOL)queuePenalty
+- (NSNumber *)weightFromNode:(IntersectionNode *)sourceNode viaNode:(IntersectionNode *)viaNode toNeighboringNode:(IntersectionNode *)destinationNode withOrigStartNode:(IntersectionNode *)origStart andConsiderLightPenalty:(BOOL)considerPenalty andRT:(BOOL)rt andTime:(double)time andQueuePenalty:(BOOL)queuePenalty
 {
     StreetEdge *firstEdge = [self edgeFromNode:sourceNode toNeighboringNode:viaNode];
     StreetEdge *lastEdge = [self edgeFromNode:viaNode toNeighboringNode:destinationNode];
     
     double baseWeight = lastEdge.weight;
+    
+    
+    // No need to delay cars emitted from first intersection
+//    if (sourceNode == origStart) return @(baseWeight);
 
     if (firstEdge) {
         
@@ -107,17 +104,15 @@
             
             double penalty;
             if (!rt)
-                penalty = [sourceNode calculateTurnPenaltyForInPort:inPort outPort:outPort];
+                penalty = [viaNode calculateTurnPenaltyForInPort:inPort outPort:outPort];
             else
-                penalty = [sourceNode calculateRealtimePenalty:inPort outPort:outPort withRealTimestamp:time+baseWeight];
+                penalty = [viaNode calculateRealtimePenalty:inPort outPort:outPort withRealTimestamp:time+baseWeight];
             
             
             baseWeight += penalty;
             
-    //        NSLog(@"Penalty from source:%@ via:%@ dest:%@ amount :%.2f, forTime %.2f t+b %.2f", sourceNode.identifier, viaNode.identifier, destinationNode.identifier, penalty, time, time+baseWeight-penalty);
         } else {
-            // fixed thirty seconds
-#warning FIXED TIME 30 S!
+            // fixed Thirty seconds -- as per UI
             baseWeight += 30.0;
         }
     }
@@ -144,19 +139,6 @@
     
     return (lastEdge) ? @(baseWeight) : nil;
 }
-
-// TLDR implement later if needed
-//- (NSInteger)edgeCount
-//{
-//    NSInteger edgeCount = 0;
-//    
-//    for (NSString *nodeIdentifier in nodeEdges) {
-//        
-//        edgeCount += [(NSDictionary *)[nodeEdges objectForKey:nodeIdentifier] count];
-//    }
-//    
-//    return edgeCount;
-//}
 
 - (NSSet *)neighborsOfNode:(IntersectionNode *)aNode
 {
@@ -316,8 +298,6 @@
     
     NSString *currentlyExaminedIdentifier = nil;
     
-//    double cum_time = time;
-    
     while ([unexaminedNodes count] > 0) {
         
         // Find the node, of all the unexamined nodes, that we know has the closest path back to the origin
@@ -360,11 +340,10 @@
                     
                     NSNumber *distanceFromNeighborToOrigin = [distancesFromSource objectForKey:neighboringNode.identifier];
                     
-                    // need to consider full candidate route??
-
                     double calculatedWeight = [[self weightFromNode:[previousNodeInOptimalPath objectForKey:nodeMostRecentlyExamined.identifier]
                                                             viaNode:nodeMostRecentlyExamined
                                                   toNeighboringNode:neighboringNode
+                                                  withOrigStartNode:startNode
                                              andConsiderLightPenalty:penalty andRT:realtime andTime:time andQueuePenalty:currentQueuePenalty]  doubleValue];
                     
                                                

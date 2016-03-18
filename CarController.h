@@ -16,7 +16,7 @@
 
 @property (strong, nonatomic) CarView *carView;
 
-@property (weak, nonatomic) TrafficGridViewController *secondVC;
+@property (weak, nonatomic) TrafficGridViewController *parentVC;
 
 @property (nonatomic) CGPoint currentLongLat;
 

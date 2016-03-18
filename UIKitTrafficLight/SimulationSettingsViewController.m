@@ -12,6 +12,7 @@
 @interface SimulationSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UISwitch *freqUIUpdatesSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *drawAllPathsSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *e2eForAllSwitch;
 
 @end
 
@@ -24,6 +25,7 @@
     self.drawAllPathsSwitch.on = *self.parentDrawAllPaths;
     self.startField.text = self.trafficVC.startEmitNodename;
     self.endField.text = self.trafficVC.endEmitNodename;
+    self.e2eForAllSwitch.on = ! *self.parentReportE2EForGreenOnly;
 
 }
 
@@ -32,6 +34,9 @@
 }
 - (IBAction)drawAllPathsChanged:(UISwitch*)sender {
     *self.parentDrawAllPaths = sender.on;
+}
+- (IBAction)reportE2EForAllChanged:(UISwitch *)sender {
+    *self.parentReportE2EForGreenOnly = !sender.on;
 }
 
 - (void)displayGenericAlert:(NSString *)text andField:(UITextField *)field {
@@ -54,7 +59,7 @@
         return;
     }
     
-    if (! candidateEnd|| candidateEnd.length == 0) {
+    if (!candidateEnd || candidateEnd.length == 0) {
         [self displayGenericAlert:@"You must enter a end nodename!" andField:self.endField];
         return;
     }

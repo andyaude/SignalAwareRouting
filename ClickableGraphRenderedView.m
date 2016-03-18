@@ -18,10 +18,6 @@
 #define ROAD_WIDTH 16.
 #define RIGHT_SIDE_OF_ROAD_OFFSET 4.0
 
-@interface ClickableGraphRenderedView ()
-
-
-@end
 
 
 @implementation ClickableGraphRenderedView
@@ -279,8 +275,6 @@ CGPoint CGLineMidPoint(CGPoint one, CGPoint two)
             CGContextMoveToPoint(ctx, off_up.x, off_up.y);
             CGContextAddLineToPoint(ctx, off_down.x, off_down.y);
             CGContextStrokePath(ctx);
-
-
             
         }
 }

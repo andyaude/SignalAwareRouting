@@ -17,6 +17,25 @@
 
 #import "CarController.h"
 
+
+#pragma mark Tunable Parameters
+
+// How often to send out Determined Path cars?
+// Lower is faster
+#define TICKS_BETWEEN_EMITS 90.
+
+// How often to send out random path cars??
+// Set to 67 to create a congestion-vulnerable system. Set to 25 otherwise...
+// Oh, it's out of 100
+#define CHANCE_RANDO_EMIT 25
+
+// How many timer cycles between traffic light adapations?
+#define TICKS_BETWEEN_ADAPTATIONS 200.
+
+// so that pedestrians don't get too antsy... assumes press button can preempt signals
+#define IDEAL_TOTAL_CYCLE_TIME 50.
+
+
 @interface TrafficGridViewController ()
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -40,6 +59,7 @@
     _allCars = [NSMutableArray new];
     _drawAllPaths = YES;
     _frequentUIUpdates = YES;
+    _onlyCountGreenCarsForE2E = YES;
 
     [self setEmitButtonsEnabled:NO];
 
@@ -57,6 +77,9 @@
     
 }
 
+- (BOOL)shouldOnlyCountGreenCarsForE2EDelay {
+    return _onlyCountGreenCarsForE2E;
+}
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.clickableRenderView;
     
@@ -80,6 +103,8 @@
     if (sender.on) {
         [self.rtPenaltySwitch setOn:NO animated:YES];
     }
+    
+    self.rtPenaltySwitch.enabled = !sender.on;
 }
 
 - (IBAction)segmentControlChanged:(id)sender {
@@ -100,6 +125,7 @@
 
     vc.parentDrawAllPaths = &_drawAllPaths;
     vc.parentFrequentUIUpdates = &_frequentUIUpdates;
+    vc.parentReportE2EForGreenOnly = &_onlyCountGreenCarsForE2E;
     
     CGRect loc;
     loc.origin = sender.center;
@@ -148,8 +174,7 @@
     
 }
 
-
-float randomFloat(float min, float max)
+static float randomFloat(float min, float max)
 {
     assert(max > min);
     float random = ((float) rand()) / (float) RAND_MAX;
@@ -249,7 +274,7 @@ float randomFloat(float min, float max)
             [element.carView removeFromSuperview];
             [_allCars removeObjectAtIndex:i];
             // Also includes shadow random cars in finished car count
-            if (!element.shadowRandomCar)
+            if (!element.shadowRandomCar || !_onlyCountGreenCarsForE2E)
                 _finishedCars++;
         }
     }
@@ -291,14 +316,12 @@ float randomFloat(float min, float max)
     self.routeLabel.text = @"Route";
     self.flowRateLabel.text = @"Flow Rate:";
     self.throughputLabel.text = @"Throughput:";
-//    _frequentUIUpdates = YES;
-    _drawAllPaths = YES;
+//    _drawAllPaths = YES;
     
     self.graph = [CityGraph new];
     [self establishGraph];
     [self updateSpawnButtons];
     [self setEmitButtonsEnabled:NO];
-    
 
     self.masterTime = 0;
     self.clickableRenderView.graph = self.graph;
@@ -315,19 +338,6 @@ float randomFloat(float min, float max)
 
 #pragma mark Timing Controller
 
-// How often to send out Determined Path cars?
-#define TICKS_BETWEEN_EMITS 90.
-
-// How often to send out random path cars??
-// Set to 67 to create a congestion-vulnerable system. Set to 25 otherwise...
-// Oh, it's out of 100
-#define CHANCE_RANDO_EMIT 35
-
-// How many timer cycles between traffic light adapations?
-#define TICKS_BETWEEN_ADAPTATIONS 200.
-
-// so that pedestrians don't get too antsy... assumes press button can preempt signals
-#define IDEAL_TOTAL_CYCLE_TIME 50.
 
 - (void)adaptTimerCycles {
     
@@ -460,7 +470,7 @@ float randomFloat(float min, float max)
 - (IBAction)placeSpecificRouteCar:(id)sender {
     
     CarController *car = [[CarController alloc] init];
-    car.secondVC = self;
+    car.parentVC = self;
     [car markStartTime:self.masterTime];
     [_allCars addObject:car];
     
@@ -484,7 +494,7 @@ float randomFloat(float min, float max)
 - (IBAction)emitRandomCar:(id)sender {
     
     CarController *car = [[CarController alloc] init];
-    car.secondVC = self;
+    car.parentVC = self;
     [car markStartTime:self.masterTime];
 
     [_allCars addObject:car];
@@ -754,8 +764,9 @@ float randomFloat(float min, float max)
     IntersectionNode *lNode = [IntersectionNode nodeWithIdentifier:@"L" andLatitude:45.15 andLongitude:45.46];
     [graph justAddNode:lNode];
     if (withDecongestionOffset) lNode.light_phase_machine.phase_offset = 15.0;
-    lNode.light_phase_machine.ewPhase = 50;
-    lNode.light_phase_machine.nsPhase = 10;
+    // Uncomment these to drastically improve throughput of D->L scenarios.
+//    lNode.light_phase_machine.ewPhase = 50;
+//    lNode.light_phase_machine.nsPhase = 10;
     
     IntersectionNode *kNode = [IntersectionNode nodeWithIdentifier:@"K" andLatitude:45.15 andLongitude:45.38];
     [graph justAddNode:kNode];

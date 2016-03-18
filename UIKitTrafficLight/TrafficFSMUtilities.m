@@ -128,7 +128,6 @@
     }
 }
 
-// TODO: REFACTOR
 // Warning: Sensitive to placement in larger container
 +(CGPoint)stopLineForRoads:(NSArray *)roads andApproachDir:(AApproachDirs)dir andCarSize:(CGFloat)squareSize {
     

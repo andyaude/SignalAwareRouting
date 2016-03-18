@@ -67,7 +67,6 @@
         || (inp == WEST_PORT && outp == WEST_PORT))
         
         // U-Turn delay
-        // Forever and a half, basically. Downrank. TODO FIX
         return (lightPhase.nsPhase + lightPhase.ewPhase)/2.;
     
     if ((inp == NORTH_PORT && outp == SOUTH_PORT)
@@ -88,7 +87,7 @@
         || (inp == EAST_PORT && outp == NORTH_PORT)
         || (inp == WEST_PORT && outp == SOUTH_PORT)) {
         
-        // RIGHT Turn Delay
+        // RIGHT Turn Delay. TODO: Add support for righ tturn on red.
         if (inp == NORTH_PORT || inp == SOUTH_PORT)
             return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION];
         else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION]; // 2.0 for right turn on red
@@ -100,11 +99,11 @@
         || (inp == EAST_PORT && outp == SOUTH_PORT)
         || (inp == WEST_PORT && outp == NORTH_PORT)) {
         
-        // LEFT Turn Delay
+        // LEFT Turn Delay. TODO: Handle left turn conflict & explicit protected left
+        // Usually there's a wait for left turns. Scalar should depend on oncoming traffic loads. :/
         if (inp == NORTH_PORT || inp == SOUTH_PORT)
             return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:NS_DIRECTION] * 1.0;
-        else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION] * 1.0; // Extra wait for left turns. Scalar should depend on probe data traffic loads. :/
-    
+        else return [lightPhase predictWaitTimeForMasterInterval:times andTrafficDir:EW_DIRECTION] * 1.0;
     }
     NSLog(@"Uh, this shouldn't happen");
     NSAssert(0, @"Invalid turn direction");
@@ -130,7 +129,7 @@
             }
             return [theArray count] + penalties;
             
-            // Counts how many cars have waited an egregious time
+// Counts how many cars have waited an egregious time
 //            NSUInteger baseNumCars = [theArray count];
 //            NSUInteger waitersPenalty = [[theArray filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
 //                CarAndView *car = (CarAndView *)evaluatedObject;

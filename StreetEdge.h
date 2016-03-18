@@ -21,8 +21,8 @@
 @property (nonatomic) float avg_flow_scalar_a_to_b;
 @property (nonatomic) float avg_flow_scalar_b_to_a;
 
-// Distance in latitude longitude units
-@property (nonatomic, readonly) double distance; // TODO: DETERMINE UNITS! OR CAN USE GETTER for lazy load!
+// Distance in pseudo-latitude longitude units. (A square grid with equal units)
+@property (nonatomic, readonly) double distance;
 
 @property (nonatomic, weak) IntersectionNode *intersectionA;
 @property (nonatomic, weak) IntersectionNode *intersectionB;
@@ -34,7 +34,7 @@
 @property NSMutableArray* futureABCars;
 @property NSMutableArray* futureBACars;
 
-// Here be cars! 
+// Here are the cars currently on this edge cars!
 @property (nonatomic, strong) NSMutableArray *ABCars;
 @property (nonatomic, strong) NSMutableArray *BACars;
 - (CGPoint)getDirectionVector:(BOOL)bToA; // to properly rotate car...
@@ -42,7 +42,7 @@
 
 
 @property BOOL is_unidirectional; // A-->B unidirectional. Default NO
-@property (nonatomic) int num_lanes_a_to_b; // DEFAULT 1
+@property (nonatomic) int num_lanes_a_to_b; // DEFAULT 1. No support yet for more lanes.
 @property (nonatomic) int num_lanes_b_to_a; // DEFAULT 1
 
 @property (nonatomic, getter=getWeight) double weight;
@@ -51,7 +51,7 @@
 - (BOOL)isAtoBForStartNode:(IntersectionNode*)start;
 
 /**
- Convenience initializer that allows for setting the edge's name at initilization
+ Convenience constructor that allows for setting the edge's name at initilization
  @param aName a description of the information (ex road, flight path, etc.) depcited
  by this edge
  @returns an initialized and un-retained edge

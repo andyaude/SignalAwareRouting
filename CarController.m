@@ -282,11 +282,11 @@
     // State machine logic to properly accumulate time spent stopped on this edge... It works...
     if (_lastTimeStopped == -1.) {
         if (result == 0.0)
-            _lastTimeStopped = [self.secondVC masterTime];
+            _lastTimeStopped = [self.parentVC masterTime];
     } else { // previously stopped
-            self.timeStoppedOnThisEdge += [self.secondVC masterTime] - _lastTimeStopped;
+            self.timeStoppedOnThisEdge += [self.parentVC masterTime] - _lastTimeStopped;
         if (result == 0) {
-            _lastTimeStopped = [self.secondVC masterTime];
+            _lastTimeStopped = [self.parentVC masterTime];
         } else {
             _lastTimeStopped = -1.;
         }
@@ -308,29 +308,24 @@
         _wasClicked = NO;
     } else {
     
-        [self.secondVC unselectAllCars];
+        [self.parentVC unselectAllCars];
         _wasClicked = YES;
     
     }
     
     // Force show path update even if simulation is paused!
-    [self.secondVC.clickableRenderView setNeedsDisplay];
+    [self.parentVC.clickableRenderView setNeedsDisplay];
     NSLog(@"Hard_stopped %d and last velocity %.3f timeWaiting %.2f", self.hardStopped, 30*_lastSpeed, self.timeStoppedOnThisEdge);
 }
 
 
 - (void)vanquish {
-    _readyForRemoval = YES; // Flag to communicate with second view controller!
-    self.endTimeInterval = [self.secondVC masterTime];
+    _readyForRemoval = YES; // Flag to communicate with parent view controller!
+    self.endTimeInterval = [self.parentVC masterTime];
     
-    if (!self.shadowRandomCar)
-        [self.secondVC reportE2EDelayForID:self.uniqueID andInterval:self.endTimeInterval - self.startTimeInterval];
-    else {
-        if (REPORT_E2E_DELAY_EVEN_IF_SHADOW){
-            [self.secondVC reportE2EDelayForID:self.uniqueID andInterval:self.endTimeInterval - self.startTimeInterval];
-        }
+    if (!self.shadowRandomCar || ![self.parentVC shouldOnlyCountGreenCarsForE2EDelay])
+        [self.parentVC reportE2EDelayForID:self.uniqueID andInterval:self.endTimeInterval - self.startTimeInterval];
     }
-}
 
 - (void)advanceToNextStepIndex {
     
@@ -348,7 +343,7 @@
         return;
     }
     
-    [self.secondVC putCarOnEdge:first.edge andStartPoint:first.node withCar:self];
+    [self.parentVC putCarOnEdge:first.edge andStartPoint:first.node withCar:self];
     
     BOOL isA_to_B = [first.edge isAtoBForStartNode:first.node];
     if (isA_to_B)
@@ -410,7 +405,7 @@
         self.currentStep = first;
         
         if (first.edge) {
-            [self.secondVC putCarOnEdge:first.edge andStartPoint:first.node withCar:self];
+            [self.parentVC putCarOnEdge:first.edge andStartPoint:first.node withCar:self];
         }
         
         //  Tell future intersections that we'll be a future car!

@@ -25,7 +25,7 @@ typedef enum {
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, strong) NSString *title;
 
-// EDGES. (TODO: CAN ADD MORE!)
+// EDGES. (TODO: What about 5 way intersections?)
 @property (nonatomic, weak) StreetEdge *n_port;
 @property (nonatomic, weak) StreetEdge *s_port;
 @property (nonatomic, weak) StreetEdge *w_port;

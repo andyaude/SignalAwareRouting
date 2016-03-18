@@ -19,6 +19,7 @@
 		6927EFAC1C4DEF5A003344B6 /* ClickableGraphRenderedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6927EFAB1C4DEF5A003344B6 /* ClickableGraphRenderedView.m */; };
 		69729BDC1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */; };
 		69729BDF1C6DDF50003B7D1D /* CarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69729BDE1C6DDF50003B7D1D /* CarController.m */; };
+		6993B96A1C9A8C8400FFE959 /* jamicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6993B9691C9A8C8400FFE959 /* jamicon.png */; };
 		69E69B8A1C38849D00C657E7 /* LightPhaseMachine.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B891C38849D00C657E7 /* LightPhaseMachine.m */; };
 		69E69B8D1C38B00800C657E7 /* CarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8C1C38B00800C657E7 /* CarView.m */; };
 		69E69B901C38B7F800C657E7 /* TrafficFSMUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E69B8F1C38B7F800C657E7 /* TrafficFSMUtilities.m */; };
@@ -53,6 +54,7 @@
 		69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopLightTimingOptionsPopoverViewController.m; path = UIKitTrafficLight/StopLightTimingOptionsPopoverViewController.m; sourceTree = "<group>"; };
 		69729BDD1C6DDF50003B7D1D /* CarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarController.h; sourceTree = "<group>"; };
 		69729BDE1C6DDF50003B7D1D /* CarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarController.m; sourceTree = "<group>"; };
+		6993B9691C9A8C8400FFE959 /* jamicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jamicon.png; sourceTree = "<group>"; };
 		69E69B881C38849D00C657E7 /* LightPhaseMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightPhaseMachine.h; path = UIKitTrafficLight/LightPhaseMachine.h; sourceTree = "<group>"; };
 		69E69B891C38849D00C657E7 /* LightPhaseMachine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LightPhaseMachine.m; path = UIKitTrafficLight/LightPhaseMachine.m; sourceTree = "<group>"; };
 		69E69B8B1C38B00800C657E7 /* CarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CarView.h; path = UIKitTrafficLight/CarView.h; sourceTree = "<group>"; };
@@ -70,8 +72,6 @@
 		69EBD9461C38750F00FA7C87 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		69EBD9481C38750F00FA7C87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		69EBD94D1C38750F00FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKitTrafficLightUITests.m; sourceTree = "<group>"; };
-		69EBD9581C38751000FA7C87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69EBD9611C38776B00FA7C87 /* StopLightView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StopLightView.h; path = UIKitTrafficLight/StopLightView.h; sourceTree = "<group>"; };
 		69EBD9621C38776B00FA7C87 /* StopLightView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StopLightView.m; path = UIKitTrafficLight/StopLightView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,22 +104,22 @@
 			name = "Graph Classes";
 			sourceTree = "<group>";
 		};
-		69EBD92D1C38750F00FA7C87 = {
+		6993B96B1C9B8DBC00FFE959 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				6927EFAA1C4DEF5A003344B6 /* ClickableGraphRenderedView.h */,
 				6927EFAB1C4DEF5A003344B6 /* ClickableGraphRenderedView.m */,
-				69729BDD1C6DDF50003B7D1D /* CarController.h */,
-				69729BDE1C6DDF50003B7D1D /* CarController.m */,
 				69EBD9611C38776B00FA7C87 /* StopLightView.h */,
 				69EBD9621C38776B00FA7C87 /* StopLightView.m */,
-				69E69B881C38849D00C657E7 /* LightPhaseMachine.h */,
-				69E69B891C38849D00C657E7 /* LightPhaseMachine.m */,
 				69E69B8B1C38B00800C657E7 /* CarView.h */,
 				69E69B8C1C38B00800C657E7 /* CarView.m */,
-				69E69B8E1C38B7F800C657E7 /* TrafficFSMUtilities.h */,
-				69E69B8F1C38B7F800C657E7 /* TrafficFSMUtilities.m */,
-				6927EF9A1C4DDC14003344B6 /* Graph Classes */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		6993B96C1C9B8DD500FFE959 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
 				69EBD93F1C38750F00FA7C87 /* TrafficFSMViewController.h */,
 				69EBD9401C38750F00FA7C87 /* TrafficFSMViewController.m */,
 				69EBD9421C38750F00FA7C87 /* TrafficGridViewController.h */,
@@ -128,8 +128,31 @@
 				69729BDB1C6DCAFC003B7D1D /* StopLightTimingOptionsPopoverViewController.m */,
 				690D1BA91C87B2F300FCC63F /* SimulationSettingsViewController.h */,
 				690D1BAA1C87B2F300FCC63F /* SimulationSettingsViewController.m */,
-				69EBD9381C38750F00FA7C87 /* UIKitTrafficLight */,
-				69EBD9551C38751000FA7C87 /* UIKitTrafficLightUITests */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		6993B96E1C9B8DFD00FFE959 /* Traffic Logic */ = {
+			isa = PBXGroup;
+			children = (
+				69729BDD1C6DDF50003B7D1D /* CarController.h */,
+				69729BDE1C6DDF50003B7D1D /* CarController.m */,
+				69E69B881C38849D00C657E7 /* LightPhaseMachine.h */,
+				69E69B891C38849D00C657E7 /* LightPhaseMachine.m */,
+				69E69B8E1C38B7F800C657E7 /* TrafficFSMUtilities.h */,
+				69E69B8F1C38B7F800C657E7 /* TrafficFSMUtilities.m */,
+			);
+			name = "Traffic Logic";
+			sourceTree = "<group>";
+		};
+		69EBD92D1C38750F00FA7C87 = {
+			isa = PBXGroup;
+			children = (
+				6993B96C1C9B8DD500FFE959 /* View Controllers */,
+				6993B96B1C9B8DBC00FFE959 /* Views */,
+				6993B96E1C9B8DFD00FFE959 /* Traffic Logic */,
+				6927EF9A1C4DDC14003344B6 /* Graph Classes */,
+				69EBD9381C38750F00FA7C87 /* Application and Storyboard */,
 				69EBD9371C38750F00FA7C87 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -142,12 +165,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		69EBD9381C38750F00FA7C87 /* UIKitTrafficLight */ = {
+		69EBD9381C38750F00FA7C87 /* Application and Storyboard */ = {
 			isa = PBXGroup;
 			children = (
 				69EBD93C1C38750F00FA7C87 /* AppDelegate.h */,
 				69EBD93D1C38750F00FA7C87 /* AppDelegate.m */,
 				69EBD9451C38750F00FA7C87 /* Main.storyboard */,
+				6993B9691C9A8C8400FFE959 /* jamicon.png */,
 				690D1BA31C87B1A800FCC63F /* gear.png */,
 				690D1BA71C87B27600FCC63F /* pause1-150x150.png */,
 				690D1BA51C87B27100FCC63F /* play1-150x150.png */,
@@ -155,6 +179,7 @@
 				69EBD94D1C38750F00FA7C87 /* Info.plist */,
 				69EBD9391C38750F00FA7C87 /* Supporting Files */,
 			);
+			name = "Application and Storyboard";
 			path = UIKitTrafficLight;
 			sourceTree = "<group>";
 		};
@@ -164,15 +189,6 @@
 				69EBD93A1C38750F00FA7C87 /* main.m */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		69EBD9551C38751000FA7C87 /* UIKitTrafficLightUITests */ = {
-			isa = PBXGroup;
-			children = (
-				69EBD9561C38751000FA7C87 /* UIKitTrafficLightUITests.m */,
-				69EBD9581C38751000FA7C87 /* Info.plist */,
-			);
-			path = UIKitTrafficLightUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,6 +254,7 @@
 				690D1BA41C87B1A800FCC63F /* gear.png in Resources */,
 				690D1BA61C87B27100FCC63F /* play1-150x150.png in Resources */,
 				69EBD9471C38750F00FA7C87 /* Main.storyboard in Resources */,
+				6993B96A1C9A8C8400FFE959 /* jamicon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

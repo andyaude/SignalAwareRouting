@@ -9,12 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "ClickableGraphRenderedView.h"
 
+// This is the second tab: Traffic Grid
 @interface TrafficGridViewController : UIViewController <UIScrollViewDelegate> {
     double _timeMultiplier;
     NSMutableArray *_allCars;
     int _finishedCars;
     int _emittedCars;
 
+    BOOL _onlyCountGreenCarsForE2E;
     BOOL _autoEFEmit;
     BOOL _autorandoEmit;
     
@@ -70,6 +72,7 @@
 
 
 // For CarAndView's use
+- (BOOL)shouldOnlyCountGreenCarsForE2EDelay;
 - (void)reportE2EDelayForID:(NSUInteger)uniqueID andInterval:(NSTimeInterval)interval;
 
 // For SimulationSettingsViewController's use

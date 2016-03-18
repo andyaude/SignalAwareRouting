@@ -13,6 +13,7 @@
 
 @property (nonatomic) BOOL *parentFrequentUIUpdates;
 @property (nonatomic) BOOL *parentDrawAllPaths;
+@property (nonatomic) BOOL *parentReportE2EForGreenOnly;
 @property (nonatomic, weak) TrafficGridViewController *trafficVC;
 @property (weak, nonatomic) IBOutlet UITextField *startField;
 @property (weak, nonatomic) IBOutlet UITextField *endField;

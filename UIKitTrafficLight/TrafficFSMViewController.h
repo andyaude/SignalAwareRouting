@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+
+// This is the "Signal FSM" controller. 
 @interface TrafficFSMViewController : UIViewController
 
 @property (nonatomic) NSTimeInterval masterTime;
